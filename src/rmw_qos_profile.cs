@@ -2,11 +2,12 @@
 
 namespace ROS2Sharp
 {
-	public class rmw_qos_profile
+	public struct rmw_qos_profile_t
 	{
-		public rmw_qos_profile ()
-		{
-		}
+		int history;
+		UIntPtr depth;
+		int reliability;
+		int durability;
 	}
 }
 

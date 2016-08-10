@@ -20,12 +20,23 @@ namespace ROS2Sharp
 		{
 
 		}
+		public rcl_node_t NativeNode
+		{
+			get{return InternalNode.NativeNode; }
+		}
+		public rcl_node NativeNodeWrapper
+		{
+			get{ return InternalNode; }
+		}
 
 	}
 	public class rcl_node
 	{
-		private rcl_node_t node;
-
+		public rcl_node_t node;
+		public rcl_node_t NativeNode
+		{
+			get{return node; }
+		}
 
 		public rcl_node(rcl_node_t _node)
 		{
