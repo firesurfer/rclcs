@@ -20,11 +20,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <CustomCommands>
-      <CustomCommands>
-        <Command type="AfterBuild" command="cp ${TargetFile} /home/firesurfer/workspace/ros2sharp_testing_ws/install/lib/${TargetName}" />
-      </CustomCommands>
-    </CustomCommands>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -33,6 +29,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -43,9 +40,15 @@
     <Compile Include="Allocator.cs" />
     <Compile Include="RCL.cs" />
     <Compile Include="Publisher.cs" />
-    <Compile Include="rmw_qos_profile.cs" />
-    <Compile Include="rosidl_message_type_support_t.cs" />
-    <Compile Include="rosidl_generator_c__String.cs" />
+    <Compile Include="Subscription.cs" />
+    <Compile Include="NativeTypes\rmw_gid_t.cs" />
+    <Compile Include="NativeTypes\rmw_message_info_t.cs" />
+    <Compile Include="NativeTypes\rmw_qos_profile.cs" />
+    <Compile Include="NativeTypes\rosidl_generator_c__String.cs" />
+    <Compile Include="NativeTypes\rosidl_message_type_support_t.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="NativeTypes\" />
+  </ItemGroup>
 </Project>

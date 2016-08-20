@@ -25,27 +25,48 @@ namespace ROS2Sharp
 					}
 				}
 			}
-
+			PublisherOptions = rcl_publisher.get_default_options ();
 			InternalPublisher = new rcl_publisher (RosNode, TypeSupport, TopicName,PublisherOptions);
 
+		}
+		public rcl_publisher_t NativePublisher
+		{
+			get{ return InternalPublisher.NativePublisher;}
+		}
+		public rcl_publisher NativeWrapper
+		{
+			get{ return InternalPublisher; }
 		}
 	}
 	public class rcl_publisher
 	{
+		private rcl_publisher_t publisher;
+		private rcl_node_t native_node;
 		public rcl_publisher(Node _node, rosidl_message_type_support_t _type_support, string _topic_name, rcl_publisher_options_t _options)
 		{
 			publisher = rcl_get_zero_initialized_publisher ();
-			rcl_node_t nativeNode = _node.NativeNode;
-			rcl_publisher_init (ref nativeNode, ref _type_support, _topic_name, ref _options);
+			native_node = _node.NativeNode;
+			rcl_publisher_init (ref publisher,ref native_node, ref _type_support, _topic_name, ref _options);
 
 		}
-		private rcl_publisher_t publisher;
+		~rcl_publisher()
+		{
+			rcl_publisher_fini (ref publisher, ref native_node);
+		}
+		public rcl_publisher_t NativePublisher
+		{
+			get{ return publisher;}
+		}
+		public static rcl_publisher_options_t get_default_options()
+		{
+			return rcl_publisher_get_default_options ();
+		}
 
 		[DllImport("librcl.so")]
 		extern static rcl_publisher_t rcl_get_zero_initialized_publisher();
 
 		[DllImport("librcl.so")]
-		extern static int rcl_publisher_init(ref rcl_node_t node, ref rosidl_message_type_support_t type_support, string topic_name, ref rcl_publisher_options_t options);
+		extern static int rcl_publisher_init(ref rcl_publisher_t publisher,ref rcl_node_t node, ref rosidl_message_type_support_t type_support, string topic_name, ref rcl_publisher_options_t options);
 
 		[DllImport("librcl.so")]
 		extern static int rcl_publisher_fini (ref rcl_publisher_t publisher, ref rcl_node_t node);
@@ -68,7 +89,7 @@ namespace ROS2Sharp
 	}
 	public struct rcl_publisher_options_t
 	{
-		rmw_qos_profile_t options;
+		rmw_qos_profile_t qos;
 		public rcl_allocator_t allocator;
 	}
 }
