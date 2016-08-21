@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Reflection;
 namespace ROS2Sharp
 {
-	public class Publisher<T>
+	public class Publisher<T>:Executable
 	{
 		private rosidl_message_type_support_t TypeSupport;
 		private rcl_publisher InternalPublisher;

@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace ROS2Sharp
 {
-	public class Node
+	public class Node:Executable
 	{
 		private rcl_node InternalNode;
 		public string Name{ get; private set; }
@@ -20,6 +20,7 @@ namespace ROS2Sharp
 		{
 
 		}
+
 		public rcl_node_t NativeNode
 		{
 			get{return InternalNode.NativeNode; }

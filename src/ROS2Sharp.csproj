@@ -46,9 +46,14 @@
     <Compile Include="NativeTypes\rmw_qos_profile.cs" />
     <Compile Include="NativeTypes\rosidl_generator_c__String.cs" />
     <Compile Include="NativeTypes\rosidl_message_type_support_t.cs" />
+    <Compile Include="Executor.cs" />
+    <Compile Include="Executors\SingleThreadedExecutors.cs" />
+    <Compile Include="Executable.cs" />
+    <Compile Include="MessageRecievedEventArgs.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="NativeTypes\" />
+    <Folder Include="Executors\" />
   </ItemGroup>
 </Project>
