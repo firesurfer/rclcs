@@ -5,7 +5,7 @@ namespace ROS2Sharp
 {
 	public class Executor
 	{
-		protected ConcurrentBag<Node> Nodes;
+		protected ConcurrentBag<Node> Nodes = new ConcurrentBag<Node> ();
 	
 		public Executor ()
 		{
@@ -28,7 +28,7 @@ namespace ROS2Sharp
 		public virtual void SpinOnce(System.TimeSpan Span)
 		{
 		}
-		public virtual void Spin()
+		public virtual void Spin(System.TimeSpan Intervall)
 		{
 		}
 		public virtual void SpinSome()

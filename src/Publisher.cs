@@ -4,6 +4,7 @@ using System.Reflection;
 namespace ROS2Sharp
 {
 	public class Publisher<T>:Executable
+		where T: struct
 	{
 		private rosidl_message_type_support_t TypeSupport;
 		private rcl_publisher InternalPublisher;
@@ -39,8 +40,7 @@ namespace ROS2Sharp
 		}
 		public bool Publish(T msg)
 		{
-			object LocalMessage = (object)msg;
-			return InternalPublisher.PublishMessage (ref LocalMessage);
+			return InternalPublisher.PublishMessage<T> (ref msg);
 		}
 	}
 	public class rcl_publisher
@@ -66,10 +66,11 @@ namespace ROS2Sharp
 		{
 			return rcl_publisher_get_default_options ();
 		}
-		public bool PublishMessage(ref object msg)
+		public bool PublishMessage<T>(ref T msg)
+			where T : struct
 		{
-			IntPtr msg_ptr = IntPtr.Zero;
-			Marshal.StructureToPtr (msg, msg_ptr, false);
+			IntPtr msg_ptr = Marshal.AllocHGlobal (Marshal.SizeOf (typeof(T)));
+			Marshal.StructureToPtr (msg, msg_ptr, true);
 			int ret = rcl_publish (ref publisher, msg_ptr);
 			RCLReturnValues ret_val = (RCLReturnValues)ret;
 
@@ -124,7 +125,7 @@ namespace ROS2Sharp
 	}
 	public struct rcl_publisher_options_t
 	{
-		rmw_qos_profile_t qos;
+		public rmw_qos_profile_t qos;
 		public rcl_allocator_t allocator;
 	}
 }

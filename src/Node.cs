@@ -7,7 +7,7 @@ namespace ROS2Sharp
 	public class Node:Executable
 	{
 		private rcl_node InternalNode;
-		private ConcurrentBag<Executable> ManagedExecutables;
+		private ConcurrentBag<Executable> ManagedExecutables = new ConcurrentBag<Executable>();
 
 		public string Name{ get; private set; }
 
