@@ -37,6 +37,11 @@ namespace ROS2Sharp
 		{
 			get{ return InternalPublisher; }
 		}
+		public bool Publish(T msg)
+		{
+			object LocalMessage = (object)msg;
+			return InternalPublisher.PublishMessage (ref LocalMessage);
+		}
 	}
 	public class rcl_publisher
 	{
@@ -61,7 +66,34 @@ namespace ROS2Sharp
 		{
 			return rcl_publisher_get_default_options ();
 		}
+		public bool PublishMessage(ref object msg)
+		{
+			IntPtr msg_ptr = IntPtr.Zero;
+			Marshal.StructureToPtr (msg, msg_ptr, false);
+			int ret = rcl_publish (ref publisher, msg_ptr);
+			RCLReturnValues ret_val = (RCLReturnValues)ret;
 
+			/* \return RCL_RET_OK if the message was published successfully, or
+			*         RCL_RET_INVALID_ARGUMENT if any arguments are invalid, or
+			*         RCL_RET_PUBLISHER_INVALID if the publisher is invalid, or
+			*         RCL_RET_ERROR if an unspecified error occurs.
+				*/
+			bool publish_message_success = false;
+			switch (ret_val) {
+			case RCLReturnValues.RCL_RET_OK:
+				publish_message_success = true;
+				break;
+			case RCLReturnValues.RCL_RET_INVALID_ARGUMENT:
+				break;
+			case RCLReturnValues.RCL_RET_PUBLISHER_INVALID:
+				break;
+			case RCLReturnValues.RCL_RET_ERROR:
+				break;
+			default:
+				break;
+			}
+			return publish_message_success;
+		}
 		[DllImport("librcl.so")]
 		extern static rcl_publisher_t rcl_get_zero_initialized_publisher();
 

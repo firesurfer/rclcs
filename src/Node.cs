@@ -29,6 +29,18 @@ namespace ROS2Sharp
 		{
 			get{ return InternalNode; }
 		}
+		public  Publisher<T> CreatePublisher<T>(string TopicName)
+			where T: struct
+		{
+			Publisher<T> NewPublisher = new Publisher<T> (this, TopicName);
+			return NewPublisher;
+		}
+		public Subscription<T> CreateSubscription<T>(string TopicName)
+			where T: struct
+		{
+			Subscription<T> NewSubscription = new Subscription<T> (this, TopicName);
+			return NewSubscription;
+		}
 
 	}
 	public class rcl_node
