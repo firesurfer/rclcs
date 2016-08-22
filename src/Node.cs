@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Runtime.InteropServices;
 
 namespace ROS2Sharp
@@ -6,6 +7,8 @@ namespace ROS2Sharp
 	public class Node:Executable
 	{
 		private rcl_node InternalNode;
+		private ConcurrentBag<Executable> ManagedExecutables;
+
 		public string Name{ get; private set; }
 
 		public Node (string _Name)
@@ -29,17 +32,36 @@ namespace ROS2Sharp
 		{
 			get{ return InternalNode; }
 		}
-		public  Publisher<T> CreatePublisher<T>(string TopicName)
+		public  Publisher<T> CreatePublisher<T>(string TopicName, bool AddToExecutables = true)
 			where T: struct
 		{
 			Publisher<T> NewPublisher = new Publisher<T> (this, TopicName);
+			if(AddToExecutables)
+				ManagedExecutables.Add (NewPublisher);
 			return NewPublisher;
 		}
-		public Subscription<T> CreateSubscription<T>(string TopicName)
+		public Subscription<T> CreateSubscription<T>(string TopicName, bool AddToExecutables = true)
 			where T: struct
 		{
 			Subscription<T> NewSubscription = new Subscription<T> (this, TopicName);
+			if(AddToExecutables)
+				ManagedExecutables.Add (NewSubscription);
 			return NewSubscription;
+		}
+		public Service<T> CreateService<T>(string ServiceName, bool AddToExecutables = true)
+			where T: struct
+		{
+			//TODO -> Add parameters to constructor when serivce is implemented
+			Service<T> NewService = new Service<T> ();
+			if(AddToExecutables)
+				ManagedExecutables.Add (NewService);
+			return NewService;
+		}
+		public override void Execute ()
+		{
+			foreach (var item in ManagedExecutables) {
+				item.Execute ();
+			}
 		}
 
 	}
@@ -61,13 +83,20 @@ namespace ROS2Sharp
 		}
 		public string get_node_name()
 		{	
-			return marshal_rcl_node_get_name (ref node);
+			return rcl_node_get_name(ref node);
 		}
 		public bool node_is_valid()
 		{
 			return rcl_node_is_valid (ref node);
 		}
-
+		public static rcl_node create_native_node(string name)
+		{
+			rcl_node_t node = rcl_get_zero_initialized_node ();
+			IntPtr default_options = rcl_node_get_default_options ();
+			int ret = rcl_node_init(ref node,name, default_options);
+			rcl_node local_node = new rcl_node(node);
+			return local_node;
+		}
 
 		[DllImport ("librcl.so")]
 		static extern rcl_node_t rcl_get_zero_initialized_node ();
@@ -90,22 +119,11 @@ namespace ROS2Sharp
 		static extern bool rcl_node_is_valid(ref rcl_node_t node);
 
 		[DllImport("librcl.so")]
-		static extern IntPtr rcl_node_get_name(ref rcl_node_t node);
-
-		public string marshal_rcl_node_get_name(ref rcl_node_t node)
-		{
-			return Marshal.PtrToStringAnsi (rcl_node_get_name (ref node));
-		}
+		static extern string rcl_node_get_name(ref rcl_node_t node);
 
 
-		public static rcl_node create_native_node(string name)
-		{
-			rcl_node_t node = rcl_get_zero_initialized_node ();
-			IntPtr default_options = rcl_node_get_default_options ();
-			int ret = rcl_node_init(ref node,name, default_options);
-			rcl_node local_node = new rcl_node(node);
-			return local_node;
-		}
+
+
 
 	}
 	public struct rcl_node_t

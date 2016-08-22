@@ -84,10 +84,13 @@ namespace ROS2Sharp
 				publish_message_success = true;
 				break;
 			case RCLReturnValues.RCL_RET_INVALID_ARGUMENT:
+				throw new RCLInvalidArgumentException ();
 				break;
 			case RCLReturnValues.RCL_RET_PUBLISHER_INVALID:
+				throw new RCLPublisherInvalidException ();
 				break;
 			case RCLReturnValues.RCL_RET_ERROR:
+				throw new RCLInvalidArgumentException ();
 				break;
 			default:
 				break;

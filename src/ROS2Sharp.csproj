@@ -50,6 +50,8 @@
     <Compile Include="Executors\SingleThreadedExecutors.cs" />
     <Compile Include="Executable.cs" />
     <Compile Include="MessageRecievedEventArgs.cs" />
+    <Compile Include="Service.cs" />
+    <Compile Include="RCLExceptions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
