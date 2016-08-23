@@ -80,6 +80,7 @@ namespace ROS2Sharp
 			rmw_message_info_t message_info = new rmw_message_info_t();
 			IntPtr msg_ptr = Marshal.AllocHGlobal (Marshal.SizeOf (typeof(T)));
 			IntPtr message_info_ptr = Marshal.AllocHGlobal(Marshal.SizeOf(message_info));
+
 			int ret = rcl_take (ref subscription, msg_ptr, message_info_ptr);
 			RCLReturnValues ret_val = (RCLReturnValues)ret;
 			//Console.WriteLine (ret_val);
@@ -121,6 +122,8 @@ namespace ROS2Sharp
 				break;
 			}
 			success = take_message_success;
+			Marshal.FreeHGlobal (message_info_ptr);
+		
 			return msg;
 		}
 

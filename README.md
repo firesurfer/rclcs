@@ -28,6 +28,7 @@ Then go back to the ros2 workspace and do an ament build.
 * Create a Node
 * Create a Publisher
 * Create a Subscription
+* Publish and recieve a simple message (no string, no arrays, no nested types)
 * Generate code for simple messages (mostly basic types)
 
 ## What doesn't work at the moment
