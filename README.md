@@ -8,6 +8,8 @@ So the messages (structs) can directly be passed to the `rcl` without any conver
 
 Get your [copy of ROS](https://github.com/ros2/ros2/wiki/Linux-Development-Setup) and compile it according to the documentation.
 
+Make sure you've got mono/ .Net installed (Not tested on windows yet).
+
 Then from your ros2 workspace base directory:
 ```
   cd src/ros2
