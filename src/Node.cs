@@ -33,7 +33,7 @@ namespace ROS2Sharp
 			get{ return InternalNode; }
 		}
 		public  Publisher<T> CreatePublisher<T>(string TopicName, bool AddToExecutables = true)
-			where T: struct
+			where T: class
 		{
 			Publisher<T> NewPublisher = new Publisher<T> (this, TopicName);
 			if(AddToExecutables)
@@ -41,7 +41,7 @@ namespace ROS2Sharp
 			return NewPublisher;
 		}
 		public Subscription<T> CreateSubscription<T>(string TopicName, bool AddToExecutables = true)
-			where T: struct
+			where T: class, new()
 		{
 			Subscription<T> NewSubscription = new Subscription<T> (this, TopicName);
 			if(AddToExecutables)
@@ -49,7 +49,7 @@ namespace ROS2Sharp
 			return NewSubscription;
 		}
 		public Service<T> CreateService<T>(string ServiceName, bool AddToExecutables = true)
-			where T: struct
+			where T: class
 		{
 			//TODO -> Add parameters to constructor when serivce is implemented
 			Service<T> NewService = new Service<T> ();

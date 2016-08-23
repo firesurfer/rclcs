@@ -98,5 +98,37 @@ namespace ROS2Sharp
 			RCLReturnValue = RCLReturnValues.RCL_RET_PUBLISHER_INVALID;
 		}
 	}
+	public class RCLSubscriptionInvalidException:Exception
+	{
+		public RCLReturnValues RCLReturnValue{ get; private set;}
+		public RCLSubscriptionInvalidException()
+		{
+			RCLReturnValue = RCLReturnValues.RCL_RET_SUBSCRIPTION_INVALID;
+		}
+		public RCLSubscriptionInvalidException(string message):base(message)
+		{
+			RCLReturnValue = RCLReturnValues.RCL_RET_SUBSCRIPTION_INVALID;
+		}
+		public RCLSubscriptionInvalidException(string message,Exception inner):base(message,inner)
+		{
+			RCLReturnValue = RCLReturnValues.RCL_RET_SUBSCRIPTION_INVALID;
+		}
+	}
+	public class RCLSubscriptonTakeFailedException:Exception
+	{
+		public RCLReturnValues RCLReturnValue{ get; private set;}
+		public RCLSubscriptonTakeFailedException()
+		{
+			RCLReturnValue = RCLReturnValues.RCL_RET_SUBSCRIPTION_TAKE_FAILED;
+		}
+		public RCLSubscriptonTakeFailedException(string message):base(message)
+		{
+			RCLReturnValue = RCLReturnValues.RCL_RET_SUBSCRIPTION_TAKE_FAILED;
+		}
+		public RCLSubscriptonTakeFailedException(string message,Exception inner):base(message,inner)
+		{
+			RCLReturnValue = RCLReturnValues.RCL_RET_SUBSCRIPTION_TAKE_FAILED;
+		}
+	}
 }
 

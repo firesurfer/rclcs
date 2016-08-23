@@ -4,7 +4,7 @@ using System.Reflection;
 namespace ROS2Sharp
 {
 	public class Subscription<T>:Executable
-		where T : struct
+		where T : class, new()
 	{
 		private rosidl_message_type_support_t TypeSupport;
 		private rcl_subscription InternalSubscription;
@@ -38,15 +38,12 @@ namespace ROS2Sharp
 		{
 			get{ return InternalSubscription;}
 		}
-		private bool TakeMessage(ref T msg)
-		{
-			
-			return false;
-		}
+
 		public override void Execute()
 		{
-			T message = default(T);
-			if (TakeMessage(ref message)) {
+			bool success = false;
+			T message = InternalSubscription.TakeMessage<T> (out success);
+			if (success) {
 				if (MessageRecieved != null)
 					MessageRecieved (this,new MessageRecievedEventArgs<T> (message));
 			}
@@ -76,15 +73,16 @@ namespace ROS2Sharp
 		{
 			return rcl_subscription_get_default_options ();
 		}
-		public bool TakeMessage(ref object msg)
+		public T TakeMessage<T>(out bool success)
+			where T: class, new()
 		{
-			rmw_message_info_t message_info = default(rmw_message_info_t);
-			IntPtr msg_ptr = IntPtr.Zero;
-
-			Marshal.StructureToPtr (msg, msg_ptr, false);
-			int ret = rcl_take (ref subscription, msg_ptr, ref message_info);
+			T msg = new T ();
+			rmw_message_info_t message_info = new rmw_message_info_t();
+			IntPtr msg_ptr = Marshal.AllocHGlobal (Marshal.SizeOf (typeof(T)));
+			IntPtr message_info_ptr = Marshal.AllocHGlobal(Marshal.SizeOf(message_info));
+			int ret = rcl_take (ref subscription, msg_ptr, message_info_ptr);
 			RCLReturnValues ret_val = (RCLReturnValues)ret;
-
+			//Console.WriteLine (ret_val);
 			/*return RCL_RET_OK if the message was published, or
 			*         RCL_RET_INVALID_ARGUMENT if any arguments are invalid, or
 			*         RCL_RET_SUBSCRIPTION_INVALID if the subscription is invalid, or
@@ -95,27 +93,35 @@ namespace ROS2Sharp
 			bool take_message_success = false;
 			switch (ret_val) {
 			case RCLReturnValues.RCL_RET_INVALID_ARGUMENT:
+				throw new RCLInvalidArgumentException ();
 				break;
 			case RCLReturnValues.RCL_RET_SUBSCRIPTION_INVALID:
+				throw new RCLSubscriptionInvalidException ();
 				break;
 			case RCLReturnValues.RCL_RET_BAD_ALLOC:
+				throw new RCLBadAllocException ();
 				break;
 			case RCLReturnValues.RCL_RET_SUBSCRIPTION_TAKE_FAILED:
+				//throw new RCLSubscriptonTakeFailedException ();
+				take_message_success = false;
+				Marshal.FreeHGlobal (msg_ptr);
 				break;
 			case RCLReturnValues.RCL_RET_ERROR:
+				throw new RCLErrorException ();
 				break;
 			case RCLReturnValues.RCL_RET_OK:
 				{
 					take_message_success = true;
 					//Is this needed -> How to two way marshal structures that were passed as void ptrs?
-					Marshal.PtrToStructure (msg_ptr, msg);
+					msg = Marshal.PtrToStructure<T> (msg_ptr);
+
 				}
 				break;
 			default:
 				break;
 			}
-
-			return take_message_success;
+			success = take_message_success;
+			return msg;
 		}
 
 		[DllImport("librcl.so")]
@@ -131,7 +137,7 @@ namespace ROS2Sharp
 	    extern static rcl_subscription_options_t rcl_subscription_get_default_options ();
 
 		[DllImport("librcl.so")]
-		extern static int rcl_take(ref rcl_subscription_t subscription, IntPtr ros_message, ref rmw_message_info_t message_info);
+		extern static int rcl_take(ref rcl_subscription_t subscription, IntPtr ros_message, IntPtr message_info);
 
 		[DllImport("librcl.so")]
 		extern static string rcl_subscription_get_topic_name(ref rcl_subscription_t subscription);

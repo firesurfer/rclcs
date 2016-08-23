@@ -4,7 +4,7 @@ using System.Reflection;
 namespace ROS2Sharp
 {
 	public class Publisher<T>:Executable
-		where T: struct
+		where T: class
 	{
 		private rosidl_message_type_support_t TypeSupport;
 		private rcl_publisher InternalPublisher;
@@ -67,7 +67,7 @@ namespace ROS2Sharp
 			return rcl_publisher_get_default_options ();
 		}
 		public bool PublishMessage<T>(ref T msg)
-			where T : struct
+			where T : class
 		{
 			IntPtr msg_ptr = Marshal.AllocHGlobal (Marshal.SizeOf (typeof(T)));
 			Marshal.StructureToPtr (msg, msg_ptr, true);

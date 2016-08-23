@@ -3,7 +3,7 @@
 namespace ROS2Sharp
 {
 	public class Service<T>:Executable
-		where T: struct
+		where T: class
 	{
 		public Service ()
 		{
