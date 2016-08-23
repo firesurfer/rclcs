@@ -22,6 +22,8 @@ Then edit the file in `rosidl/rosidl_default_generators/CMakeLists.txt` and add 
 
 Then go back to the ros2 workspace and do an ament build. 
 
+An example on how to use the rclcs in your own application is soon to follow.
+
 ## What works at the moment
 
 * Init and deinit RCL
@@ -30,6 +32,8 @@ Then go back to the ros2 workspace and do an ament build.
 * Create a Subscription
 * Publish and recieve a simple message (no string, no arrays, no nested types)
 * Generate code for simple messages (mostly basic types)
+
+For a list of currently supported types see: [supported types](doc/SupportedTypes.md)
 
 ## What doesn't work at the moment
 
