@@ -4,7 +4,7 @@ using System.Reflection;
 namespace ROS2Sharp
 {
 	public class Publisher<T>:Executable
-		where T: class
+		where T: MessageBase
 	{
 		private rosidl_message_type_support_t TypeSupport;
 		private rcl_publisher InternalPublisher;
@@ -38,7 +38,7 @@ namespace ROS2Sharp
 		{
 			get{ return InternalPublisher; }
 		}
-		public bool Publish(T msg)
+		public bool Publish(MessageBase msg)
 		{
 			return InternalPublisher.PublishMessage<T> (ref msg);
 		}
@@ -66,12 +66,12 @@ namespace ROS2Sharp
 		{
 			return rcl_publisher_get_default_options ();
 		}
-		public bool PublishMessage<T>(ref T msg)
-			where T : class
+		public bool PublishMessage<T>(ref MessageBase msg)
+			where T : MessageBase
 		{
-			IntPtr msg_ptr = Marshal.AllocHGlobal (Marshal.SizeOf (typeof(T)));
-			Marshal.StructureToPtr (msg, msg_ptr, true);
-			int ret = rcl_publish (ref publisher, msg_ptr);
+			//IntPtr msg_ptr = Marshal.AllocHGlobal (Marshal.SizeOf (msg));
+			//Marshal.StructureToPtr (msg, msg_ptr, true);
+			int ret = rcl_publish (ref publisher,  msg);
 			RCLReturnValues ret_val = (RCLReturnValues)ret;
 
 			/* \return RCL_RET_OK if the message was published successfully, or
@@ -111,7 +111,7 @@ namespace ROS2Sharp
 		extern static rcl_publisher_options_t rcl_publisher_get_default_options();
 
 		[DllImport("librcl.so")]
-		extern static int rcl_publish(ref rcl_publisher_t publisher, IntPtr ros_message);
+		extern static int rcl_publish(ref rcl_publisher_t publisher, [In, Out] MessageBase ros_message);
 
 		[DllImport("librcl.so")]
 		extern static string rcl_publisher_get_topic_name(ref rcl_publisher_t publisher);

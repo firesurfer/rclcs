@@ -33,7 +33,7 @@ namespace ROS2Sharp
 			get{ return InternalNode; }
 		}
 		public  Publisher<T> CreatePublisher<T>(string TopicName, bool AddToExecutables = true)
-			where T: class
+			where T: MessageBase
 		{
 			Publisher<T> NewPublisher = new Publisher<T> (this, TopicName);
 			if(AddToExecutables)
@@ -41,7 +41,7 @@ namespace ROS2Sharp
 			return NewPublisher;
 		}
 		public Subscription<T> CreateSubscription<T>(string TopicName, bool AddToExecutables = true)
-			where T: class, new()
+			where T: MessageBase, new()
 		{
 			Subscription<T> NewSubscription = new Subscription<T> (this, TopicName);
 			if(AddToExecutables)

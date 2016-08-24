@@ -4,7 +4,7 @@ using System.Reflection;
 namespace ROS2Sharp
 {
 	public class Subscription<T>:Executable
-		where T : class, new()
+		where T : MessageBase, new()
 	{
 		private rosidl_message_type_support_t TypeSupport;
 		private rcl_subscription InternalSubscription;
@@ -74,14 +74,14 @@ namespace ROS2Sharp
 			return rcl_subscription_get_default_options ();
 		}
 		public T TakeMessage<T>(out bool success)
-			where T: class, new()
+			where T: MessageBase, new()
 		{
 			T msg = new T ();
 			rmw_message_info_t message_info = new rmw_message_info_t();
-			IntPtr msg_ptr = Marshal.AllocHGlobal (Marshal.SizeOf (typeof(T)));
-			IntPtr message_info_ptr = Marshal.AllocHGlobal(Marshal.SizeOf(message_info));
+			//IntPtr msg_ptr = Marshal.AllocHGlobal (Marshal.SizeOf (msg));
+			//IntPtr message_info_ptr = Marshal.AllocHGlobal(Marshal.SizeOf(message_info));
 
-			int ret = rcl_take (ref subscription, msg_ptr, message_info_ptr);
+			int ret = rcl_take (ref subscription, msg, message_info);
 			RCLReturnValues ret_val = (RCLReturnValues)ret;
 			//Console.WriteLine (ret_val);
 			/*return RCL_RET_OK if the message was published, or
@@ -105,7 +105,7 @@ namespace ROS2Sharp
 			case RCLReturnValues.RCL_RET_SUBSCRIPTION_TAKE_FAILED:
 				//throw new RCLSubscriptonTakeFailedException ();
 				take_message_success = false;
-				Marshal.FreeHGlobal (msg_ptr);
+				//Marshal.FreeHGlobal (msg_ptr);
 				break;
 			case RCLReturnValues.RCL_RET_ERROR:
 				throw new RCLErrorException ();
@@ -114,7 +114,7 @@ namespace ROS2Sharp
 				{
 					take_message_success = true;
 					//Is this needed -> How to two way marshal structures that were passed as void ptrs?
-					msg = Marshal.PtrToStructure<T> (msg_ptr);
+					//msg = Marshal.PtrToStructure<T> (msg_ptr);
 
 				}
 				break;
@@ -122,7 +122,7 @@ namespace ROS2Sharp
 				break;
 			}
 			success = take_message_success;
-			Marshal.FreeHGlobal (message_info_ptr);
+			//Marshal.FreeHGlobal (message_info_ptr);
 		
 			return msg;
 		}
@@ -140,7 +140,7 @@ namespace ROS2Sharp
 	    extern static rcl_subscription_options_t rcl_subscription_get_default_options ();
 
 		[DllImport("librcl.so")]
-		extern static int rcl_take(ref rcl_subscription_t subscription, IntPtr ros_message, IntPtr message_info);
+		extern static int rcl_take(ref rcl_subscription_t subscription, [In,Out] MessageBase ros_message,[In,Out] rmw_message_info_t message_info);
 
 		[DllImport("librcl.so")]
 		extern static string rcl_subscription_get_topic_name(ref rcl_subscription_t subscription);

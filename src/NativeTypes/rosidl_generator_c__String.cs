@@ -2,16 +2,16 @@
 using System.Runtime.InteropServices;
 namespace ROS2Sharp
 {
-	[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+	[StructLayout(LayoutKind.Sequential)]
 	public struct rosidl_generator_c__String
 	{
 
 		public rosidl_generator_c__String(string _data)
 		{
-			data = _data;
+			//data = _data;
 			size = (UIntPtr)_data.Length;
 			capacity = (UIntPtr)size +1;
-
+			data = Marshal.StringToHGlobalAnsi (_data);
 		}
 		/*~rosidl_generator_c__String()
 		{
@@ -21,11 +21,19 @@ namespace ROS2Sharp
 			capacity = UIntPtr.Zero;
 		}*/
 		public string Data{
-			get{return data;}
+			//get{return data;}
+			get{return Marshal.PtrToStringAnsi(data);}
 		}
-		[MarshalAs(UnmanagedType.LPStr)]
-		string data ;
-
+		public int Size{
+			get{ return (int)size;}
+		}
+		public int Capacity{
+			get{ return (int)capacity; }
+		}
+		//[MarshalAs(UnmanagedType.LPStr)]
+		//string data ;
+		IntPtr data;
+		
 		UIntPtr size;
 
 		UIntPtr capacity;

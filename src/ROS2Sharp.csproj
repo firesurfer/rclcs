@@ -52,6 +52,8 @@
     <Compile Include="Service.cs" />
     <Compile Include="RCLExceptions.cs" />
     <Compile Include="Executors\SingleThreadedExecutor.cs" />
+    <Compile Include="NativeTypes\rosidl_generator_c__primitive_arrays.cs" />
+    <Compile Include="MessageBase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
