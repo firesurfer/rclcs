@@ -6,8 +6,8 @@ namespace ROS2Sharp
 {
 	public  unsafe struct rmw_gid_t
 	{
-		string implementation_identifier;
-		fixed byte data [24] ;
+		public string implementation_identifier;
+		public fixed byte data [24] ;
 	}
 }
 

@@ -2,7 +2,7 @@
 namespace ROS2Sharp
 {
 	public class MessageRecievedEventArgs<T>:EventArgs
-		where T : class
+		where T : struct
 	{
 		private T message;
 		public MessageRecievedEventArgs(T msg)

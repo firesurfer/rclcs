@@ -64,8 +64,8 @@ namespace ROS2Sharp
 	[StructLayout(LayoutKind.Sequential)]
 	public struct rosidl_generator_c__primitive_array_float32
 	{	
-		 [MarshalAs(UnmanagedType.LPArray)]
-		 public float[] Data;
+		 //[MarshalAs(UnmanagedType.LPArray)]
+		 public IntPtr Data;
 		 UIntPtr Size;
 		 UIntPtr Capacity;
 
@@ -73,23 +73,23 @@ namespace ROS2Sharp
 		public rosidl_generator_c__primitive_array_float32(float[] _Data)
 		{
 			
-			//Data = Marshal.AllocHGlobal (Marshal.SizeOf<float>()*_Data.Length);
-			Data =_Data;
-			Size = (UIntPtr)(_Data.Length);
+			Data = Marshal.AllocHGlobal (Marshal.SizeOf(typeof(float))*(_Data.Length));
+			//Data =_Data;
+			Size = (UIntPtr)(_Data.Length-1);
 			Capacity = Size;
 		
-			//Marshal.Copy (_Data, 0, Data,_Data.Length);
+			Marshal.Copy (_Data, 0, Data,_Data.Length);
 
    			//Marshal.StructureToPtr<float[] >(_Data, Data, true);  
 		}
 		public float[] Array
 		{
-			/*get{ 
+			get{ 
 				float[] tempArray = new float[(int)Size]; 
 				Marshal.Copy (Data, tempArray, 0, (int)Size);
 				return tempArray;
-			}*/
-			get{return Data;}
+			}
+			//get{return Data;}
 		}
 		public int ArraySize
 		{

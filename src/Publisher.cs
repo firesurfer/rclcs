@@ -4,7 +4,7 @@ using System.Reflection;
 namespace ROS2Sharp
 {
 	public class Publisher<T>:Executable
-		where T: MessageBase
+		where T: struct
 	{
 		private rosidl_message_type_support_t TypeSupport;
 		private rcl_publisher InternalPublisher;
@@ -38,7 +38,7 @@ namespace ROS2Sharp
 		{
 			get{ return InternalPublisher; }
 		}
-		public bool Publish(MessageBase msg)
+		public bool Publish(ValueType msg)
 		{
 			return InternalPublisher.PublishMessage<T> (ref msg);
 		}
@@ -66,11 +66,12 @@ namespace ROS2Sharp
 		{
 			return rcl_publisher_get_default_options ();
 		}
-		public bool PublishMessage<T>(ref MessageBase msg)
-			where T : MessageBase
+		public bool PublishMessage<T>(ref ValueType msg)
+			where T : struct
 		{
 			//IntPtr msg_ptr = Marshal.AllocHGlobal (Marshal.SizeOf (msg));
 			//Marshal.StructureToPtr (msg, msg_ptr, true);
+
 			int ret = rcl_publish (ref publisher,  msg);
 			RCLReturnValues ret_val = (RCLReturnValues)ret;
 
@@ -111,7 +112,7 @@ namespace ROS2Sharp
 		extern static rcl_publisher_options_t rcl_publisher_get_default_options();
 
 		[DllImport("librcl.so")]
-		extern static int rcl_publish(ref rcl_publisher_t publisher, [In, Out] MessageBase ros_message);
+		extern static int rcl_publish(ref rcl_publisher_t publisher,  [In,Out] ValueType ros_message);
 
 		[DllImport("librcl.so")]
 		extern static string rcl_publisher_get_topic_name(ref rcl_publisher_t publisher);

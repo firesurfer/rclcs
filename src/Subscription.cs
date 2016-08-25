@@ -4,7 +4,7 @@ using System.Reflection;
 namespace ROS2Sharp
 {
 	public class Subscription<T>:Executable
-		where T : MessageBase, new()
+		where T : struct
 	{
 		private rosidl_message_type_support_t TypeSupport;
 		private rcl_subscription InternalSubscription;
@@ -74,14 +74,14 @@ namespace ROS2Sharp
 			return rcl_subscription_get_default_options ();
 		}
 		public T TakeMessage<T>(out bool success)
-			where T: MessageBase, new()
+			where T: struct
 		{
-			T msg = new T ();
+			ValueType msg = new T();
 			rmw_message_info_t message_info = new rmw_message_info_t();
 			//IntPtr msg_ptr = Marshal.AllocHGlobal (Marshal.SizeOf (msg));
 			//IntPtr message_info_ptr = Marshal.AllocHGlobal(Marshal.SizeOf(message_info));
 
-			int ret = rcl_take (ref subscription, msg, message_info);
+			int ret = rcl_take (ref subscription,  msg, message_info);
 			RCLReturnValues ret_val = (RCLReturnValues)ret;
 			//Console.WriteLine (ret_val);
 			/*return RCL_RET_OK if the message was published, or
@@ -113,6 +113,9 @@ namespace ROS2Sharp
 			case RCLReturnValues.RCL_RET_OK:
 				{
 					take_message_success = true;
+					foreach (var item in msg.GetType().GetFields()) {
+						Console.WriteLine (item.Name + " " + item.GetValue (msg));
+					}
 					//Is this needed -> How to two way marshal structures that were passed as void ptrs?
 					//msg = Marshal.PtrToStructure<T> (msg_ptr);
 
@@ -124,7 +127,7 @@ namespace ROS2Sharp
 			success = take_message_success;
 			//Marshal.FreeHGlobal (message_info_ptr);
 		
-			return msg;
+			return (T)msg;
 		}
 
 		[DllImport("librcl.so")]
@@ -139,8 +142,8 @@ namespace ROS2Sharp
 		[DllImport("librcl.so")]
 	    extern static rcl_subscription_options_t rcl_subscription_get_default_options ();
 
-		[DllImport("librcl.so")]
-		extern static int rcl_take(ref rcl_subscription_t subscription, [In,Out] MessageBase ros_message,[In,Out] rmw_message_info_t message_info);
+		[DllImport("librcl.so",CallingConvention = CallingConvention.Cdecl)]
+		extern static int rcl_take(ref rcl_subscription_t subscription,[In,Out] ValueType ros_message,[In,Out] rmw_message_info_t message_info);
 
 		[DllImport("librcl.so")]
 		extern static string rcl_subscription_get_topic_name(ref rcl_subscription_t subscription);

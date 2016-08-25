@@ -4,8 +4,8 @@ namespace ROS2Sharp
 {
 	public struct rmw_message_info_t
 	{
-		rmw_gid_t publisher_gid;
-		bool from_intra_process;
+		public rmw_gid_t publisher_gid;
+		public bool from_intra_process;
 	}
 }
 

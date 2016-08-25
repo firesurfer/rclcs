@@ -2,11 +2,9 @@
 
 namespace ROS2Sharp
 {
-	public class MessageBase
+	public interface MessageBase
 	{
-		public MessageBase ()
-		{
-		}
+		
 	}
 }
 
