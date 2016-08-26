@@ -62,6 +62,25 @@ namespace ROS2Sharp
 		}
 	}
 	[StructLayout(LayoutKind.Sequential)]
+	public struct rosidl_generator_c__primitive_array_string
+	{	
+		IntPtr Data;
+		UIntPtr Size;
+		UIntPtr Capacity;
+
+		public rosidl_generator_c__primitive_array_string(string[] _Data)
+		{
+			Data = Marshal.AllocHGlobal (Marshal.SizeOf (_Data));
+			Size = (UIntPtr)Marshal.SizeOf (_Data);
+			Capacity = Size;
+			Marshal.StructureToPtr (_Data, Data, true);  
+		}
+		public string[] Array
+		{
+			get{ return Marshal.PtrToStructure<string[]> (Data);}
+		}
+	}
+	[StructLayout(LayoutKind.Sequential)]
 	public struct rosidl_generator_c__primitive_array_float32
 	{	
 		 //[MarshalAs(UnmanagedType.LPArray)]
@@ -72,10 +91,13 @@ namespace ROS2Sharp
 
 		public rosidl_generator_c__primitive_array_float32(float[] _Data)
 		{
-			
-			Data = Marshal.AllocHGlobal (Marshal.SizeOf(typeof(float))*(_Data.Length));
+
+			int size = Marshal.SizeOf (typeof(float)) * (_Data.Length);
+			Console.WriteLine ("Allocating: " + size + " For: " + _Data);
+			Data = Marshal.AllocHGlobal (size);
+
 			//Data =_Data;
-			Size = (UIntPtr)(_Data.Length-1);
+			Size = (UIntPtr)(_Data.Length);
 			Capacity = Size;
 		
 			Marshal.Copy (_Data, 0, Data,_Data.Length);
@@ -123,22 +145,24 @@ namespace ROS2Sharp
 	[StructLayout(LayoutKind.Sequential)]
 	public struct rosidl_generator_c__primitive_array_int8
 	{	
-		IntPtr Data ;
+		public IntPtr Data ;
 		UIntPtr Size;
 		UIntPtr Capacity;
 
 
 		public rosidl_generator_c__primitive_array_int8(byte[] _Data)
 		{
-			Data = Marshal.AllocHGlobal (Marshal.SizeOf<byte> ()*_Data.Length);
+			
+			Data = Marshal.AllocHGlobal (_Data.Length);//Marshal.SizeOf<byte> ()*_Data.Length);
 			Size = (UIntPtr) _Data.Length;
 			Capacity = Size;
 			Marshal.Copy (_Data, 0, Data, _Data.Length);
-			//Marshal.StructureToPtr (_Data, Data, true);  
 		}
 		public byte[] Array
 		{
-			get{ return Marshal.PtrToStructure<byte[]> (Data);}
+			get{ byte[] tempArray = new byte[(int)Size]; 
+				Marshal.Copy (Data, tempArray, 0, (int)Size);
+				return tempArray;}
 		}
 		public int ArraySize
 		{

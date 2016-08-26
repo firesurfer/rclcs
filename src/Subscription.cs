@@ -82,6 +82,7 @@ namespace ROS2Sharp
 			//IntPtr message_info_ptr = Marshal.AllocHGlobal(Marshal.SizeOf(message_info));
 
 			int ret = rcl_take (ref subscription,  msg, message_info);
+
 			RCLReturnValues ret_val = (RCLReturnValues)ret;
 			//Console.WriteLine (ret_val);
 			/*return RCL_RET_OK if the message was published, or
@@ -113,11 +114,11 @@ namespace ROS2Sharp
 			case RCLReturnValues.RCL_RET_OK:
 				{
 					take_message_success = true;
+					Console.WriteLine (msg.GetType ().ToString () + " Msg size:" + Marshal.SizeOf (msg));
 					foreach (var item in msg.GetType().GetFields()) {
-						Console.WriteLine (item.Name + " " + item.GetValue (msg));
+						Console.WriteLine (item.ToString () + " Size: " + Marshal.SizeOf(item.GetValue(msg)) + " Value: " + item.GetValue(msg));
 					}
-					//Is this needed -> How to two way marshal structures that were passed as void ptrs?
-					//msg = Marshal.PtrToStructure<T> (msg_ptr);
+					Console.WriteLine ();
 
 				}
 				break;
@@ -142,8 +143,8 @@ namespace ROS2Sharp
 		[DllImport("librcl.so")]
 	    extern static rcl_subscription_options_t rcl_subscription_get_default_options ();
 
-		[DllImport("librcl.so",CallingConvention = CallingConvention.Cdecl)]
-		extern static int rcl_take(ref rcl_subscription_t subscription,[In,Out] ValueType ros_message,[In,Out] rmw_message_info_t message_info);
+		[DllImport("librcl.so")]
+		extern static int rcl_take(ref rcl_subscription_t subscription,[Out] ValueType ros_message,[In,Out] rmw_message_info_t message_info);
 
 		[DllImport("librcl.so")]
 		extern static string rcl_subscription_get_topic_name(ref rcl_subscription_t subscription);
