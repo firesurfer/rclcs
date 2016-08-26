@@ -52,7 +52,7 @@ namespace ROS2Sharp
 			where T: struct
 		{
 			//TODO -> Add parameters to constructor when serivce is implemented
-			Service<T> NewService = new Service<T> ();
+			Service<T> NewService = new Service<T> (this, ServiceName);
 			if(AddToExecutables)
 				ManagedExecutables.Add (NewService);
 			return NewService;
@@ -67,7 +67,7 @@ namespace ROS2Sharp
 	}
 	public class rcl_node
 	{
-		public rcl_node_t node;
+		private rcl_node_t node;
 		public rcl_node_t NativeNode
 		{
 			get{return node; }

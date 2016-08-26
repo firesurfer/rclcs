@@ -11,10 +11,10 @@ namespace ROS2Sharp
 		public Node RosNode{ get; private set;}
 		public string TopicName { get; private set; }
 		public rcl_publisher_options_t PublisherOptions{ get; private set; }
-		public Publisher (Node _node, string _topicName)
+		public Publisher (Node _Node, string _TopicName)
 		{
-			RosNode = _node;
-			TopicName = _topicName;
+			RosNode = _Node;
+			TopicName = _TopicName;
 			Type messsageType = typeof(T);
 			foreach (var item in messsageType.GetMethods()) {
 				
