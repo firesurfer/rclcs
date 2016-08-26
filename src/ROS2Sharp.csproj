@@ -8,6 +8,8 @@
     <RootNamespace>ROS2Sharp</RootNamespace>
     <AssemblyName>ROS2Sharp</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,7 +37,6 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Node.cs" />
-    <Compile Include="Allocator.cs" />
     <Compile Include="RCL.cs" />
     <Compile Include="Publisher.cs" />
     <Compile Include="Subscription.cs" />
@@ -51,7 +52,8 @@
     <Compile Include="RCLExceptions.cs" />
     <Compile Include="Executors\SingleThreadedExecutor.cs" />
     <Compile Include="NativeTypes\rosidl_generator_c__primitive_arrays.cs" />
-    <Compile Include="MessageBase.cs" />
+    <Compile Include="NativeTypes\rcl_allocator_t.cs" />
+    <Compile Include="NativeTypes\rosidl_service_type_support_t.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

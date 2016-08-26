@@ -42,7 +42,7 @@ namespace ROS2Sharp
 		public override void Execute()
 		{
 			bool success = false;
-			T message = InternalSubscription.TakeMessage<T> (out success);
+			T message = InternalSubscription.TakeMessage<T> (ref success);
 			if (success) {
 				if (MessageRecieved != null)
 					MessageRecieved (this,new MessageRecievedEventArgs<T> (message));
@@ -73,13 +73,17 @@ namespace ROS2Sharp
 		{
 			return rcl_subscription_get_default_options ();
 		}
-		public T TakeMessage<T>(out bool success)
+		public T TakeMessage<T>(ref bool success)
+			where T: struct
+		{
+			rmw_message_info_t message_info = new rmw_message_info_t ();
+			return TakeMessage<T> (ref success, ref message_info);
+		}
+		public T TakeMessage<T>(ref bool success, ref rmw_message_info_t _message_info )
 			where T: struct
 		{
 			ValueType msg = new T();
-			rmw_message_info_t message_info = new rmw_message_info_t();
-			//IntPtr msg_ptr = Marshal.AllocHGlobal (Marshal.SizeOf (msg));
-			//IntPtr message_info_ptr = Marshal.AllocHGlobal(Marshal.SizeOf(message_info));
+			rmw_message_info_t message_info = _message_info;
 
 			int ret = rcl_take (ref subscription,  msg, message_info);
 

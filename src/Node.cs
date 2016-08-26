@@ -21,7 +21,7 @@ namespace ROS2Sharp
 		 */
 		public Node (string _Name, UInt64 DomainId)
 		{
-
+			throw  new NotImplementedException ();
 		}
 
 		public rcl_node_t NativeNode
@@ -49,7 +49,7 @@ namespace ROS2Sharp
 			return NewSubscription;
 		}
 		public Service<T> CreateService<T>(string ServiceName, bool AddToExecutables = true)
-			where T: class
+			where T: struct
 		{
 			//TODO -> Add parameters to constructor when serivce is implemented
 			Service<T> NewService = new Service<T> ();

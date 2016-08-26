@@ -27,6 +27,7 @@ namespace ROS2Sharp
 		}
 		public virtual void SpinOnce(System.TimeSpan Span)
 		{
+			
 		}
 		public virtual void Spin(System.TimeSpan Intervall)
 		{

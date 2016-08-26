@@ -15,8 +15,6 @@ namespace ROS2Sharp
 		{
 			RosNode = _node;
 			TopicName = _topicName;
-
-		 	//TypeSupport = IntPtr.Zero;
 			Type messsageType = typeof(T);
 			foreach (var item in messsageType.GetMethods()) {
 				
@@ -69,9 +67,6 @@ namespace ROS2Sharp
 		public bool PublishMessage<T>(ref ValueType msg)
 			where T : struct
 		{
-			//IntPtr msg_ptr = Marshal.AllocHGlobal (Marshal.SizeOf (msg));
-			//Marshal.StructureToPtr (msg, msg_ptr, true);
-
 			int ret = rcl_publish (ref publisher,  msg);
 			RCLReturnValues ret_val = (RCLReturnValues)ret;
 
@@ -112,7 +107,7 @@ namespace ROS2Sharp
 		extern static rcl_publisher_options_t rcl_publisher_get_default_options();
 
 		[DllImport("librcl.so")]
-		extern static int rcl_publish(ref rcl_publisher_t publisher,  [In,Out] ValueType ros_message);
+		extern static int rcl_publish(ref rcl_publisher_t publisher,  [In] ValueType ros_message);
 
 		[DllImport("librcl.so")]
 		extern static string rcl_publisher_get_topic_name(ref rcl_publisher_t publisher);

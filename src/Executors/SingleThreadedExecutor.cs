@@ -13,6 +13,7 @@ namespace ROS2Sharp
 		private Thread SpinThread;
 		public  override void SpinOnce(System.TimeSpan Span)
 		{
+			
 		}
 		public  override void Spin(System.TimeSpan Intervall)
 		{
@@ -35,7 +36,11 @@ namespace ROS2Sharp
 		{
 			
 			while (!AbortSpin) {
-				SpinSome ();
+				lock (SpinMutex) {
+					
+				
+					SpinSome ();
+				}
 				Thread.Sleep (((System.TimeSpan)Intervall).Milliseconds);
 
 			}
