@@ -13,10 +13,8 @@ Because it's kind of difficult to automatically reproduce all types which are de
 * uint64
 * float32
 * float64
-* string (got some errors at the moment)
+* string 
 
-* arrays of the types above are soon to follow
+* arrays (got some errors
 
-## Types I'm not sure that they will ever work
-
-* Nested message. For example you define a message A and want an array of elements of message A in a message B
+* nested message are going to be supported as soon a I'm doing a clean up of the rosidl_generator_cs - the implementation should be fairly easy because nested structs in c# can directly be used in c. 
