@@ -45,7 +45,7 @@ For a list of currently supported types see: [supported types](doc/SupportedType
 
 ## What is critical at the moment
 
-* ~ ~I'm not sure if it's possible to reproduce more complicated messages in C# an directly pass them to the rcl without any conversion. A conversion would be possible but would be a waste of resources in the most cases.~ ~
+* ~~I'm not sure if it's possible to reproduce more complicated messages in C# an directly pass them to the rcl without any conversion. A conversion would be possible but would be a waste of resources in the most cases.~~
 
 ## What has to be done next
 
