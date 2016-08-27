@@ -57,6 +57,9 @@
     <Compile Include="NativeTypes\rmw_request_id_t.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="ServiceRecievedRequestEventArgs.cs" />
+    <Compile Include="IRosMessage.cs" />
+    <Compile Include="IRosService.cs" />
+    <Compile Include="IRosTransportItem.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

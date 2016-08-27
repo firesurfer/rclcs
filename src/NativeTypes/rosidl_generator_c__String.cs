@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 namespace ROS2Sharp
 {
 	[StructLayout(LayoutKind.Sequential)]
-	public struct rosidl_generator_c__String
+	public struct rosidl_generator_c__String:IRosTransportItem
 	{
 
 		public rosidl_generator_c__String(string _data)
@@ -29,6 +29,10 @@ namespace ROS2Sharp
 		}
 		public int Capacity{
 			get{ return (int)capacity; }
+		}
+		public void Free()
+		{
+			Marshal.FreeHGlobal (data);
 		}
 		//[MarshalAs(UnmanagedType.LPStr)]
 		//string data ;

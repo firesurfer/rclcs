@@ -10,6 +10,8 @@ namespace ROS2Sharp
 		public Node RosNode{ get; private set; }
 		public string ServiceName{ get;private set;}
 		public rcl_service_options_t ServiceOptions { get; private set; }
+		public event EventHandler<ServiceRecievedRequestEventArgs<T>> RequestRecieved;
+
 		public Service (Node _Node, string _ServiceName)
 		{
 			RosNode = _Node;
@@ -31,17 +33,18 @@ namespace ROS2Sharp
 	}
 	public class rcl_service
 	{
-		private rcl_node_t node;
+		private rcl_node_t native_node;
 		private rcl_service_t native_handle;
 
-		public rcl_service(rcl_node_t _node)
+		public rcl_service(rcl_node_t _node, rosidl_service_type_support_t typesupport, string topic_name, rcl_service_options_t options)
 		{
-			node = _node;
-
+			native_node = _node;
+			native_handle = rcl_get_zero_initialized_service ();
+			rcl_service_init (ref native_node, ref typesupport, topic_name, ref options);
 		}
 		~rcl_service()
 		{
-			rcl_service_fini (ref native_handle, ref node);
+			rcl_service_fini (ref native_handle, ref native_node);
 		}
 		public rcl_service_t NativeService
 		{
@@ -57,7 +60,10 @@ namespace ROS2Sharp
 		{
 
 		}
-
+		public static rcl_service_options_t get_default_options()
+		{
+			return rcl_service_get_default_options ();
+		}
 		[DllImport("librcl.so")]
 		extern static rcl_service_t rcl_get_zero_initialized_service();
 

@@ -2,7 +2,7 @@
 
 namespace ROS2Sharp
 {
-	public class Client
+	public class Client<T>
 	{
 		public Client ()
 		{

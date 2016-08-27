@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 namespace ROS2Sharp
 {
 	[StructLayout(LayoutKind.Sequential)]
-	public struct rosidl_generator_c__primitive_array_bool
+	public struct rosidl_generator_c__primitive_array_bool:IRosTransportItem
 	{	
 		IntPtr Data;
 		UIntPtr Size;
@@ -21,9 +21,15 @@ namespace ROS2Sharp
 		{
 			get{ return Marshal.PtrToStructure<bool[]> (Data);}
 		}
+		public void Free()
+		{
+			if(Data != IntPtr.Zero)
+				Marshal.FreeHGlobal (Data);
+			
+		}
 	}
 	[StructLayout(LayoutKind.Sequential)]
-	public struct rosidl_generator_c__primitive_array_byte
+	public struct rosidl_generator_c__primitive_array_byte:IRosTransportItem
 	{	
 		IntPtr Data;
 		UIntPtr Size;
@@ -41,9 +47,15 @@ namespace ROS2Sharp
 		{
 			get{ return Marshal.PtrToStructure<byte[]> (Data);}
 		}
+		public void Free()
+		{
+			if(Data != IntPtr.Zero)
+				Marshal.FreeHGlobal (Data);
+
+		}
 	}
 	[StructLayout(LayoutKind.Sequential)]
-	public struct rosidl_generator_c__primitive_array_char
+	public struct rosidl_generator_c__primitive_array_char:IRosTransportItem
 	{	
 		IntPtr Data;
 		UIntPtr Size;
@@ -60,9 +72,15 @@ namespace ROS2Sharp
 		{
 			get{ return Marshal.PtrToStructure<char[]> (Data);}
 		}
+		public void Free()
+		{
+			if(Data != IntPtr.Zero)
+				Marshal.FreeHGlobal (Data);
+
+		}
 	}
 	[StructLayout(LayoutKind.Sequential)]
-	public struct rosidl_generator_c__primitive_array_string
+	public struct rosidl_generator_c__primitive_array_string:IRosTransportItem
 	{	
 		IntPtr Data;
 		UIntPtr Size;
@@ -79,9 +97,15 @@ namespace ROS2Sharp
 		{
 			get{ return Marshal.PtrToStructure<string[]> (Data);}
 		}
+		public void Free()
+		{
+			if(Data != IntPtr.Zero)
+				Marshal.FreeHGlobal (Data);
+
+		}
 	}
 	[StructLayout(LayoutKind.Sequential)]
-	public struct rosidl_generator_c__primitive_array_float32
+	public struct rosidl_generator_c__primitive_array_float32:IRosTransportItem
 	{	
 		 //[MarshalAs(UnmanagedType.LPArray)]
 		 public IntPtr Data;
@@ -121,9 +145,15 @@ namespace ROS2Sharp
 		{
 			get{ return (int)Capacity;}
 		}
+		public void Free()
+		{
+			if(Data != IntPtr.Zero)
+				Marshal.FreeHGlobal (Data);
+
+		}
 	}
 	[StructLayout(LayoutKind.Sequential)]
-	public struct rosidl_generator_c__primitive_array_float64
+	public struct rosidl_generator_c__primitive_array_float64:IRosTransportItem
 	{	
 		IntPtr Data;
 		UIntPtr Size ;
@@ -141,9 +171,15 @@ namespace ROS2Sharp
 		{
 			get{ return Marshal.PtrToStructure<double[]> (Data);}
 		}
+		public void Free()
+		{
+			if(Data != IntPtr.Zero)
+				Marshal.FreeHGlobal (Data);
+
+		}
 	}
 	[StructLayout(LayoutKind.Sequential)]
-	public struct rosidl_generator_c__primitive_array_int8
+	public struct rosidl_generator_c__primitive_array_int8:IRosTransportItem
 	{	
 		public IntPtr Data ;
 		UIntPtr Size;
@@ -172,9 +208,15 @@ namespace ROS2Sharp
 		{
 			get{ return (int)Capacity;}
 		}
+		public void Free()
+		{
+			if(Data != IntPtr.Zero)
+				Marshal.FreeHGlobal (Data);
+
+		}
 	}
 	[StructLayout(LayoutKind.Sequential)]
-	public struct rosidl_generator_c__primitive_array_uint8
+	public struct rosidl_generator_c__primitive_array_uint8:IRosTransportItem
 	{	
 		IntPtr Data ;
 		UIntPtr Size ;
@@ -192,9 +234,15 @@ namespace ROS2Sharp
 		{
 			get{ return Marshal.PtrToStructure<sbyte[]> (Data);}
 		}
+		public void Free()
+		{
+			if(Data != IntPtr.Zero)
+				Marshal.FreeHGlobal (Data);
+
+		}
 	}
 	[StructLayout(LayoutKind.Sequential)]
-	public struct rosidl_generator_c__primitive_array_int16
+	public struct rosidl_generator_c__primitive_array_int16:IRosTransportItem
 	{	
 		IntPtr Data ;
 		UIntPtr Size ;
@@ -212,9 +260,15 @@ namespace ROS2Sharp
 		{
 			get{ return Marshal.PtrToStructure<Int16[]> (Data);}
 		}
+		public void Free()
+		{
+			if(Data != IntPtr.Zero)
+				Marshal.FreeHGlobal (Data);
+
+		}
 	}
 	[StructLayout(LayoutKind.Sequential)]
-	public struct rosidl_generator_c__primitive_array_uint16
+	public struct rosidl_generator_c__primitive_array_uint16:IRosTransportItem
 	{	
 		IntPtr Data ;
 		UIntPtr Size ;
@@ -231,9 +285,15 @@ namespace ROS2Sharp
 		{
 			get{ return Marshal.PtrToStructure<UInt16[]> (Data);}
 		}
+		public void Free()
+		{
+			if(Data != IntPtr.Zero)
+				Marshal.FreeHGlobal (Data);
+
+		}
 	}
 	[StructLayout(LayoutKind.Sequential)]
-	public struct rosidl_generator_c__primitive_array_int32
+	public struct rosidl_generator_c__primitive_array_int32:IRosTransportItem
 	{	
 		IntPtr Data ;
 		UIntPtr Size;
@@ -253,7 +313,7 @@ namespace ROS2Sharp
 		}
 	}
 	[StructLayout(LayoutKind.Sequential)]
-	public struct rosidl_generator_c__primitive_array_uint32
+	public struct rosidl_generator_c__primitive_array_uint32:IRosTransportItem
 	{	
 		IntPtr Data;
 		UIntPtr Size ;
@@ -271,9 +331,15 @@ namespace ROS2Sharp
 		{
 			get{ return Marshal.PtrToStructure<UInt32[]> (Data);}
 		}
+		public void Free()
+		{
+			if(Data != IntPtr.Zero)
+				Marshal.FreeHGlobal (Data);
+
+		}
 	}
 	[StructLayout(LayoutKind.Sequential)]
-	public struct rosidl_generator_c__primitive_array_int64
+	public struct rosidl_generator_c__primitive_array_int64:IRosTransportItem
 	{	
 		IntPtr Data;
 		UIntPtr Size;
@@ -290,9 +356,15 @@ namespace ROS2Sharp
 		{
 			get{ return Marshal.PtrToStructure<Int64[]> (Data);}
 		}
+		public void Free()
+		{
+			if(Data != IntPtr.Zero)
+				Marshal.FreeHGlobal (Data);
+
+		}
 	}
 	[StructLayout(LayoutKind.Sequential)]
-	public struct rosidl_generator_c__primitive_array_uint64
+	public struct rosidl_generator_c__primitive_array_uint64:IRosTransportItem
 	{	
 		IntPtr Data;
 		UIntPtr Size;
@@ -308,6 +380,12 @@ namespace ROS2Sharp
 		public UInt64[] Array
 		{
 			get{ return Marshal.PtrToStructure<UInt64[]> (Data);}
+		}
+		public void Free()
+		{
+			if(Data != IntPtr.Zero)
+				Marshal.FreeHGlobal (Data);
+
 		}
 	}
 }
