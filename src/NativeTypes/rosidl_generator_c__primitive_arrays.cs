@@ -311,6 +311,12 @@ namespace ROS2Sharp
 		{
 			get{ return Marshal.PtrToStructure<Int32[]> (Data);}
 		}
+		public void Free()
+		{
+			if(Data != IntPtr.Zero)
+				Marshal.FreeHGlobal (Data);
+
+		}
 	}
 	[StructLayout(LayoutKind.Sequential)]
 	public struct rosidl_generator_c__primitive_array_uint32:IRosTransportItem
