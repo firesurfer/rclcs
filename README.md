@@ -27,6 +27,7 @@ Then go back to the ros2 workspace and do an ament build.
 An example on how to use the rclcs in your own application is soon to follow.
 You can have look at my [testing workspace](https://github.com/firesurfer/rclcs_testing_ws) which is quite messy.
 
+
 ## What works at the moment
 
 * Init and deinit RCL
@@ -65,3 +66,26 @@ For a list of currently supported types see: [supported types](doc/SupportedType
 	* I think I'm going to break the consistency in some parts in favour to usability
 * Write tests
 * Use templating engine for message generation
+
+
+# How to run the example workspace:
+
+First do an ament build in the root directory. Afterwards source the workspace with:
+```
+source install/local_setup.bash
+```
+
+The go into the install/bin folder:
+```
+cd install/bin
+```
+
+Tell mono where to search for assemblies:
+```
+export MONO_PATH=<Path to ros2 workspace/install/lib>
+```
+Then run the application:
+```
+mono test_cs.exe
+```
+
