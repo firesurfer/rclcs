@@ -9,7 +9,7 @@ find_package(ament_cmake_python REQUIRED)
 
 add_custom_target(rclcs ALL
 	COMMAND 
-	"xbuild" ROS2Sharp.csproj /property:OutputPath=${CMAKE_BINARY_DIR} /property:AssemblyName=rclcs
+	"xbuild" rclcs.csproj /property:OutputPath=${CMAKE_BINARY_DIR} /property:AssemblyName=rclcs
 	WORKING_DIRECTORY
 	${CMAKE_SOURCE_DIR}/src
 )

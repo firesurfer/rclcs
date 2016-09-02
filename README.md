@@ -35,21 +35,24 @@ You can have look at my [testing workspace](https://github.com/firesurfer/rclcs_
 * Create a Subscription
 * Create a Service/Client
 	* Get a request and answer it
-* Publish and recieve a simple message (no nested types)
-	* Arrays will work soon without any patches to the rmw
-* Generate code for messages without nested types
+* Publish and recieve a  message (nested types might be a bit buggy at the moment)
+	* Arrays will work soon without any patches to the rmw (See: https://github.com/eProsima/ROS-RMW-Fast-RTPS-cpp/pull/45)
+* Generate code for messages 
 
 For a list of currently supported types see: [supported types](doc/SupportedTypes.md)
 
 ## What doesn't work at the moment
 
-* Everything else 
-* String arrays
 
+* String arrays
+* Fixed Arrays - Coming soon
+* Everything else 
 
 ## What is critical at the moment
 
 * ~~I'm not sure if it's possible to reproduce more complicated messages in C# an directly pass them to the rcl without any conversion. A conversion would be possible but would be a waste of resources in the most cases.~~
+
+* Program crashes at exit
 
 ## What has to be done next
 
@@ -59,4 +62,5 @@ For a list of currently supported types see: [supported types](doc/SupportedType
 * ~~Finish implementation of services~~
 * Implement error handling where needed
 * Make sure the api is consistent with the rclcpp
+	* I think I'm going to break the consistency in some parts in favour to usability
 * Write tests
