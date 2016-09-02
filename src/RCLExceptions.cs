@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ROS2Sharp
+namespace rclcs
 {
 	public class RCLErrorException:Exception
 	{
@@ -128,6 +128,54 @@ namespace ROS2Sharp
 		public RCLSubscriptonTakeFailedException(string message,Exception inner):base(message,inner)
 		{
 			RCLReturnValue = RCLReturnValues.RCL_RET_SUBSCRIPTION_TAKE_FAILED;
+		}
+	}
+	public class RCLServiceInvalidException:Exception
+	{
+		public RCLReturnValues RCLReturnValue{ get; private set;}
+		public RCLServiceInvalidException()
+		{
+			RCLReturnValue = RCLReturnValues.RCL_RET_SERVICE_INVALID;
+		}
+		public RCLServiceInvalidException(string message):base(message)
+		{
+			RCLReturnValue = RCLReturnValues.RCL_RET_SERVICE_INVALID;
+		}
+		public RCLServiceInvalidException(string message,Exception inner):base(message,inner)
+		{
+			RCLReturnValue = RCLReturnValues.RCL_RET_SERVICE_INVALID;
+		}
+	}
+	public class RCLClientInvalidException:Exception
+	{
+		public RCLReturnValues RCLReturnValue{ get; private set;}
+		public RCLClientInvalidException()
+		{
+			RCLReturnValue = RCLReturnValues.RCL_RET_CLIENT_INVALID;
+		}
+		public RCLClientInvalidException(string message):base(message)
+		{
+			RCLReturnValue = RCLReturnValues.RCL_RET_CLIENT_INVALID;
+		}
+		public RCLClientInvalidException(string message,Exception inner):base(message,inner)
+		{
+			RCLReturnValue = RCLReturnValues.RCL_RET_CLIENT_INVALID;
+		}
+	}
+	public class RCLNodeInvalidException:Exception
+	{
+		public RCLReturnValues RCLReturnValue{ get; private set;}
+		public RCLNodeInvalidException()
+		{
+			RCLReturnValue = RCLReturnValues.RCL_RET_NODE_INVALID;
+		}
+		public RCLNodeInvalidException(string message):base(message)
+		{
+			RCLReturnValue = RCLReturnValues.RCL_RET_NODE_INVALID;
+		}
+		public RCLNodeInvalidException(string message,Exception inner):base(message,inner)
+		{
+			RCLReturnValue = RCLReturnValues.RCL_RET_NODE_INVALID;
 		}
 	}
 }

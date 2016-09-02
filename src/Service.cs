@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-namespace ROS2Sharp
+namespace rclcs
 {
 	/*
 	 * T is the request type
@@ -26,7 +26,7 @@ namespace ROS2Sharp
 			foreach (var item in ServiceType.GetMethods()) {
 
 				if (item.IsStatic ) {
-					if (item.Name.Contains ("rosidl_typesupport_introspection_c_get_service")) {
+					if (item.Name.Contains ("rosidl_typesupport_introspection_c_get_message")) {
 						TypeSupport = (rosidl_service_type_support_t)Marshal.PtrToStructure((IntPtr)item.Invoke (null, null),typeof(rosidl_service_type_support_t));
 					}
 				}
@@ -38,8 +38,14 @@ namespace ROS2Sharp
 		}
 		public override void Execute ()
 		{
-			
+			bool TakeSuccess = false;
+			T Request = InternalService.TakeRequest<T> (ref TakeSuccess);
+			if (TakeSuccess) {
+				if(RequestRecieved != null)
+					RequestRecieved(this, new ServiceRecievedRequestEventArgs<T>(Request));
+			}
 		}
+		/*TODO Make sure this can only be called ones after recieving a RequestRecieved event*/
 		public void SendResponse(U response)
 		{
 			InternalService.SendResponse<U> (ref response);
@@ -57,12 +63,35 @@ namespace ROS2Sharp
 	{
 		private rcl_node_t native_node;
 		private rcl_service_t native_handle;
-
+		private rmw_request_id_t last_request_header;
 		public rcl_service(rcl_node_t _node, rosidl_service_type_support_t typesupport, string service_name, rcl_service_options_t options)
 		{
 			native_node = _node;
 			native_handle = rcl_get_zero_initialized_service ();
-			rcl_service_init (ref native_node, ref typesupport, service_name, ref options);
+			int ret = rcl_service_init (ref native_handle,ref native_node, ref typesupport, service_name, ref options);
+			RCLReturnValues retVal = (RCLReturnValues)ret;
+			switch (retVal) {
+			case RCLReturnValues.RCL_RET_OK:
+				
+				break;
+			case RCLReturnValues.RCL_RET_NODE_INVALID:
+				throw new RCLNodeInvalidException ();
+				break;
+			case RCLReturnValues.RCL_RET_INVALID_ARGUMENT:
+				throw new RCLInvalidArgumentException();
+				break;
+			case RCLReturnValues.RCL_RET_SERVICE_INVALID:
+				throw new RCLServiceInvalidException ();
+				break;
+			case RCLReturnValues.RCL_RET_BAD_ALLOC:
+				throw new RCLBadAllocException ();
+				break;
+			case RCLReturnValues.RCL_RET_ERROR:
+				
+				break;
+			default:
+				break;
+			}
 		}
 		~rcl_service()
 		{
@@ -76,12 +105,53 @@ namespace ROS2Sharp
 			where T:struct
 		{
 			success = false;
-			return new T ();
+		    last_request_header = new rmw_request_id_t ();
+			T request = new T ();
+			int ret = rcl_take_request (ref native_handle, ref last_request_header, request);
+			RCLReturnValues retVal = (RCLReturnValues)ret;
+			switch (retVal) {
+			case RCLReturnValues.RCL_RET_OK:
+				success = true;
+				break;
+			case RCLReturnValues.RCL_RET_INVALID_ARGUMENT:
+				//throw new RCLInvalidArgumentException();
+				break;
+			case RCLReturnValues.RCL_RET_SERVICE_INVALID:
+				throw new RCLServiceInvalidException ();
+				break;
+			case RCLReturnValues.RCL_RET_BAD_ALLOC:
+				throw new RCLBadAllocException ();
+				break;
+			case RCLReturnValues.RCL_RET_ERROR:
+				success = false;
+				break;
+			default:
+				break;
+			}
+			return request;
 		}
 		public void SendResponse<T>(ref T response)
 			where T: struct
 		{
-
+			
+			int ret = rcl_send_response (ref native_handle, ref last_request_header, response);
+			RCLReturnValues retVal = (RCLReturnValues)ret;
+			switch (retVal) {
+			case RCLReturnValues.RCL_RET_OK:
+				return;
+				break;
+			case RCLReturnValues.RCL_RET_INVALID_ARGUMENT:
+				throw new RCLInvalidArgumentException();
+				break;
+			case RCLReturnValues.RCL_RET_SERVICE_INVALID:
+				throw new RCLServiceInvalidException ();
+				break;
+			case RCLReturnValues.RCL_RET_ERROR:
+				throw new RCLErrorException ();
+				break;
+			default:
+				break;
+			}
 		}
 		public static rcl_service_options_t get_default_options()
 		{
@@ -91,7 +161,7 @@ namespace ROS2Sharp
 		extern static rcl_service_t rcl_get_zero_initialized_service();
 
 		[DllImport("librcl.so")]
-		extern static int rcl_service_init(ref rcl_node_t node, ref rosidl_service_type_support_t type_support, string topic_name, ref rcl_service_options_t options);
+		extern static int rcl_service_init(ref rcl_service_t service, ref rcl_node_t node, ref rosidl_service_type_support_t type_support, string topic_name, ref rcl_service_options_t options);
 
 		[DllImport("librcl.so")]
 		extern static int rcl_service_fini(ref rcl_service_t service, ref rcl_node_t node);

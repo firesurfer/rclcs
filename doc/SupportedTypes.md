@@ -15,6 +15,6 @@ Because it's kind of difficult to automatically reproduce all types which are de
 * float64
 * string 
 
-* arrays (got some errors
+* arrays 
 
 * nested message are going to be supported as soon a I'm doing a clean up of the rosidl_generator_cs - the implementation should be fairly easy because nested structs in c# can directly be used in c. 

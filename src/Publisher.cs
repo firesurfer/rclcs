@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Reflection;
-namespace ROS2Sharp
+namespace rclcs
 {
 	public class Publisher<T>:Executable
 		where T: struct

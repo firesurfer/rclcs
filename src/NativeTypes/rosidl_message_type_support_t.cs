@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ROS2Sharp
+namespace rclcs
 {
 	public struct rosidl_message_type_support_t
 	{

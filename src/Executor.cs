@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Threading;
-namespace ROS2Sharp
+namespace rclcs
 {
 	public class Executor
 	{

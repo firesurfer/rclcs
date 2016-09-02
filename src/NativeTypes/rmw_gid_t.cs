@@ -2,7 +2,7 @@
 using System;
 
 
-namespace ROS2Sharp
+namespace rclcs
 {
 	public  unsafe struct rmw_gid_t
 	{

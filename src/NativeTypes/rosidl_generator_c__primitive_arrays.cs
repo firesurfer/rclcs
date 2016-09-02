@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
-namespace ROS2Sharp
+namespace rclcs
 {
 	[StructLayout(LayoutKind.Sequential)]
 	public struct rosidl_generator_c__primitive_array_bool:IRosTransportItem

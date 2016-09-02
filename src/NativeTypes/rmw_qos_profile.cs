@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ROS2Sharp
+namespace rclcs
 {
 	public struct rmw_qos_profile_t
 	{

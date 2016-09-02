@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Runtime.InteropServices;
 
-namespace ROS2Sharp
+namespace rclcs
 {
 	public class Node:Executable
 	{
@@ -15,6 +15,11 @@ namespace ROS2Sharp
 		{
 			InternalNode = rcl_node.create_native_node (_Name);
 			Name = _Name;
+		}
+		~Node()
+		{
+			
+
 		}
 		/**
 		 * This isn't supported yet
@@ -52,11 +57,19 @@ namespace ROS2Sharp
 			where T: struct
 			where U: struct
 		{
-			//TODO -> Add parameters to constructor when serivce is implemented
 			Service<T,U> NewService = new Service<T,U> (this, ServiceName);
 			if(AddToExecutables)
 				ManagedExecutables.Add (NewService);
 			return NewService;
+		}
+		public Client<T,U> CreateClient<T,U>(string ServiceName, bool AddToExecutables = true)
+			where T: struct
+			where U: struct
+		{
+			Client<T,U> NewClient = new Client<T,U> (this, ServiceName);
+			if(AddToExecutables)
+				ManagedExecutables.Add (NewClient);
+			return NewClient;
 		}
 		public override void Execute ()
 		{

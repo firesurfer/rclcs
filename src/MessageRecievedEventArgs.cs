@@ -1,5 +1,5 @@
 ﻿using System;
-namespace ROS2Sharp
+namespace rclcs
 {
 	public class MessageRecievedEventArgs<T>:EventArgs
 		where T : struct

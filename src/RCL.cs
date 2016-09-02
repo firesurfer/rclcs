@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-namespace ROS2Sharp
+namespace rclcs
 {
 	
 	public static class RCL

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ROS2Sharp
+namespace rclcs
 {
 	public unsafe struct rmw_request_id_t
 	{

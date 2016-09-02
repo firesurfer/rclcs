@@ -32,7 +32,10 @@ An example on how to use the rclcs in your own application is soon to follow.
 * Create a Node
 * Create a Publisher
 * Create a Subscription
+* Create a Service/Client
+	* Get a request and answer it
 * Publish and recieve a simple message (no nested types)
+	* Arrays will work soon without any patches to the rmw
 * Generate code for messages without nested types
 
 For a list of currently supported types see: [supported types](doc/SupportedTypes.md)
@@ -40,8 +43,8 @@ For a list of currently supported types see: [supported types](doc/SupportedType
 ## What doesn't work at the moment
 
 * Everything else 
-* Services
-* Arrays - Working on it
+* String arrays
+
 
 ## What is critical at the moment
 
@@ -50,8 +53,9 @@ For a list of currently supported types see: [supported types](doc/SupportedType
 ## What has to be done next
 
 * Support for nested types - this includes a cleanup of the message generator
-* Fix errors regarding arrays
-* Free memory where needed
-* Finish implementation of services
+* ~~Fix errors regarding arrays~~
+* Free memory where neededsss
+* ~~Finish implementation of services~~
 * Implement error handling where needed
 * Make sure the api is consistent with the rclcpp
+* Write tests

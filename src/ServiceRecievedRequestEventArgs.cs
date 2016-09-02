@@ -1,21 +1,21 @@
 ﻿using System;
 
-namespace ROS2Sharp
+namespace rclcs
 {
 
 	public class ServiceRecievedRequestEventArgs<T>:EventArgs
 		where T: struct
 	{
 		//TODO Provide rmw_service_info_t ?
-		private T message;
+		private T request;
 
-		public ServiceRecievedRequestEventArgs (T msg)
+		public ServiceRecievedRequestEventArgs (T req)
 		{
-			message = msg;
+			request = req;
 		}
-		public T Message
+		public T Request
 		{
-			get { return message; }
+			get { return request; }
 		}
 	}
 }
