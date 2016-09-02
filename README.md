@@ -64,3 +64,4 @@ For a list of currently supported types see: [supported types](doc/SupportedType
 * Make sure the api is consistent with the rclcpp
 	* I think I'm going to break the consistency in some parts in favour to usability
 * Write tests
+* Use templating engine for message generation
