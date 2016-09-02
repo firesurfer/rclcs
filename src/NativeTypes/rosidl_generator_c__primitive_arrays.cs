@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Text;
 namespace ROS2Sharp
 {
 	[StructLayout(LayoutKind.Sequential)]
@@ -12,14 +13,34 @@ namespace ROS2Sharp
 
 		public rosidl_generator_c__primitive_array_bool(bool[] _Data)
 		{
-			Data = Marshal.AllocHGlobal (Marshal.SizeOf (_Data));
-			Size = (UIntPtr)Marshal.SizeOf (_Data);
+			//TODO Performance
+			byte[] ConvertedData = new byte[_Data.Length];
+			for (int i = 0; i < _Data.Length; i++) {
+				if (_Data [i])
+					ConvertedData [i] = 255;
+				else
+					ConvertedData [i] = 0;
+			}
+			Data = Marshal.AllocHGlobal (Marshal.SizeOf<byte>()* _Data.Length);
+			Size = (UIntPtr) _Data.Length;
 			Capacity = Size;
-			Marshal.StructureToPtr (_Data, Data, true);  
+			Marshal.Copy (ConvertedData, 0, Data, _Data.Length);
+
 		}
 		public bool[] Array
 		{
-			get{ return Marshal.PtrToStructure<bool[]> (Data);}
+			get{ 
+				byte[] tempArray = new byte[(int)Size]; 
+				Marshal.Copy (Data, tempArray, 0, (int)Size);
+				bool[] resultArray = new bool[(int)Size];
+				for (int i = 0; i < tempArray.Length; i++) {
+					if (tempArray [i] != 0)
+						resultArray [i] = true;
+					else
+						resultArray [i] = false;
+				}
+				return resultArray;
+			}
 		}
 		public void Free()
 		{
@@ -38,14 +59,19 @@ namespace ROS2Sharp
 
 		public rosidl_generator_c__primitive_array_byte(byte[] _Data)
 		{
-			Data = Marshal.AllocHGlobal (Marshal.SizeOf (_Data));
-			Size = (UIntPtr)Marshal.SizeOf (_Data);
+			Data = Marshal.AllocHGlobal (Marshal.SizeOf<byte>()* _Data.Length);
+			Size = (UIntPtr) _Data.Length;
 			Capacity = Size;
-			Marshal.StructureToPtr (_Data, Data, true);  
+			Marshal.Copy (_Data, 0, Data, _Data.Length);
+
 		}
 		public byte[] Array
 		{
-			get{ return Marshal.PtrToStructure<byte[]> (Data);}
+			get{ 
+				byte[] tempArray = new byte[(int)Size]; 
+				Marshal.Copy (Data, tempArray, 0, (int)Size);
+				return tempArray;
+			}
 		}
 		public void Free()
 		{
@@ -63,14 +89,22 @@ namespace ROS2Sharp
 
 		public rosidl_generator_c__primitive_array_char(char[] _Data)
 		{
-			Data = Marshal.AllocHGlobal (Marshal.SizeOf (_Data));
-			Size = (UIntPtr)Marshal.SizeOf (_Data);
+			Data = Marshal.AllocHGlobal (Marshal.SizeOf<byte>()* _Data.Length);
+			byte[] ConvertedData = Encoding.ASCII.GetBytes(_Data);
+			Size = (UIntPtr) _Data.Length;
 			Capacity = Size;
-			Marshal.StructureToPtr (_Data, Data, true);  
+			Marshal.Copy (ConvertedData, 0, Data, _Data.Length);
+
 		}
 		public char[] Array
 		{
-			get{ return Marshal.PtrToStructure<char[]> (Data);}
+			get{ 
+				byte[] tempArray = new byte[(int)Size]; 
+				Marshal.Copy (Data, tempArray, 0, (int)Size);
+				char[] resultArray = new char[(int)Size];
+				Encoding.ASCII.GetChars (tempArray);
+				return resultArray;
+			}
 		}
 		public void Free()
 		{
@@ -88,14 +122,22 @@ namespace ROS2Sharp
 
 		public rosidl_generator_c__primitive_array_string(string[] _Data)
 		{
-			Data = Marshal.AllocHGlobal (Marshal.SizeOf (_Data));
-			Size = (UIntPtr)Marshal.SizeOf (_Data);
+			//TODO Check for native type, do marshalling
+			Data = Marshal.AllocHGlobal (Marshal.SizeOf<rosidl_generator_c__String>()* _Data.Length);
+			Size = (UIntPtr) _Data.Length;
 			Capacity = Size;
-			Marshal.StructureToPtr (_Data, Data, true);  
+			rosidl_generator_c__String[] ConvertedData = new rosidl_generator_c__String[_Data.Length];
+			for (int i = 0; i < _Data.Length; i++) {
+				ConvertedData [i] = new rosidl_generator_c__String (_Data [i]);
+			}
+			Marshal.StructureToPtr (ConvertedData, Data, true);
+			//Marshal.Copy (ConvertedData, 0, Data, _Data.Length);
+
 		}
 		public string[] Array
 		{
-			get{ return Marshal.PtrToStructure<string[]> (Data);}
+			//TODO
+			get{ return new string[1];}//Marshal.PtrToStructure<rosidl_generator_c__String[]> (Data);}
 		}
 		public void Free()
 		{
@@ -107,8 +149,8 @@ namespace ROS2Sharp
 	[StructLayout(LayoutKind.Sequential)]
 	public struct rosidl_generator_c__primitive_array_float32:IRosTransportItem
 	{	
-		 //[MarshalAs(UnmanagedType.LPArray)]
-		 public IntPtr Data;
+		 
+		 IntPtr Data;
 		 UIntPtr Size;
 		 UIntPtr Capacity;
 
@@ -116,17 +158,11 @@ namespace ROS2Sharp
 		public rosidl_generator_c__primitive_array_float32(float[] _Data)
 		{
 
-			int size = Marshal.SizeOf (typeof(float)) * (_Data.Length);
-			Console.WriteLine ("Allocating: " + size + " For: " + _Data);
-			Data = Marshal.AllocHGlobal (size);
-
-			//Data =_Data;
-			Size = (UIntPtr)(_Data.Length);
+			Data = Marshal.AllocHGlobal (Marshal.SizeOf<float>()* _Data.Length);
+			Size = (UIntPtr) _Data.Length;
 			Capacity = Size;
-		
-			Marshal.Copy (_Data, 0, Data,_Data.Length);
+			Marshal.Copy (_Data, 0, Data, _Data.Length);
 
-   			//Marshal.StructureToPtr<float[] >(_Data, Data, true);  
 		}
 		public float[] Array
 		{
@@ -135,7 +171,7 @@ namespace ROS2Sharp
 				Marshal.Copy (Data, tempArray, 0, (int)Size);
 				return tempArray;
 			}
-			//get{return Data;}
+
 		}
 		public int ArraySize
 		{
@@ -162,14 +198,19 @@ namespace ROS2Sharp
 
 		public rosidl_generator_c__primitive_array_float64(double[] _Data)
 		{
-			Data = Marshal.AllocHGlobal (Marshal.SizeOf (_Data));
-			Size = (UIntPtr)Marshal.SizeOf (_Data);
+			Data = Marshal.AllocHGlobal (Marshal.SizeOf<double>()* _Data.Length);
+			Size = (UIntPtr) _Data.Length;
 			Capacity = Size;
-			Marshal.StructureToPtr (_Data, Data, true);  
+			Marshal.Copy (_Data, 0, Data, _Data.Length);
+
 		}
 		public double[] Array
 		{
-			get{ return Marshal.PtrToStructure<double[]> (Data);}
+			get{ 
+				double[] tempArray = new double[(int)Size]; 
+				Marshal.Copy (Data, tempArray, 0, (int)Size);
+				return tempArray;
+			}
 		}
 		public void Free()
 		{
@@ -189,16 +230,19 @@ namespace ROS2Sharp
 		public rosidl_generator_c__primitive_array_int8(byte[] _Data)
 		{
 			
-			Data = Marshal.AllocHGlobal (_Data.Length);//Marshal.SizeOf<byte> ()*_Data.Length);
+			Data = Marshal.AllocHGlobal (Marshal.SizeOf<byte>()* _Data.Length);
 			Size = (UIntPtr) _Data.Length;
 			Capacity = Size;
 			Marshal.Copy (_Data, 0, Data, _Data.Length);
+
 		}
 		public byte[] Array
 		{
-			get{ byte[] tempArray = new byte[(int)Size]; 
+			get{ 
+				byte[] tempArray = new byte[(int)Size]; 
 				Marshal.Copy (Data, tempArray, 0, (int)Size);
-				return tempArray;}
+				return tempArray;
+			}
 		}
 		public int ArraySize
 		{
@@ -225,14 +269,19 @@ namespace ROS2Sharp
 
 		public rosidl_generator_c__primitive_array_uint8(SByte[] _Data)
 		{
-			Data = Marshal.AllocHGlobal (Marshal.SizeOf (_Data));
-			Size = (UIntPtr)Marshal.SizeOf (_Data);
+			Data = Marshal.AllocHGlobal (Marshal.SizeOf<sbyte>()* _Data.Length);
+			Size = (UIntPtr) _Data.Length;
 			Capacity = Size;
-			Marshal.StructureToPtr (_Data, Data, true);  
+			Marshal.Copy ((byte[])(Array)_Data, 0, Data, _Data.Length);
+
 		}
 		public sbyte[] Array
 		{
-			get{ return Marshal.PtrToStructure<sbyte[]> (Data);}
+			get{ 
+				byte[] tempArray = new byte[(int)Size]; 
+				Marshal.Copy (Data, tempArray, 0, (int)Size);
+				return (sbyte[])(Array)tempArray;
+			}
 		}
 		public void Free()
 		{
@@ -251,14 +300,20 @@ namespace ROS2Sharp
 
 		public rosidl_generator_c__primitive_array_int16(Int16[] _Data)
 		{
-			Data = Marshal.AllocHGlobal (Marshal.SizeOf (_Data));
-			Size = (UIntPtr)Marshal.SizeOf (_Data);
+			Data = Marshal.AllocHGlobal (Marshal.SizeOf<Int16>()* _Data.Length);
+			Size = (UIntPtr) _Data.Length;
 			Capacity = Size;
-			Marshal.StructureToPtr (_Data, Data, true);  
+			Marshal.Copy (_Data, 0, Data, _Data.Length);
+
 		}
 		public Int16[] Array
 		{
-			get{ return Marshal.PtrToStructure<Int16[]> (Data);}
+
+			get{ 
+				Int16[] tempArray = new Int16[(int)Size]; 
+				Marshal.Copy (Data, tempArray, 0, (int)Size);
+				return tempArray;
+			}
 		}
 		public void Free()
 		{
@@ -276,14 +331,19 @@ namespace ROS2Sharp
 
 		public rosidl_generator_c__primitive_array_uint16(UInt16[] _Data)
 		{
-			Data = Marshal.AllocHGlobal (Marshal.SizeOf (_Data));
-			Size = (UIntPtr)Marshal.SizeOf (_Data);
+			Data = Marshal.AllocHGlobal (Marshal.SizeOf<UInt16>()* _Data.Length);
+			Size = (UIntPtr) _Data.Length;
 			Capacity = Size;
-			Marshal.StructureToPtr (_Data, Data, true);  
+			Marshal.Copy ((Int16[])(Array)_Data, 0, Data, _Data.Length);
+
 		}
 		public UInt16[] Array
 		{
-			get{ return Marshal.PtrToStructure<UInt16[]> (Data);}
+			get{ 
+				Int16[] tempArray = new Int16[(int)Size]; 
+				Marshal.Copy (Data, tempArray, 0, (int)Size);
+				return (UInt16[])(Array)tempArray;
+			}
 		}
 		public void Free()
 		{
@@ -302,14 +362,20 @@ namespace ROS2Sharp
 
 		public rosidl_generator_c__primitive_array_int32(Int32[] _Data)
 		{
-			Data = Marshal.AllocHGlobal (Marshal.SizeOf (_Data));
-			Size = (UIntPtr)Marshal.SizeOf (_Data);
+			Data = Marshal.AllocHGlobal (Marshal.SizeOf<Int32>()* _Data.Length);
+			Size = (UIntPtr) _Data.Length;
 			Capacity = Size;
-			Marshal.StructureToPtr (_Data, Data, true);  
+			Marshal.Copy (_Data, 0, Data, _Data.Length);
+
 		}
 		public Int32[] Array
 		{
-			get{ return Marshal.PtrToStructure<Int32[]> (Data);}
+
+			get{ 
+				Int32[] tempArray = new Int32[(int)Size]; 
+				Marshal.Copy (Data, tempArray, 0, (int)Size);
+				return tempArray;
+			}
 		}
 		public void Free()
 		{
@@ -328,14 +394,18 @@ namespace ROS2Sharp
 
 		public rosidl_generator_c__primitive_array_uint32(UInt32[] _Data)
 		{
-			Data = Marshal.AllocHGlobal (Marshal.SizeOf (_Data));
-			Size = (UIntPtr)Marshal.SizeOf (_Data);
+			Data = Marshal.AllocHGlobal (Marshal.SizeOf<UInt32>()* _Data.Length);
+			Size = (UIntPtr) _Data.Length;
 			Capacity = Size;
-			Marshal.StructureToPtr (_Data, Data, true);  
+			Marshal.Copy ((Int32[])(Array)_Data, 0, Data, _Data.Length);
 		}
 		public UInt32[] Array
 		{
-			get{ return Marshal.PtrToStructure<UInt32[]> (Data);}
+			get{ 
+				Int32[] tempArray = new Int32[(int)Size]; 
+				Marshal.Copy (Data, tempArray, 0, (int)Size);
+				return (UInt32[])(Array)tempArray;
+			}
 		}
 		public void Free()
 		{
@@ -353,14 +423,19 @@ namespace ROS2Sharp
 
 		public rosidl_generator_c__primitive_array_int64(Int64[] _Data)
 		{
-			Data = Marshal.AllocHGlobal (Marshal.SizeOf (_Data));
-			Size = (UIntPtr)Marshal.SizeOf (_Data);
+			Data = Marshal.AllocHGlobal (Marshal.SizeOf<Int64>()* _Data.Length);
+			Size = (UIntPtr) _Data.Length;
 			Capacity = Size;
-			Marshal.StructureToPtr (_Data, Data, true);  
+			Marshal.Copy (_Data, 0, Data, _Data.Length);
+
 		}
 		public Int64[] Array
 		{
-			get{ return Marshal.PtrToStructure<Int64[]> (Data);}
+			get{ 
+				Int64[] tempArray = new Int64[(int)Size]; 
+				Marshal.Copy (Data, tempArray, 0, (int)Size);
+				return tempArray;
+			}
 		}
 		public void Free()
 		{
@@ -378,14 +453,19 @@ namespace ROS2Sharp
 
 		public rosidl_generator_c__primitive_array_uint64(UInt64[] _Data)
 		{
-			Data = Marshal.AllocHGlobal (Marshal.SizeOf (_Data));
-			Size = (UIntPtr)Marshal.SizeOf (_Data);
+			Data = Marshal.AllocHGlobal (Marshal.SizeOf<UInt64>()* _Data.Length);
+			Size = (UIntPtr) _Data.Length;
 			Capacity = Size;
-			Marshal.StructureToPtr (_Data, Data, true);  
+			Marshal.Copy ((Int64[])(Array)_Data, 0, Data, _Data.Length);
+
 		}
 		public UInt64[] Array
 		{
-			get{ return Marshal.PtrToStructure<UInt64[]> (Data);}
+			get{ 
+				Int64[] tempArray = new Int64[(int)Size]; 
+				Marshal.Copy (Data, tempArray, 0, (int)Size);
+				return (UInt64[])(Array)tempArray;
+			}
 		}
 		public void Free()
 		{

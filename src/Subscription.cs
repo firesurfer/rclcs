@@ -118,12 +118,6 @@ namespace ROS2Sharp
 			case RCLReturnValues.RCL_RET_OK:
 				{
 					take_message_success = true;
-					Console.WriteLine (msg.GetType ().ToString () + " Msg size:" + Marshal.SizeOf (msg));
-					foreach (var item in msg.GetType().GetFields()) {
-						Console.WriteLine (item.ToString () + " Size: " + Marshal.SizeOf(item.GetValue(msg)) + " Value: " + item.GetValue(msg));
-					}
-					Console.WriteLine ();
-
 				}
 				break;
 			default:

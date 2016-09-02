@@ -2,14 +2,12 @@
 
 namespace ROS2Sharp
 {
-
-	public class ServiceRecievedRequestEventArgs<T>:EventArgs
+	public class ClientRecievedResponseEventArgs<T>:EventArgs
 		where T: struct
 	{
 		//TODO Provide rmw_service_info_t ?
 		private T message;
-
-		public ServiceRecievedRequestEventArgs (T msg)
+		public ClientRecievedResponseEventArgs (T msg)
 		{
 			message = msg;
 		}

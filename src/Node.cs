@@ -48,11 +48,12 @@ namespace ROS2Sharp
 				ManagedExecutables.Add (NewSubscription);
 			return NewSubscription;
 		}
-		public Service<T> CreateService<T>(string ServiceName, bool AddToExecutables = true)
+		public Service<T,U> CreateService<T,U>(string ServiceName, bool AddToExecutables = true)
 			where T: struct
+			where U: struct
 		{
 			//TODO -> Add parameters to constructor when serivce is implemented
-			Service<T> NewService = new Service<T> (this, ServiceName);
+			Service<T,U> NewService = new Service<T,U> (this, ServiceName);
 			if(AddToExecutables)
 				ManagedExecutables.Add (NewService);
 			return NewService;

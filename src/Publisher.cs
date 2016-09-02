@@ -8,9 +8,12 @@ namespace ROS2Sharp
 	{
 		private rosidl_message_type_support_t TypeSupport;
 		private rcl_publisher InternalPublisher;
+
 		public Node RosNode{ get; private set;}
 		public string TopicName { get; private set; }
 		public rcl_publisher_options_t PublisherOptions{ get; private set; }
+
+
 		public Publisher (Node _Node, string _TopicName)
 		{
 			RosNode = _Node;
@@ -32,7 +35,7 @@ namespace ROS2Sharp
 		{
 			get{ return InternalPublisher.NativePublisher;}
 		}
-		public rcl_publisher NativeWrapper
+		internal rcl_publisher NativeWrapper
 		{
 			get{ return InternalPublisher; }
 		}
@@ -41,24 +44,36 @@ namespace ROS2Sharp
 			return InternalPublisher.PublishMessage<T> (ref msg);
 		}
 	}
-	public class rcl_publisher
+	internal class rcl_publisher
 	{
-		private rcl_publisher_t publisher;
+		private rcl_publisher_t native_handle;
 		private rcl_node_t native_node;
+		private string topic_name;
+		private rcl_publisher_options_t options;
+		private rosidl_message_type_support_t type_support;
+
 		public rcl_publisher(Node _node, rosidl_message_type_support_t _type_support, string _topic_name, rcl_publisher_options_t _options)
 		{
-			publisher = rcl_get_zero_initialized_publisher ();
-			native_node = _node.NativeNode;
-			rcl_publisher_init (ref publisher,ref native_node, ref _type_support, _topic_name, ref _options);
+			this.native_node = _node.NativeNode;
+			this.topic_name = _topic_name;
+			this.type_support = _type_support;
+			this.options = _options;
+
+			native_handle = rcl_get_zero_initialized_publisher ();
+			rcl_publisher_init (ref native_handle,ref native_node, ref type_support, topic_name, ref options);
 
 		}
 		~rcl_publisher()
 		{
-			rcl_publisher_fini (ref publisher, ref native_node);
+			rcl_publisher_fini (ref native_handle, ref native_node);
+		}
+		public string TopicName
+		{
+			get{ return topic_name; }
 		}
 		public rcl_publisher_t NativePublisher
 		{
-			get{ return publisher;}
+			get{ return native_handle;}
 		}
 		public static rcl_publisher_options_t get_default_options()
 		{
@@ -67,7 +82,7 @@ namespace ROS2Sharp
 		public bool PublishMessage<T>(ref ValueType msg)
 			where T : struct
 		{
-			int ret = rcl_publish (ref publisher,  msg);
+			int ret = rcl_publish (ref native_handle,  msg);
 			RCLReturnValues ret_val = (RCLReturnValues)ret;
 
 			/* \return RCL_RET_OK if the message was published successfully, or

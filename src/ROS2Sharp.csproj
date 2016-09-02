@@ -60,6 +60,7 @@
     <Compile Include="IRosMessage.cs" />
     <Compile Include="IRosService.cs" />
     <Compile Include="IRosTransportItem.cs" />
+    <Compile Include="ClientRecievedResponseEventArgs.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
