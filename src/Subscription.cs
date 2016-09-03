@@ -6,6 +6,7 @@ namespace rclcs
 	public class Subscription<T>:Executable
 		where T : struct
 	{
+		private  bool disposed = false;
 		private rosidl_message_type_support_t TypeSupport;
 		private rcl_subscription InternalSubscription;
 		public Node RosNode{ get; private set;}
@@ -49,9 +50,34 @@ namespace rclcs
 			}
 		}
 
+		~Subscription()
+		{
+			Dispose (false);
+		}
+		protected override void Dispose(bool disposing)
+		{
+			if (disposed)
+				return; 
+
+			if (disposing) {
+				
+				// Free any other managed objects here.
+				//
+				InternalSubscription.Dispose();
+			}
+
+			// Free any unmanaged objects here.
+			//
+
+			disposed = true;
+			// Call base class implementation.
+			base.Dispose(disposing);
+		}
+
 	}
-	public class rcl_subscription
+	public class rcl_subscription:IDisposable
 	{
+		private bool disposed = false;
 		private rcl_subscription_t subscription;
 		private rcl_node_t native_node;
 		public rcl_subscription(Node _node, rosidl_message_type_support_t _type_support, string _topic_name, rcl_subscription_options_t _options)
@@ -62,7 +88,7 @@ namespace rclcs
 		}
 		~rcl_subscription()
 		{
-			rcl_subscription_fini (ref subscription, ref native_node);
+			Dispose (false);
 		}
 		public rcl_subscription_t NativeSubscription
 		{
@@ -127,6 +153,28 @@ namespace rclcs
 			//Marshal.FreeHGlobal (message_info_ptr);
 		
 			return (T)msg;
+		}
+		// Public implementation of Dispose pattern callable by consumers.
+		public void Dispose()
+		{ 
+			Dispose(true);
+			GC.SuppressFinalize(this);           
+		}
+
+		// Protected implementation of Dispose pattern.
+		protected virtual void Dispose(bool disposing)
+		{
+			if (disposed)
+				return; 
+
+			if (disposing) {
+				// Free any other managed objects here.
+				//
+			}
+			rcl_subscription_fini (ref subscription, ref native_node);
+			// Free any unmanaged objects here.
+			//
+			disposed = true;
 		}
 
 		[DllImport("librcl.so")]
