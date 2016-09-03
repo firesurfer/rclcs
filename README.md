@@ -48,12 +48,14 @@ For a list of currently supported types see: [supported types](doc/SupportedType
 * String arrays
 * Fixed Arrays - Coming soon
 * Everything else 
+* Preinitialized value -> Not coming soon
 
 ## What is critical at the moment
 
 * ~~I'm not sure if it's possible to reproduce more complicated messages in C# an directly pass them to the rcl without any conversion. A conversion would be possible but would be a waste of resources in the most cases.~~
 
 * Program crashes at exit
+* Memory handling has to be done manual if using arrays
 
 ## What has to be done next
 
@@ -66,26 +68,7 @@ For a list of currently supported types see: [supported types](doc/SupportedType
 	* I think I'm going to break the consistency in some parts in favour to usability
 * Write tests
 * Use templating engine for message generation
+* Allow debugging the managed code
 
 
-# How to run the example workspace:
-
-First do an ament build in the root directory. Afterwards source the workspace with:
-```
-source install/local_setup.bash
-```
-
-The go into the install/bin folder:
-```
-cd install/bin
-```
-
-Tell mono where to search for assemblies:
-```
-export MONO_PATH=<Path to ros2 workspace/install/lib>
-```
-Then run the application:
-```
-mono test_cs.exe
-```
 
