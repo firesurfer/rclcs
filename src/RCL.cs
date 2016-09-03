@@ -3,19 +3,101 @@ using System.Runtime.InteropServices;
 namespace rclcs
 {
 	
-	public static class RCL
+	public class RCL:IDisposable
 	{
-		[DllImport("librcl.so")]
-		public static extern int rcl_init(int argc, [In, Out] String[] argv, rcl_allocator_t allocator);
+		bool disposed = false;
 
 		[DllImport("librcl.so")]
-		public static extern int rcl_shutdown ();
+	    static extern int rcl_init(int argc, [In, Out] String[] argv, rcl_allocator_t allocator);
+
+		/**
+		 * Call this function instead of rcl_init
+		 */
+		public void Init(String[] args)
+		{
+			RCLReturnValues retVal = (RCLReturnValues)rcl_init (args.Length, args, Allocator.rcl_get_default_allocator ());
+			switch (retVal) {
+			case RCLReturnValues.RCL_RET_OK:
+				break;
+			case RCLReturnValues.RCL_RET_ALREADY_INIT:
+				throw new RCLAlreadyInitExcption ();
+				break;
+			case RCLReturnValues.RCL_RET_BAD_ALLOC:
+				throw new RCLBadAllocException ();
+				break;
+			case RCLReturnValues.RCL_RET_ERROR:
+				throw new RCLErrorException (RCLErrorHandling.GetRMWErrorState());
+				break;
+			default:
+				break;
+			}
+
+		}
+		public void Init(String[] args, rcl_allocator_t custom_allocator)
+		{
+			RCLReturnValues retVal = (RCLReturnValues)rcl_init (args.Length, args, custom_allocator);
+			switch (retVal) {
+			case RCLReturnValues.RCL_RET_OK:
+				break;
+			case RCLReturnValues.RCL_RET_ALREADY_INIT:
+				throw new RCLAlreadyInitExcption ();
+				break;
+			case RCLReturnValues.RCL_RET_BAD_ALLOC:
+				throw new RCLBadAllocException ();
+				break;
+			case RCLReturnValues.RCL_RET_ERROR:
+				throw new RCLErrorException (RCLErrorHandling.GetRMWErrorState());
+				break;
+			default:
+				break;
+			}
+
+		}
 
 		[DllImport("librcl.so")]
-		public static extern UInt64 rcl_get_instance_id ();
+	    static extern int rcl_shutdown ();
 
 		[DllImport("librcl.so")]
-		public static extern bool rcl_ok ();
+	    static extern UInt64 rcl_get_instance_id ();
+
+		[DllImport("librcl.so")]
+		static extern bool rcl_ok ();
+
+		public void Dispose()
+		{
+			// Dispose of unmanaged resources.
+			Dispose(true);
+			// Suppress finalization.
+			GC.SuppressFinalize(this);
+		}
+		protected virtual void Dispose(bool disposing)
+		{
+			if (disposed)
+				return;
+			if (disposing) {
+				
+				// Free any other managed objects here.
+			}
+			// Free any unmanaged objects here.
+			RCLReturnValues retVal = (RCLReturnValues)rcl_shutdown ();
+			switch (retVal) {
+			case RCLReturnValues.RCL_RET_OK:
+				break;
+			case RCLReturnValues.RCL_RET_NOT_INIT:
+				//throw new RCLNotInitException ();
+				break;
+			case RCLReturnValues.RCL_RET_ERROR:
+				//throw new RCLErrorException (RCLErrorHandling.GetRMWErrorState());
+				break;
+			default:
+				break;
+			}
+			disposed = true;
+		}
+		~RCL()
+		{
+			Dispose (false);
+		}
 
 
 	}
@@ -26,7 +108,7 @@ namespace rclcs
 		RCL_RET_TIMEOUT = 2,
 		// rcl specific ret codes start at 100
 		RCL_RET_ALREADY_INIT = 100,
-		RCL_REG_NOT_INIT = 101,
+		RCL_RET_NOT_INIT = 101,
 		RCL_RET_BAD_ALLOC = 102,
 		RCL_RET_INVALID_ARGUMENT = 103,
 		RCL_REG_MISMATCHED_RMW_ID = 104,

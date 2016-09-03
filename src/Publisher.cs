@@ -8,7 +8,7 @@ namespace rclcs
 	{
 		private rosidl_message_type_support_t TypeSupport;
 		private rcl_publisher InternalPublisher;
-
+		private bool disposed = false;
 		public Node RosNode{ get; private set;}
 		public string TopicName { get; private set; }
 		public rcl_publisher_options_t PublisherOptions{ get; private set; }
@@ -39,18 +39,38 @@ namespace rclcs
 		{
 			get{ return InternalPublisher; }
 		}
-		public bool Publish(ValueType msg)
+		public bool Publish(T msg)
 		{
-			return InternalPublisher.PublishMessage<T> (ref msg);
+			return InternalPublisher.PublishMessage<T> ( msg);
+		}
+		protected override void Dispose(bool disposing)
+		{
+			if (disposed)
+				return; 
+
+			if (disposing) {
+				
+				// Free any other managed objects here.
+				//
+				InternalPublisher.Dispose();
+			}
+
+			// Free any unmanaged objects here.
+			//
+
+			disposed = true;
+			// Call base class implementation.
+			base.Dispose(disposing);
 		}
 	}
-	internal class rcl_publisher
+	internal class rcl_publisher:IDisposable
 	{
 		private rcl_publisher_t native_handle;
 		private rcl_node_t native_node;
 		private string topic_name;
 		private rcl_publisher_options_t options;
 		private rosidl_message_type_support_t type_support;
+		private bool disposed = false;
 
 		public rcl_publisher(Node _node, rosidl_message_type_support_t _type_support, string _topic_name, rcl_publisher_options_t _options)
 		{
@@ -65,7 +85,26 @@ namespace rclcs
 		}
 		~rcl_publisher()
 		{
+			Dispose (false);	
+		}
+		public void Dispose()
+		{ 
+			Dispose(true);
+			GC.SuppressFinalize(this);           
+		}
+		protected virtual void Dispose(bool disposing)
+		{
+			if (disposed)
+				return; 
+
+			if (disposing) {
+				// Free any other managed objects here.
+				//
+			}
 			rcl_publisher_fini (ref native_handle, ref native_node);
+			// Free any unmanaged objects here.
+			//
+			disposed = true;
 		}
 		public string TopicName
 		{
@@ -79,7 +118,7 @@ namespace rclcs
 		{
 			return rcl_publisher_get_default_options ();
 		}
-		public bool PublishMessage<T>(ref ValueType msg)
+		public bool PublishMessage<T>( ValueType msg)
 			where T : struct
 		{
 			int ret = rcl_publish (ref native_handle,  msg);

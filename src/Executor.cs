@@ -3,8 +3,9 @@ using System.Collections.Concurrent;
 using System.Threading;
 namespace rclcs
 {
-	public class Executor
+	public abstract class Executor
 	{
+		//TODO allow any executables
 		protected ConcurrentBag<Node> Nodes = new ConcurrentBag<Node> ();
 	
 		public Executor ()
@@ -37,6 +38,7 @@ namespace rclcs
 		}
 		public virtual void Cancel()
 		{
+			
 		}
 	}
 }

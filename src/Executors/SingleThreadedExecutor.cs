@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Collections.Generic;
 namespace rclcs
 {
 	public class SingleThreadedExecutor:Executor
@@ -23,22 +24,33 @@ namespace rclcs
 		}
 		public  override void SpinSome()
 		{
+			List<Node> ToRemove = new List<Node> ();
 			foreach (var item in Nodes) {
-				item.Execute ();
+				if (!item.IsDisposed ()) {
+					item.Execute ();
+				} else {
+					ToRemove.Add (item);
+				}
+			}
+			if (ToRemove.Count > 0) {
+				foreach (var item in ToRemove) {
+					RemoveNode (item);
+				}
 			}
 		}
 		public  override void Cancel()
 		{
 			AbortSpin = true;
+			SpinThread.Abort ();
 		}
 
 		private void InternalSpinMethod(object Intervall)
 		{
 			
-			while (!AbortSpin) {
-				lock (SpinMutex) {
-					
-				
+			while (!AbortSpin) 
+			{
+				lock (SpinMutex) 
+				{
 					SpinSome ();
 				}
 				Thread.Sleep (((System.TimeSpan)Intervall).Milliseconds);

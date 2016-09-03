@@ -5,9 +5,16 @@ namespace rclcs
 	public class RCLErrorException:Exception
 	{
 		public RCLReturnValues RCLReturnValue{ get; private set;}
+		public RMWErrorState ErrorState{ get; private set;}
+
 		public RCLErrorException()
 		{
 			RCLReturnValue = RCLReturnValues.RCL_RET_ERROR;
+		}
+		public RCLErrorException(RMWErrorState _ErrorState):this()
+		{
+			ErrorState = _ErrorState;
+
 		}
 		public RCLErrorException(string message):base(message)
 		{
@@ -39,15 +46,15 @@ namespace rclcs
 		public RCLReturnValues RCLReturnValue{ get; private set;}
 		public RCLNotInitException()
 		{
-			RCLReturnValue = RCLReturnValues.RCL_REG_NOT_INIT;
+			RCLReturnValue = RCLReturnValues.RCL_RET_NOT_INIT;
 		}
 		public RCLNotInitException(string message):base(message)
 		{
-			RCLReturnValue = RCLReturnValues.RCL_REG_NOT_INIT;
+			RCLReturnValue = RCLReturnValues.RCL_RET_NOT_INIT;
 		}
 		public RCLNotInitException(string message,Exception inner):base(message,inner)
 		{
-			RCLReturnValue = RCLReturnValues.RCL_REG_NOT_INIT;
+			RCLReturnValue = RCLReturnValues.RCL_RET_NOT_INIT;
 		}
 	}
 	public class RCLBadAllocException:Exception
@@ -176,6 +183,22 @@ namespace rclcs
 		public RCLNodeInvalidException(string message,Exception inner):base(message,inner)
 		{
 			RCLReturnValue = RCLReturnValues.RCL_RET_NODE_INVALID;
+		}
+	}
+	public class RCLAlreadyInitExcption:Exception
+	{
+		public RCLReturnValues RCLReturnValue{ get; private set;}
+		public RCLAlreadyInitExcption()
+		{
+			RCLReturnValue = RCLReturnValues.RCL_RET_ALREADY_INIT;
+		}
+		public RCLAlreadyInitExcption(string message):base(message)
+		{
+			RCLReturnValue = RCLReturnValues.RCL_RET_ALREADY_INIT;
+		}
+		public RCLAlreadyInitExcption(string message,Exception inner):base(message,inner)
+		{
+			RCLReturnValue = RCLReturnValues.RCL_RET_ALREADY_INIT;
 		}
 	}
 }

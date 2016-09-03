@@ -8,7 +8,7 @@ namespace rclcs
 	{
 		private rcl_node InternalNode;
 		private ConcurrentBag<Executable> ManagedExecutables = new ConcurrentBag<Executable>();
-
+		private bool disposed = false;
 		public string Name{ get; private set; }
 
 		public Node (string _Name)
@@ -19,7 +19,7 @@ namespace rclcs
 		~Node()
 		{
 			
-
+			Dispose (false);
 		}
 		/**
 		 * This isn't supported yet
@@ -77,31 +77,74 @@ namespace rclcs
 				item.Execute ();
 			}
 		}
-
-	}
-	public class rcl_node
-	{
-		private rcl_node_t node;
-		public rcl_node_t NativeNode
+		protected override void Dispose(bool disposing)
 		{
-			get{return node; }
+			if (disposed)
+				return; 
+
+			if (disposing) {
+				// Free any other managed objects here.
+				//
+				InternalNode.Dispose ();
+			}
+
+			// Free any unmanaged objects here.
+			//
+
+			disposed = true;
+			// Call base class implementation.
+			base.Dispose(disposing);
+		}
+		public override bool IsDisposed()
+		{
+			return disposed;
 		}
 
+
+	}
+	public class rcl_node:IDisposable
+	{
+		private bool disposed = false;
+		private rcl_node_t nativ_handle;
+		public rcl_node_t NativeNode
+		{
+			get{return nativ_handle; }
+		}
+		 
 		public rcl_node(rcl_node_t _node)
 		{
-			node = _node;
+			nativ_handle = _node;
+		}
+		public void Dispose()
+		{ 
+			Dispose(true);
+			GC.SuppressFinalize(this);           
+		}
+		protected virtual void Dispose(bool disposing)
+		{
+			if (disposed)
+				return; 
+
+			if (disposing) {
+				// Free any other managed objects here.
+				//
+			}
+			rcl_node_fini (ref nativ_handle);
+			// Free any unmanaged objects here.
+			//
+			disposed = true;
 		}
 		~rcl_node()
 		{
-			rcl_node_fini (ref node);
+			Dispose (false);
 		}
 		public string get_node_name()
 		{	
-			return rcl_node_get_name(ref node);
+			return rcl_node_get_name(ref nativ_handle);
 		}
 		public bool node_is_valid()
 		{
-			return rcl_node_is_valid (ref node);
+			return rcl_node_is_valid (ref nativ_handle);
 		}
 		public static rcl_node create_native_node(string name)
 		{

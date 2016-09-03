@@ -24,8 +24,8 @@ Then edit the file in `rosidl/rosidl_default_generators/CMakeLists.txt` and add 
 
 Then go back to the ros2 workspace and do an ament build. 
 
-An example on how to use the rclcs in your own application is soon to follow.
-You can have look at my [testing workspace](https://github.com/firesurfer/rclcs_testing_ws) which is quite messy.
+## Example
+You can have look at my [testing workspace](https://github.com/firesurfer/rclcs_testing_ws) ~~which is quite messy.~~ which contains some examples (And is still a bit messy).
 
 
 ## What works at the moment
