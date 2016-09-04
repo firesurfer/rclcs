@@ -34,6 +34,10 @@ namespace rclcs
 		{
 			Marshal.FreeHGlobal (data);
 		}
+		public override string ToString ()
+		{
+			return Data;
+		}
 		//[MarshalAs(UnmanagedType.LPStr)]
 		//string data ;
 		IntPtr data;
