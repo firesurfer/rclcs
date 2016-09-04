@@ -48,14 +48,14 @@ For a list of currently supported types see: [supported types](doc/SupportedType
 * String arrays
 * Fixed Arrays - Coming soon
 * Everything else 
-* Preinitialized value -> Not coming soon
+* Preinitialized value -> Not coming soon (This is because C# doesn't allow preinitialised members in structs)
 
 ## What is critical at the moment
 
 * ~~I'm not sure if it's possible to reproduce more complicated messages in C# an directly pass them to the rcl without any conversion. A conversion would be possible but would be a waste of resources in the most cases.~~
 
-* Program crashes at exit
-* Memory handling has to be done manual if using arrays
+* Program crashes at exit due to a multithreading error
+* Memory handling has to be done manual: See [memory handling](/doc/MemoryHandling.md)
 
 ## What has to be done next
 

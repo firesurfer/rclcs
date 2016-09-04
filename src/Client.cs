@@ -11,6 +11,7 @@ namespace rclcs
 		where U :struct
 	
 	{
+		private bool disposed = false;
 		private rosidl_service_type_support_t TypeSupport;
 		private rcl_client InternalClient;
 		public Node RosNode{ get; private set; }
@@ -57,9 +58,29 @@ namespace rclcs
 		{
 			get{return InternalClient; }
 		}
+		protected override void Dispose(bool disposing)
+		{
+			if (disposed)
+				return; 
+
+			if (disposing) {
+				// Free any other managed objects here.
+				//
+				InternalClient.Dispose();
+			}
+
+			// Free any unmanaged objects here.
+			//
+			disposed = true;
+
+			// Call the base class implementation.
+			base.Dispose(disposing);
+		}
+
 	}
-	internal class rcl_client
+	internal class rcl_client:IDisposable
 	{
+		private  bool disposed = false;
 		private rcl_client_t native_handle;
 		private rcl_node_t native_node;
 		private string service_name;
@@ -80,7 +101,7 @@ namespace rclcs
 		}
 		~rcl_client()
 		{
-			rcl_client_fini(ref native_handle, ref native_node);
+			Dispose (false);
 		}
 		public static rcl_client_options_t get_default_options()
 		{
@@ -137,6 +158,26 @@ namespace rclcs
 				break;
 			}
 		}
+		public void Dispose()
+		{ 
+			Dispose(true);
+			GC.SuppressFinalize(this);           
+		}
+		protected virtual void Dispose(bool disposing)
+		{
+			if (disposed)
+				return; 
+
+			if (disposing) {
+				// Free any other managed objects here.
+				//
+			}
+			rcl_client_fini(ref native_handle, ref native_node);
+			// Free any unmanaged objects here.
+			//
+			disposed = true;
+		}
+
 		[DllImport("librcl.so")]
 		extern static rcl_client_t rcl_get_zero_initialized_client();
 

@@ -35,6 +35,10 @@ namespace rclcs
 		{
 			return disposed;
 		}
+		~Executable()
+		{
+			Dispose (false);
+		}
 	}
 }
 

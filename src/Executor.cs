@@ -3,13 +3,18 @@ using System.Collections.Concurrent;
 using System.Threading;
 namespace rclcs
 {
-	public abstract class Executor
+	public abstract class Executor:IDisposable
 	{
 		//TODO allow any executables
 		protected ConcurrentBag<Node> Nodes = new ConcurrentBag<Node> ();
-	
+		bool disposed = false;
+
 		public Executor ()
 		{
+		}
+		~Executor()
+		{
+			Dispose (false);
 		}
 		public virtual void AddNode(Node _node)
 		{
@@ -39,6 +44,26 @@ namespace rclcs
 		public virtual void Cancel()
 		{
 			
+		}
+		public void Dispose()
+		{ 
+			Dispose(true);
+			GC.SuppressFinalize(this);           
+		}
+		protected virtual void Dispose(bool disposing)
+		{
+			if (disposed)
+				return; 
+
+			if (disposing) {
+				
+				// Free any other managed objects here.
+				//
+			}
+
+			// Free any unmanaged objects here.
+			//
+			disposed = true;
 		}
 	}
 }

@@ -10,6 +10,7 @@ namespace rclcs
 		where T: struct
 		where U: struct
 	{
+		private  bool disposed = false;
 		private rosidl_service_type_support_t TypeSupport;
 		private rcl_service InternalService;
 		public Node RosNode{ get; private set; }
@@ -36,6 +37,26 @@ namespace rclcs
 
 
 		}
+		protected override void Dispose(bool disposing)
+		{
+			if (disposed)
+				return; 
+
+			if (disposing) {
+				
+				// Free any other managed objects here.
+				//
+				InternalService.Dispose();
+			}
+
+			// Free any unmanaged objects here.
+			//
+
+			disposed = true;
+			// Call base class implementation.
+			base.Dispose(disposing);
+		}
+
 		public override void Execute ()
 		{
 			bool TakeSuccess = false;
@@ -59,8 +80,9 @@ namespace rclcs
 			get{ return NativeServiceWrapper; }
 		}
 	}
-	public class rcl_service
+	public class rcl_service:IDisposable
 	{
+		private bool disposed = false;
 		private rcl_node_t native_node;
 		private rcl_service_t native_handle;
 		private rmw_request_id_t last_request_header;
@@ -95,7 +117,27 @@ namespace rclcs
 		}
 		~rcl_service()
 		{
+			Dispose (false);
+		}
+		public void Dispose()
+		{ 
+			Dispose(true);
+			GC.SuppressFinalize(this);           
+		}
+		protected virtual void Dispose(bool disposing)
+		{
+			if (disposed)
+				return; 
+
+			if (disposing) {
+				
+				// Free any other managed objects here.
+				//
+			}
 			rcl_service_fini (ref native_handle, ref native_node);
+			// Free any unmanaged objects here.
+			//
+			disposed = true;
 		}
 		public rcl_service_t NativeService
 		{

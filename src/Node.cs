@@ -6,20 +6,16 @@ namespace rclcs
 {
 	public class Node:Executable
 	{
+		private bool disposed = false;
 		private rcl_node InternalNode;
 		private ConcurrentBag<Executable> ManagedExecutables = new ConcurrentBag<Executable>();
-		private bool disposed = false;
+
 		public string Name{ get; private set; }
 
 		public Node (string _Name)
 		{
 			InternalNode = rcl_node.create_native_node (_Name);
 			Name = _Name;
-		}
-		~Node()
-		{
-			
-			Dispose (false);
 		}
 		/**
 		 * This isn't supported yet
@@ -129,7 +125,8 @@ namespace rclcs
 				// Free any other managed objects here.
 				//
 			}
-			rcl_node_fini (ref nativ_handle);
+			if(rcl_node_is_valid(ref nativ_handle))
+				rcl_node_fini (ref nativ_handle);
 			// Free any unmanaged objects here.
 			//
 			disposed = true;

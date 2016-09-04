@@ -5,6 +5,7 @@ namespace rclcs
 {
 	public class SingleThreadedExecutor:Executor
 	{
+		private  bool disposed = false;
 		private bool AbortSpin = false;
 		private Mutex SpinMutex = new Mutex();
 		public SingleThreadedExecutor ()
@@ -40,8 +41,11 @@ namespace rclcs
 		}
 		public  override void Cancel()
 		{
+			Console.WriteLine ("Stopping spin");
 			AbortSpin = true;
-			SpinThread.Abort ();
+			SpinThread.Join ();
+			//SpinThread.Abort ();
+			//SpinMutex.Close ();
 		}
 
 		private void InternalSpinMethod(object Intervall)
@@ -56,6 +60,23 @@ namespace rclcs
 				Thread.Sleep (((System.TimeSpan)Intervall).Milliseconds);
 
 			}
+		}
+		protected override void Dispose(bool disposing)
+		{
+			if (disposed)
+				return; 
+
+			if (disposing) {
+				// Free any other managed objects here.
+				//
+			}
+			Cancel ();
+			// Free any unmanaged objects here.
+			//
+
+			disposed = true;
+			// Call base class implementation.
+			base.Dispose(disposing);
 		}
 	}
 }
