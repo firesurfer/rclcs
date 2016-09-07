@@ -2,15 +2,15 @@
 namespace rclcs
 {
 	public class MessageRecievedEventArgs<T>:EventArgs
-		where T : struct
+		where T : class
 	{
 		//TODO Provide rmw_message_info_t ?
-		private MessageWrapper<T> message;
-		public MessageRecievedEventArgs(MessageWrapper<T> msg)
+		private T message;
+		public MessageRecievedEventArgs(T msg)
 		{
 			message = msg;
 		}
-		public MessageWrapper<T> Message
+		public T Message
 		{
 			get { return message; }
 		}

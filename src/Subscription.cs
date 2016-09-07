@@ -4,7 +4,7 @@ using System.Reflection;
 namespace rclcs
 {
 	public class Subscription<T>:Executable
-		where T : struct
+		where T : MessageWrapper, new()
 	{
 		private  bool disposed = false;
 		private rosidl_message_type_support_t TypeSupport;
@@ -18,9 +18,16 @@ namespace rclcs
 			RosNode = _node;
 			TopicName = _topicName;
 
-			//TypeSupport = IntPtr.Zero;
-			Type messsageType = typeof(T);
-			foreach (var item in messsageType.GetMethods()) {
+			Type wrapperType = typeof(T);
+			Type messageType = typeof(T);
+			foreach (var item in wrapperType.GetMethods()) {
+				if (item.IsStatic) {
+					if (item.Name.Contains ("GetMessageType")) {
+						messageType = (Type)item.Invoke (null, null);
+					}
+				}
+			}
+			foreach (var item in messageType.GetMethods()) {
 
 				if (item.IsStatic ) {
 					if (item.Name.Contains ("rosidl_typesupport_introspection_c_get_message")) {
@@ -28,6 +35,8 @@ namespace rclcs
 					}
 				}
 			}
+			if (TypeSupport.data == IntPtr.Zero)
+				throw new Exception ("Couldn't get typesupport");
 			SubscriptionOptions = rcl_subscription.get_default_options ();
 			InternalSubscription = new rcl_subscription (RosNode, TypeSupport, TopicName,SubscriptionOptions);
 		}
@@ -46,7 +55,7 @@ namespace rclcs
 			T message = InternalSubscription.TakeMessage<T> (ref success);
 			if (success) {
 				if (MessageRecieved != null)
-					MessageRecieved (this,new MessageRecievedEventArgs<T> (new MessageWrapper<T>(message)));
+					MessageRecieved (this,new MessageRecievedEventArgs<T> (message));
 			}
 		}
 
@@ -100,15 +109,17 @@ namespace rclcs
 			return rcl_subscription_get_default_options ();
 		}
 		public T TakeMessage<T>(ref bool success)
-			where T: struct
+			where T: MessageWrapper, new()
 		{
 			rmw_message_info_t message_info = new rmw_message_info_t ();
 			return TakeMessage<T> (ref success, ref message_info);
 		}
 		public T TakeMessage<T>(ref bool success, ref rmw_message_info_t _message_info )
-			where T: struct
+			where T: MessageWrapper, new()
 		{
-			ValueType msg = new T();
+			MessageWrapper ret_msg = new T();
+			ValueType msg;
+			ret_msg.GetData (out msg);
 			rmw_message_info_t message_info = _message_info;
 
 			int ret = rcl_take (ref subscription,  msg, message_info);
@@ -144,6 +155,10 @@ namespace rclcs
 			case RCLReturnValues.RCL_RET_OK:
 				{
 					take_message_success = true;
+					ret_msg.SetData (ref msg);
+					foreach (var item in msg.GetType().GetFields()) {
+						Console.WriteLine (item.Name + "        " + item.GetValue (msg));
+					}
 				}
 				break;
 			default:
@@ -152,7 +167,7 @@ namespace rclcs
 			success = take_message_success;
 			//Marshal.FreeHGlobal (message_info_ptr);
 		
-			return (T)msg;
+			return (T)ret_msg;
 		}
 		// Public implementation of Dispose pattern callable by consumers.
 		public void Dispose()

@@ -34,7 +34,7 @@ namespace rclcs
 			get{ return InternalNode; }
 		}
 		public  Publisher<T> CreatePublisher<T>(string TopicName, bool AddToExecutables = true)
-			where T: struct
+			where T: MessageWrapper, new()
 		{
 			Publisher<T> NewPublisher = new Publisher<T> (this, TopicName);
 			if(AddToExecutables)
@@ -42,7 +42,7 @@ namespace rclcs
 			return NewPublisher;
 		}
 		public Subscription<T> CreateSubscription<T>(string TopicName, bool AddToExecutables = true)
-			where T: struct
+			where T: MessageWrapper, new()
 		{
 			Subscription<T> NewSubscription = new Subscription<T> (this, TopicName);
 			if(AddToExecutables)

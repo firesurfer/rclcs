@@ -2,18 +2,21 @@
 
 namespace rclcs
 {
-	public class MessageWrapper<T>:IDisposable
-		where T :struct
+	public class MessageWrapper:IDisposable
 	{
 		private bool disposed = false;
-		protected T data;
+
 		public MessageWrapper()
 		{
-
+			//dataType = typeof(T);
 		}
-		public MessageWrapper(T init_data)
+		public virtual void GetData(out ValueType _data)
 		{
-			data = init_data;
+			_data = 0;
+		}
+		public virtual void SetData(ref ValueType _data)
+		{
+
 		}
 		public void Dispose()
 		{
@@ -33,10 +36,8 @@ namespace rclcs
 		{
 			Dispose (false);
 		}
-		public virtual T Data
-		{
-			get{ return data; }
-		}
+
+
 	}
 }
 

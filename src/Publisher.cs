@@ -4,7 +4,7 @@ using System.Reflection;
 namespace rclcs
 {
 	public class Publisher<T>:Executable
-		where T: struct
+		where T: MessageWrapper,new()
 	{
 		private rosidl_message_type_support_t TypeSupport;
 		private rcl_publisher InternalPublisher;
@@ -18,15 +18,29 @@ namespace rclcs
 		{
 			RosNode = _Node;
 			TopicName = _TopicName;
-			Type messsageType = typeof(T);
-			foreach (var item in messsageType.GetMethods()) {
+
+
+			Type wrapperType = typeof(T);
+			Type messageType = typeof(T);
+			foreach (var item in wrapperType.GetMethods()) {
+				if (item.IsStatic) {
+					if (item.Name.Contains ("GetMessageType")) {
+						messageType = (Type)item.Invoke (null, null);
+					}
+				}
+			}
+
+			foreach (var item in messageType.GetMethods()) {
 				
 				if (item.IsStatic ) {
+					
 					if (item.Name.Contains ("rosidl_typesupport_introspection_c_get_message")) {
 						TypeSupport = (rosidl_message_type_support_t)Marshal.PtrToStructure((IntPtr)item.Invoke (null, null),typeof(rosidl_message_type_support_t));
 					}
 				}
 			}
+			if (TypeSupport.data == IntPtr.Zero)
+				throw new Exception ("Couldn't get typesupport");
 			PublisherOptions = rcl_publisher.get_default_options ();
 			InternalPublisher = new rcl_publisher (RosNode, TypeSupport, TopicName,PublisherOptions);
 
@@ -39,9 +53,11 @@ namespace rclcs
 		{
 			get{ return InternalPublisher; }
 		}
-		public bool Publish(MessageWrapper<T> msg)
+		public bool Publish(T msg)
 		{
-			return InternalPublisher.PublishMessage<T> ( msg.Data);
+			ValueType temp;
+			msg.GetData (out temp);
+			return InternalPublisher.PublishMessage ( temp);
 		}
 		protected override void Dispose(bool disposing)
 		{
@@ -118,8 +134,7 @@ namespace rclcs
 		{
 			return rcl_publisher_get_default_options ();
 		}
-		public bool PublishMessage<T>( ValueType msg)
-			where T : struct
+		public bool PublishMessage( ValueType msg)
 		{
 			int ret = rcl_publish (ref native_handle,  msg);
 			RCLReturnValues ret_val = (RCLReturnValues)ret;
