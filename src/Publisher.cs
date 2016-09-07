@@ -39,9 +39,9 @@ namespace rclcs
 		{
 			get{ return InternalPublisher; }
 		}
-		public bool Publish(T msg)
+		public bool Publish(MessageWrapper<T> msg)
 		{
-			return InternalPublisher.PublishMessage<T> ( msg);
+			return InternalPublisher.PublishMessage<T> ( msg.Data);
 		}
 		protected override void Dispose(bool disposing)
 		{

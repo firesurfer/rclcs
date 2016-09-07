@@ -35,7 +35,7 @@ namespace rclcs
 		{
 			get{return InternalSubscription.NativeSubscription;}
 		}
-		public rcl_subscription NativeWrapper
+		internal rcl_subscription NativeWrapper
 		{
 			get{ return InternalSubscription;}
 		}
@@ -46,7 +46,7 @@ namespace rclcs
 			T message = InternalSubscription.TakeMessage<T> (ref success);
 			if (success) {
 				if (MessageRecieved != null)
-					MessageRecieved (this,new MessageRecievedEventArgs<T> (message));
+					MessageRecieved (this,new MessageRecievedEventArgs<T> (new MessageWrapper<T>(message)));
 			}
 		}
 
@@ -75,7 +75,7 @@ namespace rclcs
 		}
 
 	}
-	public class rcl_subscription:IDisposable
+	internal class rcl_subscription:IDisposable
 	{
 		private bool disposed = false;
 		private rcl_subscription_t subscription;

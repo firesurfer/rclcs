@@ -62,6 +62,7 @@
     <Compile Include="IRosTransportItem.cs" />
     <Compile Include="ClientRecievedResponseEventArgs.cs" />
     <Compile Include="RCLErrorHandling.cs" />
+    <Compile Include="MessageWrapper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

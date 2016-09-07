@@ -5,12 +5,12 @@ namespace rclcs
 		where T : struct
 	{
 		//TODO Provide rmw_message_info_t ?
-		private T message;
-		public MessageRecievedEventArgs(T msg)
+		private MessageWrapper<T> message;
+		public MessageRecievedEventArgs(MessageWrapper<T> msg)
 		{
 			message = msg;
 		}
-		public T Message
+		public MessageWrapper<T> Message
 		{
 			get { return message; }
 		}

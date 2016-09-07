@@ -171,6 +171,7 @@ namespace rclcs
 		{
 
 			Data = Marshal.AllocHGlobal (Marshal.SizeOf<float> () * _Data.Length);
+
 			Size = (UIntPtr)_Data.Length;
 			Capacity = Size;
 			Marshal.Copy (_Data, 0, Data, _Data.Length);

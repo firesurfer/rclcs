@@ -29,7 +29,7 @@ namespace rclcs
 		{
 			get{return InternalNode.NativeNode; }
 		}
-		public rcl_node NativeNodeWrapper
+		internal rcl_node NativeNodeWrapper
 		{
 			get{ return InternalNode; }
 		}
@@ -98,7 +98,7 @@ namespace rclcs
 
 
 	}
-	public class rcl_node:IDisposable
+	internal class rcl_node:IDisposable
 	{
 		private bool disposed = false;
 		private rcl_node_t nativ_handle;

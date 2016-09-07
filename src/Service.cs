@@ -75,12 +75,12 @@ namespace rclcs
 		{
 			get{ return InternalService.NativeService;}
 		}
-		public rcl_service NativeServiceWrapper
+		internal rcl_service NativeServiceWrapper
 		{
 			get{ return NativeServiceWrapper; }
 		}
 	}
-	public class rcl_service:IDisposable
+	internal class rcl_service:IDisposable
 	{
 		private bool disposed = false;
 		private rcl_node_t native_node;
