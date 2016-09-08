@@ -155,11 +155,11 @@ namespace rclcs
 			case RCLReturnValues.RCL_RET_OK:
 				{
 					take_message_success = true;
+					//Bring the data back into the message wrapper
 					ret_msg.SetData (ref msg);
+					//And do a sync for nested types. This is in my opinion a hack because I can't store references on value types in C#
 					ret_msg.SyncDataIn ();
-					foreach (var item in msg.GetType().GetFields()) {
-						Console.WriteLine (item.Name + "        " + item.GetValue (msg));
-					}
+
 				}
 				break;
 			default:
