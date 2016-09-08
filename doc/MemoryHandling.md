@@ -1,5 +1,7 @@
 # Memory handling
 
+See the last paragraph "Solution"
+
 When using a managed language like C# one usually has the advantage not to be bothered with memory management, because the garbage collector keeps track of allocated memory und releases the memory in case 
 there are no more references pointing at it. 
 
@@ -235,3 +237,9 @@ we do a copy of the whole struct. This means we do a copy of the IntPtr, so if w
 ### Solutions to this dilemma
 
 Perhaps it would be an idea to wrap the message into a message container that is a class. A class is a reference type which means that all users will use the same struct afterwards. Problems with this solution might be that you could still create copies of the struct itsself.
+
+## The (in the end) implemented solution
+
+I solved this problem by creating a wrapper class for each generated message struct. The wrapper class contains one instance of the struct which can be obtained and set by reference. The wrapper class inherits the MessageWrapper base class which defines basic functions for accessing the data. This still leaves a main problem that a struct is still a valuetype that will be copied in many cases you would'n expect it to be copied. Therefore the message generator creates getter and setter methods that directly access the struct fields (and create some magic for accessing arrays). Furthermore the wrapper itself implements IDisposable and calls the `IRosTransportItem.Free()` method where and when ever needed. In most cases at the point of its lifecyle where it gets destroyed. 
+
+//TODO talk more about the solution

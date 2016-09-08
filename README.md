@@ -25,7 +25,7 @@ Then edit the file in `rosidl/rosidl_default_generators/CMakeLists.txt` and add 
 Then go back to the ros2 workspace and do an ament build. 
 
 ## Example
-You can have look at my [testing workspace](https://github.com/firesurfer/rclcs_testing_ws) ~~which is quite messy.~~ which contains some examples (And is still a bit messy).
+You can have look at my [testing workspace](https://github.com/firesurfer/rclcs_testing_ws) ~~which is quite messy.~~ which contains some [examples](https://github.com/firesurfer/rclcs_testing_ws/tree/master/src/test_cs/test_cs/Examples) (And is still a bit messy).
 
 
 ## What works at the moment
@@ -41,6 +41,7 @@ You can have look at my [testing workspace](https://github.com/firesurfer/rclcs_
 * Generate code for messages 
 
 For a list of currently supported types see: [supported types](doc/SupportedTypes.md)
+For further understanding of the what is happeding behind the scenes see [memory handling](/doc/MemoryHandling.md)
 
 ## What doesn't work at the moment
 
@@ -55,13 +56,13 @@ For a list of currently supported types see: [supported types](doc/SupportedType
 * ~~I'm not sure if it's possible to reproduce more complicated messages in C# an directly pass them to the rcl without any conversion. A conversion would be possible but would be a waste of resources in the most cases.~~
 
 * Program crashes at exit due to a multithreading error
-* Memory handling has to be done manual: See [memory handling](/doc/MemoryHandling.md)
+* ~~Memory handling has to be done manual: See [memory handling](/doc/MemoryHandling.md)~~
 
 ## What has to be done next
 
-* Support for nested types - this includes a cleanup of the message generator
+* Cleanup of the message generator
 * ~~Fix errors regarding arrays~~
-* Free memory where neededsss
+* Free memory where needed
 * ~~Finish implementation of services~~
 * Implement error handling where needed
 * Make sure the api is consistent with the rclcpp
@@ -69,6 +70,6 @@ For a list of currently supported types see: [supported types](doc/SupportedType
 * Write tests
 * Use templating engine for message generation
 * Allow debugging the managed code
-
+* Integrate into ament
 
 
