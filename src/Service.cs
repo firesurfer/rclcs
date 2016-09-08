@@ -7,8 +7,8 @@ namespace rclcs
 	 * U is the response type
 	 */
 	public class Service<T,U>:Executable
-		where T: struct
-		where U: struct
+		where T: MessageWrapper,new()
+		where U: MessageWrapper,new()
 	{
 		private  bool disposed = false;
 		private rosidl_service_type_support_t TypeSupport;
@@ -23,7 +23,15 @@ namespace rclcs
 			RosNode = _Node;
 			ServiceName = _ServiceName;
 			Type ServiceType = typeof(T);
+			Type wrapperType = typeof(T);
 
+			foreach (var item in wrapperType.GetMethods()) {
+				if (item.IsStatic) {
+					if (item.Name.Contains ("GetMessageType")) {
+						ServiceType = (Type)item.Invoke (null, null);
+					}
+				}
+			}
 			foreach (var item in ServiceType.GetMethods()) {
 
 				if (item.IsStatic ) {
@@ -32,6 +40,8 @@ namespace rclcs
 					}
 				}
 			}
+			if (TypeSupport.data == IntPtr.Zero)
+				throw new Exception ("Couldn't get typesupport");
 			ServiceOptions = rcl_service.get_default_options ();
 			InternalService = new rcl_service (RosNode.NativeNode, TypeSupport, ServiceName, ServiceOptions);
 
@@ -144,16 +154,20 @@ namespace rclcs
 			get{return native_handle;}
 		}
 		public T TakeRequest<T> (ref bool success)
-			where T:struct
+			where T:MessageWrapper,new()
 		{
+			
 			success = false;
 		    last_request_header = new rmw_request_id_t ();
 			T request = new T ();
-			int ret = rcl_take_request (ref native_handle, ref last_request_header, request);
+			ValueType msg;
+			request.GetData (out msg);
+			int ret = rcl_take_request (ref native_handle, ref last_request_header, msg);
 			RCLReturnValues retVal = (RCLReturnValues)ret;
 			switch (retVal) {
 			case RCLReturnValues.RCL_RET_OK:
 				success = true;
+				request.SetData (ref msg);
 				break;
 			case RCLReturnValues.RCL_RET_INVALID_ARGUMENT:
 				//throw new RCLInvalidArgumentException();
@@ -173,10 +187,11 @@ namespace rclcs
 			return request;
 		}
 		public void SendResponse<T>(ref T response)
-			where T: struct
+			where T: MessageWrapper,new()
 		{
-			
-			int ret = rcl_send_response (ref native_handle, ref last_request_header, response);
+			ValueType msg;
+			response.GetData (out msg);
+			int ret = rcl_send_response (ref native_handle, ref last_request_header, msg);
 			RCLReturnValues retVal = (RCLReturnValues)ret;
 			switch (retVal) {
 			case RCLReturnValues.RCL_RET_OK:

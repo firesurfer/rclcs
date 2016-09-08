@@ -50,8 +50,8 @@ namespace rclcs
 			return NewSubscription;
 		}
 		public Service<T,U> CreateService<T,U>(string ServiceName, bool AddToExecutables = true)
-			where T: struct
-			where U: struct
+			where T: MessageWrapper,new()
+			where U: MessageWrapper,new()
 		{
 			Service<T,U> NewService = new Service<T,U> (this, ServiceName);
 			if(AddToExecutables)
@@ -59,8 +59,8 @@ namespace rclcs
 			return NewService;
 		}
 		public Client<T,U> CreateClient<T,U>(string ServiceName, bool AddToExecutables = true)
-			where T: struct
-			where U: struct
+			where T: MessageWrapper,new()
+			where U: MessageWrapper,new()
 		{
 			Client<T,U> NewClient = new Client<T,U> (this, ServiceName);
 			if(AddToExecutables)

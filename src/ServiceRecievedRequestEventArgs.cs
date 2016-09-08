@@ -4,7 +4,7 @@ namespace rclcs
 {
 
 	public class ServiceRecievedRequestEventArgs<T>:EventArgs
-		where T: struct
+		where T: MessageWrapper,new()
 	{
 		//TODO Provide rmw_service_info_t ?
 		private T request;

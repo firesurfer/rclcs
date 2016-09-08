@@ -3,7 +3,7 @@
 namespace rclcs
 {
 	public class ClientRecievedResponseEventArgs<T>:EventArgs
-		where T: struct
+		where T: MessageWrapper,new()
 	{
 		//TODO Provide rmw_service_info_t ?
 		private T response;
