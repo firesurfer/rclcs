@@ -55,8 +55,21 @@ namespace rclcs
 		}
 		public bool Publish(T msg)
 		{
+			Console.WriteLine ("##############################################");
+			Console.WriteLine ("Debug in publish method:");
+			msg.SyncDataOut ();
 			ValueType temp;
 			msg.GetData (out temp);
+			foreach (var item in temp.GetType().GetFields()) {
+				if (item.GetValue(temp).ToString().Contains ("Time")) {
+					Console.WriteLine ("!!!!!Found time!!!!!");
+					foreach (var item2 in item.FieldType.GetFields()) {
+						Console.WriteLine (item2.Name + " " + item2.GetValue (item.GetValue(temp)));
+					}
+				}
+				Console.WriteLine (item.Name + " " + item.GetValue (temp));
+			}
+			Console.WriteLine ("##############################################");
 			return InternalPublisher.PublishMessage ( temp);
 		}
 		protected override void Dispose(bool disposing)

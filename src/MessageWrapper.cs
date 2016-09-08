@@ -18,6 +18,14 @@ namespace rclcs
 		{
 
 		}
+		public virtual void SyncDataOut()
+		{
+
+		}
+		public virtual void SyncDataIn()
+		{
+
+		}
 		public void Dispose()
 		{
 			Dispose(true);

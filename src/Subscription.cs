@@ -156,6 +156,7 @@ namespace rclcs
 				{
 					take_message_success = true;
 					ret_msg.SetData (ref msg);
+					ret_msg.SyncDataIn ();
 					foreach (var item in msg.GetType().GetFields()) {
 						Console.WriteLine (item.Name + "        " + item.GetValue (msg));
 					}
