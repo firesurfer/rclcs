@@ -15,11 +15,15 @@ namespace rclcs
 		private rcl_service InternalService;
 		public Node RosNode{ get; private set; }
 		public string ServiceName{ get;private set;}
-		public rcl_service_options_t ServiceOptions { get; private set; }
-		public event EventHandler<ServiceRecievedRequestEventArgs<T>> RequestRecieved;
-
-		public Service (Node _Node, string _ServiceName)
+		private rcl_service_options_t ServiceOptions;
+		public event EventHandler<ServiceRecievedRequestEventArgs<T,U>> RequestRecieved;
+		public rmw_qos_profile_t QOSProfile{ get; private set; }
+		public Service (Node _Node, string _ServiceName):this (_Node, _ServiceName, rmw_qos_profile_t.rmw_qos_profile_default)
 		{
+		}
+		public Service (Node _Node, string _ServiceName, rmw_qos_profile_t _QOS)
+		{
+			QOSProfile = _QOS;
 			RosNode = _Node;
 			ServiceName = _ServiceName;
 			Type ServiceType = typeof(T);
@@ -43,6 +47,7 @@ namespace rclcs
 			if (TypeSupport.data == IntPtr.Zero)
 				throw new Exception ("Couldn't get typesupport");
 			ServiceOptions = rcl_service.get_default_options ();
+			ServiceOptions.qos = QOSProfile;
 			InternalService = new rcl_service (RosNode.NativeNode, TypeSupport, ServiceName, ServiceOptions);
 
 
@@ -73,14 +78,14 @@ namespace rclcs
 			T Request = InternalService.TakeRequest<T> (ref TakeSuccess);
 			if (TakeSuccess) {
 				if(RequestRecieved != null)
-					RequestRecieved(this, new ServiceRecievedRequestEventArgs<T>(Request));
+					RequestRecieved(this, new ServiceRecievedRequestEventArgs<T,U>(Request,new SendResponseDelegate<U>(InternalService.SendResponse<U>)));
 			}
 		}
-		/*TODO Make sure this can only be called ones after recieving a RequestRecieved event*/
+		/* Use delegate provided by ServiceRecievedRequest event
 		public void SendResponse(U response)
 		{
 			InternalService.SendResponse<U> (ref response);
-		}
+		}*/
 		public rcl_service_t NativeService
 		{
 			get{ return InternalService.NativeService;}
@@ -186,7 +191,7 @@ namespace rclcs
 			}
 			return request;
 		}
-		public void SendResponse<T>(ref T response)
+		public void SendResponse<T>( T response)
 			where T: MessageWrapper,new()
 		{
 			ValueType msg;
@@ -246,8 +251,8 @@ namespace rclcs
 	}
 	public struct rcl_service_options_t
 	{
-		rmw_qos_profile_t qos;
-		rcl_allocator_t allocator;
+		public rmw_qos_profile_t qos;
+		public rcl_allocator_t allocator;
 	}
 }
 

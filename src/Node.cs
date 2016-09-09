@@ -63,12 +63,17 @@ namespace rclcs
 				ManagedExecutables.Add (NewSubscription);
 			return NewSubscription;
 		}
-
 		public Service<T,U> CreateService<T,U> (string ServiceName, bool AddToExecutables = true)
 			where T: MessageWrapper, new()
 			where U: MessageWrapper, new()
 		{
-			Service<T,U> NewService = new Service<T,U> (this, ServiceName);
+			return CreateService<T,U> (ServiceName, rmw_qos_profile_t.rmw_qos_profile_default, AddToExecutables);
+		}
+		public Service<T,U> CreateService<T,U> (string ServiceName,rmw_qos_profile_t QOSProfile, bool AddToExecutables = true)
+			where T: MessageWrapper, new()
+			where U: MessageWrapper, new()
+		{
+			Service<T,U> NewService = new Service<T,U> (this, ServiceName,QOSProfile);
 			if (AddToExecutables)
 				ManagedExecutables.Add (NewService);
 			return NewService;
@@ -78,7 +83,13 @@ namespace rclcs
 			where T: MessageWrapper, new()
 			where U: MessageWrapper, new()
 		{
-			Client<T,U> NewClient = new Client<T,U> (this, ServiceName);
+			return CreateClient<T,U> (ServiceName, rmw_qos_profile_t.rmw_qos_profile_default, AddToExecutables);
+		}
+		public Client<T,U> CreateClient<T,U> (string ServiceName,rmw_qos_profile_t QOSProfile, bool AddToExecutables = true)
+			where T: MessageWrapper, new()
+			where U: MessageWrapper, new()
+		{
+			Client<T,U> NewClient = new Client<T,U> (this, ServiceName,QOSProfile);
 			if (AddToExecutables)
 				ManagedExecutables.Add (NewClient);
 			return NewClient;

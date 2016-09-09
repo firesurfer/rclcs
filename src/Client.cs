@@ -2,10 +2,12 @@
 using System.Runtime.InteropServices;
 namespace rclcs
 {
-	/*
-	 * T is the request type
-	 * U is the response type
-	 */
+
+	/// <summary>
+	/// Client class for a ROS2 Service.
+	/// <typeparam name="T">Request type</typeparam>
+	/// <typeparam name="U">Response type</typeparam>
+	/// </summary>
 	public class Client<T,U>:Executable
 		where T :MessageWrapper,new()
 		where U :MessageWrapper,new()
@@ -16,11 +18,16 @@ namespace rclcs
 		private rcl_client InternalClient;
 		public Node RosNode{ get; private set; }
 		public string ServiceName{ get;private set;}
-		public rcl_client_options_t ClientOptions { get; private set; }
-
+		private rcl_client_options_t ClientOptions;
+		public rmw_qos_profile_t QOSProfile{ get; private set; }
 		public event EventHandler<ClientRecievedResponseEventArgs<U>> RecievedResponse;
-		public Client (Node _Node, string _ServiceName)
+		public Client (Node _Node, string _ServiceName):this(_Node,_ServiceName, rmw_qos_profile_t.rmw_qos_profile_default)
 		{
+			
+		}
+		public Client (Node _Node, string _ServiceName, rmw_qos_profile_t _QOS)
+		{
+			QOSProfile = _QOS;
 			RosNode = _Node;
 			ServiceName = _ServiceName;
 			Type ServiceType = typeof(T);
@@ -44,6 +51,7 @@ namespace rclcs
 			if (TypeSupport.data == IntPtr.Zero)
 				throw new Exception ("Couldn't get typesupport");
 			ClientOptions = rcl_client.get_default_options ();
+			ClientOptions.qos = QOSProfile;
 			InternalClient = new rcl_client (RosNode.NativeNode, TypeSupport, ServiceName, ClientOptions);
 		}
 		public override void Execute ()
@@ -223,8 +231,8 @@ namespace rclcs
 	}
 	public struct rcl_client_options_t
 	{
-		rmw_qos_profile_t qos;
-		rcl_allocator_t allocator;
+		public rmw_qos_profile_t qos;
+		public rcl_allocator_t allocator;
 	}
 }
 

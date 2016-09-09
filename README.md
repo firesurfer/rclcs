@@ -62,6 +62,7 @@ For further understanding of the what is happeding behind the scenes see [memory
 
 * Generate xml documentation for better autocompletion
 * Cleanup of the message generator
+   * Use templating engine for message generation
 * ~~Fix errors regarding arrays~~
 * Free memory where needed
 * ~~Finish implementation of services~~
@@ -70,7 +71,7 @@ For further understanding of the what is happeding behind the scenes see [memory
 	* I think I'm going to break the consistency in some parts in favour to usability
 * Write tests
 * Use templating engine for message generation
-* Allow debugging the managed code
+* Allow (easier) debugging the managed code
 * Integrate into ament
 
 
