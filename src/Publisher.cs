@@ -11,11 +11,16 @@ namespace rclcs
 		private bool disposed = false;
 		public Node RosNode{ get; private set;}
 		public string TopicName { get; private set; }
-		public rcl_publisher_options_t PublisherOptions{ get; private set; }
-
-
-		public Publisher (Node _Node, string _TopicName)
+		private rcl_publisher_options_t PublisherOptions;
+		public rmw_qos_profile_t QOSProfile{ get; private set; }
+		public Publisher (Node _Node, string _TopicName) : this (_Node, _TopicName, rmw_qos_profile_t.rmw_qos_profile_default)
 		{
+			
+
+		}
+		public Publisher (Node _Node, string _TopicName, rmw_qos_profile_t _QOS )
+		{
+			QOSProfile = _QOS;
 			RosNode = _Node;
 			TopicName = _TopicName;
 
@@ -42,6 +47,7 @@ namespace rclcs
 			if (TypeSupport.data == IntPtr.Zero)
 				throw new Exception ("Couldn't get typesupport");
 			PublisherOptions = rcl_publisher.get_default_options ();
+			PublisherOptions.qos = QOSProfile;
 			InternalPublisher = new rcl_publisher (RosNode, TypeSupport, TopicName,PublisherOptions);
 
 		}
@@ -57,6 +63,7 @@ namespace rclcs
 		{
 			Console.WriteLine ("##############################################");
 			Console.WriteLine ("Debug in publish method:");
+			//I still don't like this solution which is needed for nested types...
 			msg.SyncDataOut ();
 			ValueType temp;
 			msg.GetData (out temp);

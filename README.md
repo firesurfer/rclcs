@@ -39,16 +39,16 @@ You can have look at my [testing workspace](https://github.com/firesurfer/rclcs_
 * Publish and recieve a  message (nested types might be a bit buggy at the moment)
 	* Arrays will work soon without any patches to the rmw (See: https://github.com/eProsima/ROS-RMW-Fast-RTPS-cpp/pull/45)
 * Generate code for messages 
+* Setting qos profile for subscription and publisher
 
 For a list of currently supported types see: [supported types](doc/SupportedTypes.md)
 For further understanding of the what is happeding behind the scenes see [memory handling](/doc/MemoryHandling.md)
 
 ## What doesn't work at the moment
-
+(And I know that it doesn't work)
 
 * String arrays
-* Fixed Arrays - Coming soon
-* Everything else 
+* Fixed Arrays - Coming soon (probably)
 * Preinitialized value -> Not coming soon (This is because C# doesn't allow preinitialised members in structs)
 
 ## What is critical at the moment
@@ -60,6 +60,7 @@ For further understanding of the what is happeding behind the scenes see [memory
 
 ## What has to be done next
 
+* Generate xml documentation for better autocompletion
 * Cleanup of the message generator
 * ~~Fix errors regarding arrays~~
 * Free memory where needed

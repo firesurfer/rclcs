@@ -11,10 +11,27 @@ namespace rclcs
 		private rcl_subscription InternalSubscription;
 		public Node RosNode{ get; private set;}
 		public string TopicName { get; private set; }
-		public rcl_subscription_options_t SubscriptionOptions{ get; private set; }
+		private rcl_subscription_options_t SubscriptionOptions;
+		public rmw_qos_profile_t QOSProfile { get; private set; }
 		public event EventHandler<MessageRecievedEventArgs<T>> MessageRecieved;
-		public Subscription (Node _node, string _topicName)
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="rclcs.Subscription`1"/> class. With default qos profile.
+		/// </summary>
+		/// <param name="_node">Node.</param>
+		/// <param name="_topicName">Topic name.</param>
+		public Subscription(Node _node, string _topicName): this(_node, _topicName, rmw_qos_profile_t.rmw_qos_profile_default)
 		{
+		}
+		/// <summary>
+		/// Initializes a new instance of the <see cref="rclcs.Subscription`1"/> class. With a custom qos profile 
+		/// </summary>
+		/// <param name="_node">Node.</param>
+		/// <param name="_topicName">Topic name.</param>
+		/// <param name="_QOS">QO.</param>
+		public Subscription (Node _node, string _topicName, rmw_qos_profile_t _QOS)
+		{
+			QOSProfile = _QOS;
 			RosNode = _node;
 			TopicName = _topicName;
 
@@ -38,6 +55,7 @@ namespace rclcs
 			if (TypeSupport.data == IntPtr.Zero)
 				throw new Exception ("Couldn't get typesupport");
 			SubscriptionOptions = rcl_subscription.get_default_options ();
+			SubscriptionOptions.qos = QOSProfile;
 			InternalSubscription = new rcl_subscription (RosNode, TypeSupport, TopicName,SubscriptionOptions);
 		}
 		public rcl_subscription_t NativeSubscription
@@ -221,9 +239,9 @@ namespace rclcs
 	}
 	public struct rcl_subscription_options_t
 	{
-		rmw_qos_profile_t qos;
-		bool ignore_local_publications;
-		rcl_allocator_t allocator;
+		public rmw_qos_profile_t qos;
+		public bool ignore_local_publications;
+		public rcl_allocator_t allocator;
 	}
 }
 
