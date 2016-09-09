@@ -172,7 +172,8 @@ namespace rclcs
 
 		public string get_node_name ()
 		{	
-			return rcl_node_get_name (ref nativ_handle);
+			IntPtr handle =  rcl_node_get_name (ref nativ_handle);
+			return Marshal.PtrToStringAnsi (handle);
 		}
 
 		public bool node_is_valid ()
@@ -199,6 +200,8 @@ namespace rclcs
 		{
 			return Marshal.PtrToStructure<rcl_node_options_t> (rcl_node_get_default_options ());
 		}
+		[DllImport ("librcl.so")]
+		static extern int rcl_node_get_domain_id( ref rcl_node_t  node, ref UIntPtr  domain_id);
 
 		[DllImport ("librcl.so")]
 		static extern int rcl_node_init (ref rcl_node_t node, [MarshalAs (UnmanagedType.LPStr)]string name, IntPtr options);
@@ -210,7 +213,7 @@ namespace rclcs
 		static extern bool rcl_node_is_valid (ref rcl_node_t node);
 
 		[DllImport ("librcl.so")]
-		static extern string rcl_node_get_name (ref rcl_node_t node);
+		static extern IntPtr rcl_node_get_name (ref rcl_node_t node);
 
 
 
