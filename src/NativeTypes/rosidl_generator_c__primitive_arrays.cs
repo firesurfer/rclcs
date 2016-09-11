@@ -137,17 +137,34 @@ namespace rclcs
 			Size = (UIntPtr)_Data.Length;
 			Capacity = Size;
 			rosidl_generator_c__String[] ConvertedData = new rosidl_generator_c__String[_Data.Length];
+			IntPtr mem = Data;
 			for (int i = 0; i < _Data.Length; i++) {
 				ConvertedData [i] = new rosidl_generator_c__String (_Data [i]);
+				Marshal.StructureToPtr (ConvertedData [i], mem, true);
+				mem = new IntPtr((long)mem + Marshal.SizeOf<rosidl_generator_c__String> ());
 			}
-			Marshal.StructureToPtr (ConvertedData, Data, true);
+			
 			//Marshal.Copy (ConvertedData, 0, Data, _Data.Length);
+
 
 		}
 
 		public string[] Array {
 			//TODO
-			get{ return new string[1]; }//Marshal.PtrToStructure<rosidl_generator_c__String[]> (Data);}
+			get{ 
+				int size = (int)Size;
+				IntPtr mem = Data;
+				rosidl_generator_c__String[] tempData = new rosidl_generator_c__String[size];
+				for (int i = 0; i < size; i++) {
+					tempData[i] = 	Marshal.PtrToStructure<rosidl_generator_c__String> (mem);
+					mem = new IntPtr((long)mem + Marshal.SizeOf<rosidl_generator_c__String> ());
+				}
+			
+				string[] tempArray = new string[tempData.Length];
+				for (int i = 0; i < tempData.Length; i++) {
+					tempArray [i] = tempData [i].Data;
+				}
+				return tempArray;}
 		}
 
 		public void Free ()

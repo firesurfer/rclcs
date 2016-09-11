@@ -47,7 +47,7 @@ For further understanding of the what is happeding behind the scenes see [memory
 ## What doesn't work at the moment
 (And I know that it doesn't work)
 
-* String arrays
+* ~~String arrays~~
 * Fixed Arrays - Coming soon (probably)
 * Preinitialized value -> Not coming soon (This is because C# doesn't allow preinitialised members in structs)
 
@@ -64,7 +64,7 @@ For further understanding of the what is happeding behind the scenes see [memory
 * Cleanup of the message generator
    * Use templating engine for message generation
 * ~~Fix errors regarding arrays~~
-* Free memory where needed
+* Free memory where needed - I should have covered all (or at least most cases) by now
 * ~~Finish implementation of services~~
 * Implement error handling where needed
 * Make sure the api is consistent with the rclcpp

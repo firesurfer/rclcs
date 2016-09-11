@@ -17,4 +17,4 @@ Because it's kind of difficult to automatically reproduce all types which are de
 
 * arrays 
 
-* nested messages are supported but can be buggy at the moment
+* nested messages are supported 
