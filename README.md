@@ -48,8 +48,8 @@ For further understanding of the what is happeding behind the scenes see [memory
 (And I know that it doesn't work)
 
 * ~~String arrays~~
-* Fixed Arrays - Coming soon (probably)
-* Preinitialized value -> Not coming soon (This is because C# doesn't allow preinitialised members in structs)
+* ~~Fixed Arrays - Coming soon (probably)~~
+* Preinitialized value -> Not coming soon (This is because C# doesn't allow preinitialised members in structs) At the moment the preinit values are simply ignored
 
 ## What is critical at the moment
 
