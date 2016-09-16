@@ -7,12 +7,21 @@ project(rclcs C)
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_python REQUIRED)
 
+if(NOT Win32)
 add_custom_target(rclcs ALL
 	COMMAND 
 	"xbuild" rclcs.csproj /property:OutputPath=${CMAKE_BINARY_DIR} /property:AssemblyName=rclcs 
 	WORKING_DIRECTORY
 	${CMAKE_SOURCE_DIR}/src
 )
+else()
+add_custom_target(rclcs ALL
+	COMMAND 
+	"msbuild" rclcs.csproj /property:OutputPath=${CMAKE_BINARY_DIR} /property:AssemblyName=rclcs 
+	WORKING_DIRECTORY
+	${CMAKE_SOURCE_DIR}/src
+)
+endif(NOT Win32)
 
 #ament_export_dependencies(rosidl_cmake)
 #ament_export_include_directories(include)
