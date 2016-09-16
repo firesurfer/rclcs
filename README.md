@@ -6,9 +6,14 @@ So the messages (structs) can directly be passed to the `rcl` without any conver
 
 ## How to use
 
-Get your [copy of ROS](https://github.com/ros2/ros2/wiki/Linux-Development-Setup) and compile it according to the documentation.
+These instructions are mostly the same on Windows and Linux. If needed I will point that out.
 
-Make sure you've got mono/ .Net installed (Not tested on windows yet).
+Get your copy of ROS and compile it according to the documentation:
+
+For __Linux__ :https://github.com/ros2/ros2/wiki/Linux-Development-Setup) 
+For __Windows__: https://github.com/ros2/ros2/wiki/Windows-Development-Setup
+
+Make sure you've got mono/ .Net in a version installed that targets at least the framework version 4.5.1.
 
 Then from your ros2 workspace base directory:
 ```
@@ -22,7 +27,23 @@ Then edit the file in `rosidl/rosidl_default_generators/CMakeLists.txt` and add 
   ament_export_dependencies(rosidl_generator_cs)
 ```
 
-Then go back to the ros2 workspace and do an ament build. 
+Then go back to the ros2 workspace and do:
+
+__Linux__:
+```
+rm -rf build/ install/
+./src/ament/ament_tools/scripts/ament.py build
+
+``` 
+
+__Windows__:
+Delete the build and install folder with the windows explorer.
+
+```
+python src\ament\ament_tools\scripts\ament.py build
+```
+
+
 
 ## Example
 
