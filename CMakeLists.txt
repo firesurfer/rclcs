@@ -21,7 +21,7 @@ add_custom_target(rclcs ALL
 	WORKING_DIRECTORY
 	${CMAKE_SOURCE_DIR}/src
 )
-endif(NOT Win32)
+endif()
 
 #ament_export_dependencies(rosidl_cmake)
 #ament_export_include_directories(include)
