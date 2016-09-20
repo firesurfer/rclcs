@@ -63,6 +63,8 @@
     <Compile Include="ClientRecievedResponseEventArgs.cs" />
     <Compile Include="RCLErrorHandling.cs" />
     <Compile Include="MessageWrapper.cs" />
+    <Compile Include="Graph.cs" />
+    <Compile Include="MarshallingHelpers.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

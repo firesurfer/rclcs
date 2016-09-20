@@ -143,8 +143,7 @@ namespace rclcs
 				Marshal.StructureToPtr (ConvertedData [i], mem, true);
 				mem = new IntPtr((long)mem + Marshal.SizeOf<rosidl_generator_c__String> ());
 			}
-			
-			//Marshal.Copy (ConvertedData, 0, Data, _Data.Length);
+
 
 
 		}
