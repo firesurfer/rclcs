@@ -32,15 +32,18 @@ You can have look at my [testing workspace](https://github.com/firesurfer/rclcs_
 ## What works at the moment
 
 * Init and deinit RCL
+	* Errorhandling of return values, throwing exceptions where useful.
+	* Implemented rmw errorhandling methods
 * Create a Node
 * Create a Publisher
 * Create a Subscription
 * Create a Service/Client
 	* Get a request and answer it
 * Publish and recieve a  message 
-	* Arrays will work soon without any patches to the rmw (See: https://github.com/eProsima/ROS-RMW-Fast-RTPS-cpp/pull/45)
 * Generate code for messages 
 * Setting qos profiles
+* Using the currently implemented graph functions
+* Having intellisense comments
 
 For a list of currently supported types see: [supported types](doc/SupportedTypes.md)
 For further understanding of the what is happening behind the scenes see [memory handling](/doc/MemoryHandling.md)
@@ -52,7 +55,8 @@ For further understanding of the what is happening behind the scenes see [memory
 * ~~Fixed Arrays - Coming soon (probably)~~
 * Preinitialized value -> Not coming soon (This is because C# doesn't allow preinitialised members in structs) At the moment the preinit values are simply ignored
 * Sometimes you might have to compile messages twice in order to have them properly compiled. (Or just remove the build and install folder)
-
+* Running the system on windows - but I'm working on it. Have a look at the windows branches.
+* Sending messages from a cpp program to a C# program: (See: https://github.com/eProsima/ROS-RMW-Fast-RTPS-cpp/pull/45) 
 ## What is critical at the moment
 
 * ~~I'm not sure if it's possible to reproduce more complicated messages in C# an directly pass them to the rcl without any conversion. A conversion would be possible but would be a waste of resources in the most cases.~~
@@ -62,7 +66,7 @@ For further understanding of the what is happening behind the scenes see [memory
 
 ## What has to be done next
 
-* Generate xml documentation for better autocompletion
+* ~~Generate xml documentation for better autocompletion~~
 * Cleanup of the message generator
    * ~~Use templating engine for message generation~~ I will probably use the C# codedom or in future the roselyn codesynthesizer API
    * Having a proper dependency resolving mechanism

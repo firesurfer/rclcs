@@ -21,13 +21,10 @@ namespace rclcs
 				break;
 			case RCLReturnValues.RCL_RET_ALREADY_INIT:
 				throw new RCLAlreadyInitExcption ();
-				break;
 			case RCLReturnValues.RCL_RET_BAD_ALLOC:
 				throw new RCLBadAllocException ();
-				break;
 			case RCLReturnValues.RCL_RET_ERROR:
 				throw new RCLErrorException (RCLErrorHandling.GetRMWErrorState());
-				break;
 			default:
 				break;
 			}
@@ -41,13 +38,10 @@ namespace rclcs
 				break;
 			case RCLReturnValues.RCL_RET_ALREADY_INIT:
 				throw new RCLAlreadyInitExcption ();
-				break;
 			case RCLReturnValues.RCL_RET_BAD_ALLOC:
 				throw new RCLBadAllocException ();
-				break;
 			case RCLReturnValues.RCL_RET_ERROR:
 				throw new RCLErrorException (RCLErrorHandling.GetRMWErrorState());
-				break;
 			default:
 				break;
 			}
