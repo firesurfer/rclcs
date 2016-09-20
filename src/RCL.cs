@@ -6,8 +6,11 @@ namespace rclcs
 	public class RCL:IDisposable
 	{
 		bool disposed = false;
-
+		#if (DEF_WINDOWS)
+		[DllImport("rcl.dll")]
+		#else
 		[DllImport("librcl.so")]
+		#endif
 	    static extern int rcl_init(int argc, [In, Out] String[] argv, rcl_allocator_t allocator);
 
 		/**
@@ -54,13 +57,25 @@ namespace rclcs
 
 		}
 
+		#if (DEF_WINDOWS)
+		[DllImport("rcl.dll")]
+		#else
 		[DllImport("librcl.so")]
+		#endif
 	    static extern int rcl_shutdown ();
 
+		#if (DEF_WINDOWS)
+		[DllImport("rcl.dll")]
+		#else
 		[DllImport("librcl.so")]
+		#endif
 	    static extern UInt64 rcl_get_instance_id ();
 
+		#if (DEF_WINDOWS)
+		[DllImport("rcl.dll")]
+		#else
 		[DllImport("librcl.so")]
+		#endif
 		static extern bool rcl_ok ();
 
 		public void Dispose()
