@@ -10,7 +10,7 @@ find_package(ament_cmake_python REQUIRED)
 if(NOT Win32)
 add_custom_target(rclcs ALL
 	COMMAND 
-	"xbuild" rclcs.csproj /property:OutputPath=${CMAKE_BINARY_DIR} /property:AssemblyName=rclcs 
+	"xbuild" rclcs.csproj /property:OutputPath=${CMAKE_BINARY_DIR} /property:AssemblyName=rclcs /property:DocumentationFile="rclcs.xml"
 	WORKING_DIRECTORY
 	${CMAKE_SOURCE_DIR}/src
 )
@@ -35,6 +35,7 @@ ament_package(
   
 )
 install(FILES ${CMAKE_BINARY_DIR}/rclcs.dll DESTINATION lib)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/rclcs.xml DESTINATION lib)
 
 #install(TARGETS rclcs.dll DESTINATION lib)
 #install(
