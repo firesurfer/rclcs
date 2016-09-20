@@ -8,8 +8,10 @@ namespace rclcs
 		bool disposed = false;
 
 		#if __MonoCS__
+		#warning Compiling on linux: path is now: librcl.so
 		public const string LibRCLPath = "librcl.so";
 		#else
+		#warning Compiling on windows: path is now: librcl.so
 		public const string LibRCLPath = "rcl.dll";
 		#endif
 		/**
