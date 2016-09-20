@@ -6,12 +6,7 @@ namespace rclcs
 	public class RCL:IDisposable
 	{
 		bool disposed = false;
-		#if (__MonoCS__)
-		[DllImport("librcl.so")]
-		#else
-		[DllImport("rcl.dll")]
-		#endif
-	    static extern int rcl_init(int argc, [In, Out] String[] argv, rcl_allocator_t allocator);
+
 
 		/**
 		 * Call this function instead of rcl_init
@@ -56,6 +51,12 @@ namespace rclcs
 			}
 
 		}
+		#if (__MonoCS__)
+		[DllImport("librcl.so")]
+		#else
+		[DllImport("rcl.dll")]
+		#endif
+		static extern int rcl_init(int argc, [In, Out] String[] argv, rcl_allocator_t allocator);
 
 		#if (__MonoCS__)
 		[DllImport("librcl.so")]
