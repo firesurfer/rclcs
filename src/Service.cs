@@ -219,60 +219,28 @@ namespace rclcs
 		{
 			return rcl_service_get_default_options ();
 		}
-		#if (__MonoCS__)
-		[DllImport("librcl.so")]
-		#else
-		[DllImport("rcl.dll")]
-		#endif
+		[DllImport(RCL.LibRCLPath)]
 		extern static rcl_service_t rcl_get_zero_initialized_service();
 
-		#if (__MonoCS__)
-		[DllImport("librcl.so")]
-		#else
-		[DllImport("rcl.dll")]
-		#endif
+		[DllImport(RCL.LibRCLPath)]
 		extern static int rcl_service_init(ref rcl_service_t service, ref rcl_node_t node, ref rosidl_service_type_support_t type_support, string topic_name, ref rcl_service_options_t options);
 
-		#if (__MonoCS__)
-		[DllImport("librcl.so")]
-		#else
-		[DllImport("rcl.dll")]
-		#endif
+		[DllImport(RCL.LibRCLPath)]
 		extern static int rcl_service_fini(ref rcl_service_t service, ref rcl_node_t node);
 
-		#if (__MonoCS__)
-		[DllImport("librcl.so")]
-		#else
-		[DllImport("rcl.dll")]
-		#endif
+		[DllImport(RCL.LibRCLPath)]
 		extern static rcl_service_options_t rcl_service_get_default_options();
 
-		#if (__MonoCS__)
-		[DllImport("librcl.so")]
-		#else
-		[DllImport("rcl.dll")]
-		#endif
+		[DllImport(RCL.LibRCLPath)]
 		extern static int rcl_take_request(ref rcl_service_t service, ref rmw_request_id_t request_header, [In,Out] ValueType ros_request);
 
-		#if (__MonoCS__)
-		[DllImport("librcl.so")]
-		#else
-		[DllImport("rcl.dll")]
-		#endif
+		[DllImport(RCL.LibRCLPath)]
 		extern static int rcl_send_response(ref rcl_service_t service, ref rmw_request_id_t request_header, [In,Out] ValueType ros_response);
 
-		#if (__MonoCS__)
-		[DllImport("librcl.so")]
-		#else
-		[DllImport("rcl.dll")]
-		#endif
+		[DllImport(RCL.LibRCLPath)]
 		extern static string rcl_service_get_service_name(ref rcl_service_t service);
 
-		#if (__MonoCS__)
-		[DllImport("librcl.so")]
-		#else
-		[DllImport("rcl.dll")]
-		#endif
+		[DllImport(RCL.LibRCLPath)]
 		extern static IntPtr rcl_service_get_options(ref rcl_service_t service);
 
 

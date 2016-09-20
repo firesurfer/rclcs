@@ -183,53 +183,25 @@ namespace rclcs
 			}
 			return publish_message_success;
 		}
-		#if (__MonoCS__)
-		[DllImport("librcl.so")]
-		#else
-		[DllImport("rcl.dll")]
-		#endif
+		[DllImport(RCL.LibRCLPath)]
 		extern static rcl_publisher_t rcl_get_zero_initialized_publisher();
 
-		#if (__MonoCS__)
-		[DllImport("librcl.so")]
-		#else
-		[DllImport("rcl.dll")]
-		#endif
+		[DllImport(RCL.LibRCLPath)]
 		extern static int rcl_publisher_init(ref rcl_publisher_t publisher,ref rcl_node_t node, ref rosidl_message_type_support_t type_support, string topic_name, ref rcl_publisher_options_t options);
 
-		#if (__MonoCS__)
-		[DllImport("librcl.so")]
-		#else
-		[DllImport("rcl.dll")]
-		#endif
+		[DllImport(RCL.LibRCLPath)]
 		extern static int rcl_publisher_fini (ref rcl_publisher_t publisher, ref rcl_node_t node);
 
-		#if (__MonoCS__)
-		[DllImport("librcl.so")]
-		#else
-		[DllImport("rcl.dll")]
-		#endif
+		[DllImport(RCL.LibRCLPath)]
 		extern static rcl_publisher_options_t rcl_publisher_get_default_options();
 
-		#if (__MonoCS__)
-		[DllImport("librcl.so")]
-		#else
-		[DllImport("rcl.dll")]
-		#endif
+		[DllImport(RCL.LibRCLPath)]
 		extern static int rcl_publish(ref rcl_publisher_t publisher,  [In] ValueType ros_message);
 
-		#if (__MonoCS__)
-		[DllImport("librcl.so")]
-		#else
-		[DllImport("rcl.dll")]
-		#endif
+		[DllImport(RCL.LibRCLPath)]
 		extern static string rcl_publisher_get_topic_name(ref rcl_publisher_t publisher);
 
-		#if (__MonoCS__)
-		[DllImport("librcl.so")]
-		#else
-		[DllImport("rcl.dll")]
-		#endif
+		[DllImport(RCL.LibRCLPath)]
 		extern static rcl_publisher_options_t rcl_publisher_get_options(ref rcl_publisher_t publisher);
 	}
 	public struct rcl_publisher_t
