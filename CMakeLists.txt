@@ -10,14 +10,14 @@ find_package(ament_cmake_python REQUIRED)
 if(NOT WIN32)
 add_custom_target(rclcs ALL
 	COMMAND 
-	"xbuild" rclcs.csproj /property:OutputPath=${CMAKE_BINARY_DIR} /property:AssemblyName=rclcs /property:DocumentationFile="rclcs.xml"
+	"xbuild" rclcs.csproj /property:OutputPath=${CMAKE_BINARY_DIR} /property:AssemblyName=rclcs /property:GenerateDocumentation=true /property:DocumentationFile="rclcs.xml"
 	WORKING_DIRECTORY
 	${CMAKE_SOURCE_DIR}/src
 )
 else()
 add_custom_target(rclcs ALL
 	COMMAND 
-	"msbuild" rclcs.csproj /property:OutputPath=${CMAKE_BINARY_DIR} /property:AssemblyName=rclcs /property:AllowUnsafeBlocks=true /property:Platform=x64
+	"msbuild" rclcs.csproj /property:OutputPath=${CMAKE_BINARY_DIR} /property:AssemblyName=rclcs /property:AllowUnsafeBlocks=true /property:Platform=x64 /property:GenerateDocumentation=true /property:DocumentationFile="rclcs.xml"
 	WORKING_DIRECTORY
 	${CMAKE_SOURCE_DIR}/src
 )

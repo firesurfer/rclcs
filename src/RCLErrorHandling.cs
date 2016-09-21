@@ -5,20 +5,20 @@ namespace rclcs
 	public static class RCLErrorHandling
 	{
 		//TODO Do I have to call the corresponding functions in the rcl ?
-		[DllImport("librmw.so")]
+		[DllImport(RCL.LibRMWPath)]
 		extern static bool rmw_error_is_set();
 
-		[DllImport("librmw.so")]
+		[DllImport(RCL.LibRMWPath)]
 		[return : MarshalAs(UnmanagedType.LPStruct)]
 		extern static rmw_error_state_t rmw_get_error_state();
 
-		[DllImport("librmw.so")]
+		[DllImport(RCL.LibRMWPath)]
 		extern static IntPtr rmw_get_error_string ();
 
-		[DllImport("librmw.so")]
+		[DllImport(RCL.LibRMWPath)]
 		extern static IntPtr rmw_get_error_string_safe();
 
-		[DllImport("librmw.so")]
+		[DllImport(RCL.LibRMWPath)]
 		extern static void rmw_reset_error();
 
 		public static bool IsErrorSet()

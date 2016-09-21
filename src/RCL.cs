@@ -10,9 +10,11 @@ namespace rclcs
 		#if __MonoCS__
 		#warning Compiling on linux: path is now: librcl.so
 		public const string LibRCLPath = "librcl.so";
+		public const string LibRMWPath = "librmw.so";
 		#else
 		#warning Compiling on windows: path is now: librcl.so
 		public const string LibRCLPath = "rcl.dll";
+		public const string LibRMWPath = "rmw.dll";
 		#endif
 		/**
 		 * Call this function instead of rcl_init
