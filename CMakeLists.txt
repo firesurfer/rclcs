@@ -34,8 +34,13 @@ endif()
 ament_package(
   
 )
-install(FILES ${CMAKE_BINARY_DIR}/rclcs.dll DESTINATION lib)
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/rclcs.xml DESTINATION lib)
+if(NOT WIN32)
+	install(FILES ${CMAKE_BINARY_DIR}/rclcs.dll DESTINATION lib)
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/rclcs.xml DESTINATION lib)
+else()
+	install(FILES ${CMAKE_BINARY_DIR}/rclcs.dll DESTINATION bin)
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/rclcs.xml DESTINATION bin)
+endif()
 
 #install(TARGETS rclcs.dll DESTINATION lib)
 #install(
