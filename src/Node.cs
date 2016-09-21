@@ -293,39 +293,31 @@ namespace rclcs
 		public static rcl_node create_native_node (string name)
 		{
 			rcl_node_t node = rcl_get_zero_initialized_node ();
-			IntPtr default_options = rcl_node_get_default_options ();
-			int ret = rcl_node_init (ref node, name, default_options);
+			rcl_node_options_t default_options = rcl_node_get_default_options ();
+			int ret = rcl_node_init (ref node, name,ref default_options);
 			rcl_node local_node = new rcl_node (node);
 			return local_node;
 		}
 
-		[DllImport ("librcl.so")]
+		[DllImport(RCL.LibRCLPath)]
 		static extern rcl_node_t rcl_get_zero_initialized_node ();
 
-		[DllImport ("librcl.so")]
-		static extern IntPtr rcl_node_get_default_options ();
+		[DllImport(RCL.LibRCLPath)]
+		static extern rcl_node_options_t rcl_node_get_default_options ();
 
-		/// <summary>
-		/// Marshals the node get default options funtion
-		/// </summary>
-		/// <returns>The node get default options.</returns>
-		public rcl_node_options_t marshal_node_get_default_options ()
-		{
-			return Marshal.PtrToStructure<rcl_node_options_t> (rcl_node_get_default_options ());
-		}
-		[DllImport ("librcl.so")]
+		[DllImport(RCL.LibRCLPath)]
 		static extern int rcl_node_get_domain_id( ref rcl_node_t  node, ref UIntPtr  domain_id);
 
-		[DllImport ("librcl.so")]
-		static extern int rcl_node_init (ref rcl_node_t node, [MarshalAs (UnmanagedType.LPStr)]string name, IntPtr options);
+		[DllImport(RCL.LibRCLPath)]
+		static extern int rcl_node_init (ref rcl_node_t node, [MarshalAs (UnmanagedType.LPStr)]string name, ref rcl_node_options_t options);
 
-		[DllImport ("librcl.so")]
+		[DllImport(RCL.LibRCLPath)]
 		static extern int rcl_node_fini (ref rcl_node_t node);
 
-		[DllImport ("librcl.so")]
+		[DllImport(RCL.LibRCLPath)]
 		static extern bool rcl_node_is_valid (ref rcl_node_t node);
 
-		[DllImport ("librcl.so")]
+		[DllImport(RCL.LibRCLPath)]
 		static extern IntPtr rcl_node_get_name (ref rcl_node_t node);
 
 

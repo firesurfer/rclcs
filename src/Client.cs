@@ -202,28 +202,28 @@ namespace rclcs
 			disposed = true;
 		}
 
-		[DllImport("librcl.so")]
+		[DllImport(RCL.LibRCLPath)]
 		extern static rcl_client_t rcl_get_zero_initialized_client();
 
-		[DllImport("librcl.so")]
+		[DllImport(RCL.LibRCLPath)]
 		extern static int rcl_client_init(ref rcl_client_t client, ref rcl_node_t node, ref rosidl_service_type_support_t type_support, string service_name, ref rcl_client_options_t options);
 
-		[DllImport("librcl.so")]
+		[DllImport(RCL.LibRCLPath)]
 		extern static int rcl_client_fini(ref rcl_client_t client, ref rcl_node_t node);
 
-		[DllImport("librcl.so")]
+		[DllImport(RCL.LibRCLPath)]
 		extern static rcl_client_options_t rcl_client_get_default_options();
 
-		[DllImport("librcl.so")]
+		[DllImport(RCL.LibRCLPath)]
 		extern static int rcl_send_request(ref rcl_client_t client, [In,Out] ValueType ros_request, ref Int64 sequence_number);
 
-		[DllImport("librcl.so")]
+		[DllImport(RCL.LibRCLPath)]
 		extern static int rcl_take_response(ref rcl_client_t client, ref rmw_request_id_t request_header, [In,Out] ValueType ros_response);
 
-		[DllImport("librcl.so")]
+		[DllImport(RCL.LibRCLPath)]
 		extern static string rcl_client_get_service_name(ref rcl_client_t client);
 
-		[DllImport("librcl.so")]
+		[DllImport(RCL.LibRCLPath)]
 		extern static IntPtr rcl_client_get_options(ref rcl_client_t client);
 
 	}

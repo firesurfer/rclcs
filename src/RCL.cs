@@ -7,9 +7,13 @@ namespace rclcs
 	{
 		bool disposed = false;
 
-		[DllImport("librcl.so")]
-	    static extern int rcl_init(int argc, [In, Out] String[] argv, rcl_allocator_t allocator);
-
+		#if __MonoCS__
+		#warning Compiling on linux: path is now: librcl.so
+		public const string LibRCLPath = "librcl.so";
+		#else
+		#warning Compiling on windows: path is now: librcl.so
+		public const string LibRCLPath = "rcl.dll";
+		#endif
 		/**
 		 * Call this function instead of rcl_init
 		 */
@@ -48,13 +52,16 @@ namespace rclcs
 
 		}
 
-		[DllImport("librcl.so")]
+		[DllImport(LibRCLPath)]
+		static extern int rcl_init(int argc, [In, Out] String[] argv, rcl_allocator_t allocator);
+
+		[DllImport(LibRCLPath)]
 	    static extern int rcl_shutdown ();
 
-		[DllImport("librcl.so")]
+		[DllImport(LibRCLPath)]
 	    static extern UInt64 rcl_get_instance_id ();
 
-		[DllImport("librcl.so")]
+		[DllImport(LibRCLPath)]
 		static extern bool rcl_ok ();
 
 		public void Dispose()

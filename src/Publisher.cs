@@ -183,25 +183,25 @@ namespace rclcs
 			}
 			return publish_message_success;
 		}
-		[DllImport("librcl.so")]
+		[DllImport(RCL.LibRCLPath)]
 		extern static rcl_publisher_t rcl_get_zero_initialized_publisher();
 
-		[DllImport("librcl.so")]
+		[DllImport(RCL.LibRCLPath)]
 		extern static int rcl_publisher_init(ref rcl_publisher_t publisher,ref rcl_node_t node, ref rosidl_message_type_support_t type_support, string topic_name, ref rcl_publisher_options_t options);
 
-		[DllImport("librcl.so")]
+		[DllImport(RCL.LibRCLPath)]
 		extern static int rcl_publisher_fini (ref rcl_publisher_t publisher, ref rcl_node_t node);
 
-		[DllImport("librcl.so")]
+		[DllImport(RCL.LibRCLPath)]
 		extern static rcl_publisher_options_t rcl_publisher_get_default_options();
 
-		[DllImport("librcl.so")]
+		[DllImport(RCL.LibRCLPath)]
 		extern static int rcl_publish(ref rcl_publisher_t publisher,  [In] ValueType ros_message);
 
-		[DllImport("librcl.so")]
+		[DllImport(RCL.LibRCLPath)]
 		extern static string rcl_publisher_get_topic_name(ref rcl_publisher_t publisher);
 
-		[DllImport("librcl.so")]
+		[DllImport(RCL.LibRCLPath)]
 		extern static rcl_publisher_options_t rcl_publisher_get_options(ref rcl_publisher_t publisher);
 	}
 	public struct rcl_publisher_t

@@ -211,25 +211,25 @@ namespace rclcs
 			disposed = true;
 		}
 
-		[DllImport("librcl.so")]
+		[DllImport(RCL.LibRCLPath)]
 		extern static rcl_subscription_t rcl_get_zero_initialized_subscription();
 
-		[DllImport("librcl.so")]
+		[DllImport(RCL.LibRCLPath)]
 		extern static int rcl_subscription_init(ref rcl_subscription_t subscription, ref rcl_node_t node, ref rosidl_message_type_support_t typesupport, string topic_name, ref rcl_subscription_options_t options);
 
-		[DllImport("librcl.so")]
+		[DllImport(RCL.LibRCLPath)]
 		extern static int rcl_subscription_fini (ref rcl_subscription_t subscription, ref rcl_node_t node);
 
-		[DllImport("librcl.so")]
+		[DllImport(RCL.LibRCLPath)]
 	    extern static rcl_subscription_options_t rcl_subscription_get_default_options ();
 
-		[DllImport("librcl.so")]
+		[DllImport(RCL.LibRCLPath)]
 		extern static int rcl_take(ref rcl_subscription_t subscription,[Out] ValueType ros_message,[In,Out] rmw_message_info_t message_info);
 
-		[DllImport("librcl.so")]
+		[DllImport(RCL.LibRCLPath)]
 		extern static string rcl_subscription_get_topic_name(ref rcl_subscription_t subscription);
 
-		[DllImport("librcl.so")]
+		[DllImport(RCL.LibRCLPath)]
 		extern static IntPtr rcl_subscription_get_options(ref rcl_subscription_t subscription);
 			
 	}
