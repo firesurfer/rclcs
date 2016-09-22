@@ -61,12 +61,13 @@ namespace rclcs
 		}
 		public bool Publish(T msg)
 		{
-			Console.WriteLine ("##############################################");
-			Console.WriteLine ("Debug in publish method:");
-			//I still don't like this solution which is needed for nested types...
 			msg.SyncDataOut ();
 			ValueType temp;
 			msg.GetData (out temp);
+			/*Console.WriteLine ("##############################################");
+			Console.WriteLine ("Debug in publish method:");
+			//I still don't like this solution which is needed for nested types...
+
 			foreach (var item in temp.GetType().GetFields()) {
 				if (item.GetValue(temp).ToString().Contains ("Time")) {
 					Console.WriteLine ("!!!!!Found time!!!!!");
@@ -76,7 +77,7 @@ namespace rclcs
 				}
 				Console.WriteLine (item.Name + " " + item.GetValue (temp));
 			}
-			Console.WriteLine ("##############################################");
+			Console.WriteLine ("##############################################");*/
 			return InternalPublisher.PublishMessage ( temp);
 		}
 		protected override void Dispose(bool disposing)
