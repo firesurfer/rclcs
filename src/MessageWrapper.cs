@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 namespace rclcs
 {
-	[StructLayout (LayoutKind.Sequential)]
+	
 	public class MessageWrapper:IDisposable
 	{
 		private bool disposed = false;
