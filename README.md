@@ -6,11 +6,12 @@ So the messages (structs) can directly be passed to the `rcl` without any conver
 
 ## How to use
 
-These instructions are mostly the same on Windows and Linux. If needed I will point that out.
+These instructions are mostly the same on Windows and Linux. 
 
 Get your copy of ROS and compile it according to the documentation:
 
-For __Linux__ :https://github.com/ros2/ros2/wiki/Linux-Development-Setup) 
+For __Linux__ : https://github.com/ros2/ros2/wiki/Linux-Development-Setup
+
 For __Windows__: https://github.com/ros2/ros2/wiki/Windows-Development-Setup
 
 Make sure you've got mono/ .Net in a version installed that targets at least the framework version 4.5.1.
