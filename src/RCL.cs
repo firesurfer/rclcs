@@ -38,6 +38,8 @@ namespace rclcs
 		}
 		public void Init(String[] args, rcl_allocator_t custom_allocator)
 		{
+			if (args == null)
+				throw new ArgumentNullException ();
 			RCLReturnValues retVal = (RCLReturnValues)rcl_init (args.Length, args, custom_allocator);
 			switch (retVal) {
 			case RCLReturnValues.RCL_RET_OK:
