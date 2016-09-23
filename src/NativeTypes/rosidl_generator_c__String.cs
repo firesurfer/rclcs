@@ -2,26 +2,20 @@
 using System.Runtime.InteropServices;
 namespace rclcs
 {
+	/// <summary>
+	/// Managed implementation of the rosidl_generator_c__String type. See rosidl_generator_c package for more information.
+	/// </summary>
 	[StructLayout(LayoutKind.Sequential)]
 	public struct rosidl_generator_c__String:IRosTransportItem
 	{
 
 		public rosidl_generator_c__String(string _data)
 		{
-			//data = _data;
 			size = (UIntPtr)_data.Length;
 			capacity = (UIntPtr)size +1;
 			data = Marshal.StringToHGlobalAnsi (_data);
 		}
-		/*~rosidl_generator_c__String()
-		{
-			Marshal.FreeHGlobal (data);
-			data = IntPtr.Zero;
-			size = UIntPtr.Zero;
-			capacity = UIntPtr.Zero;
-		}*/
 		public string Data{
-			//get{return data;}
 			get{return Marshal.PtrToStringAnsi(data);}
 		}
 		public int Size{
@@ -38,8 +32,7 @@ namespace rclcs
 		{
 			return Data;
 		}
-		//[MarshalAs(UnmanagedType.LPStr)]
-		//string data ;
+
 		IntPtr data;
 		
 		UIntPtr size;

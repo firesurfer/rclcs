@@ -13,7 +13,7 @@ namespace rclcs
 		}
 		public virtual void GetData(out ValueType _data)
 		{
-			//This is to suppres an compiler error due to the out keyword that requires the variable to be assigned inside the function
+			//This is to suppress an compiler error due to the out keyword that requires the variable to be assigned inside the function
 			_data = 0;
 		}
 		public virtual void SetData(ref ValueType _data)

@@ -2,6 +2,10 @@
 
 namespace rclcs
 {
+	/// <summary>
+	/// Managed implementation of the rmw_qos_profile_t defined in the rmw ros2 package.
+	/// It furthermores implementes all default/preset qos profiles that are defined in ros2.
+	/// </summary>
 	public struct rmw_qos_profile_t
 	{
 		public rmw_qos_profile_t(rmw_qos_history_policy_t _history, Int64 _depth,rmw_qos_reliability_policy_t _reliability, rmw_qos_durability_policy_t _durability)
@@ -46,18 +50,27 @@ namespace rclcs
 			return "[rmw_qos_profile_t: history: " + history.ToString() + " depth: " + depth.ToString() + " reliability: " +reliability.ToString() + " durability: " + durability.ToString() + " ]" ;
 		}
 	}
+	/// <summary>
+	/// See rmw package for more documentation
+	/// </summary>
 	public enum rmw_qos_history_policy_t
 	{
 		RMW_QOS_POLICY_HISTORY_SYSTEM_DEFAULT,
 		RMW_QOS_POLICY_KEEP_LAST_HISTORY,
 		RMW_QOS_POLICY_KEEP_ALL_HISTORY
 	}
+	/// <summary>
+	///  See rmw package for more documentation
+	/// </summary>
 	public enum rmw_qos_reliability_policy_t
 	{
 		RMW_QOS_POLICY_RELIABILITY_SYSTEM_DEFAULT,
 		RMW_QOS_POLICY_RELIABLE,
 		RMW_QOS_POLICY_BEST_EFFORT
 	}
+	/// <summary>
+	///  See rmw package for more documentation
+	/// </summary>
 	public enum rmw_qos_durability_policy_t
 	{
 		RMW_QOS_POLICY_DURABILITY_SYSTEM_DEFAULT,
