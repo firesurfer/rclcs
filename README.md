@@ -46,7 +46,7 @@ python src\ament\ament_tools\scripts\ament.py build
 
 
 
-## Example
+## Examples
 
 You can have look at my [testing workspace](https://github.com/firesurfer/rclcs_testing_ws) ~~which is quite messy.~~ which contains some [examples](https://github.com/firesurfer/rclcs_testing_ws/tree/master/src/test_cs/test_cs/Examples) (And is still a bit messy, but you should get ahead with it).
 
@@ -100,10 +100,30 @@ For further understanding of the what is happening behind the scenes see [memory
 * Free memory where needed - I should have covered all (or at least most cases) by now
 * ~~Finish implementation of services~~
 * Implement error handling where needed
+	* There are some return type checks missing
+	* There are some cases where some argument checks would be useful
+	* In some cases it would be useful to trak the current initilisation state
 * Make sure the api is consistent with the rclcpp
 	* I think I'm going to break the consistency in some parts in favour to usability
-* Write tests
+	* Implement the various executors and spin methods
+* Write tests (See Build and run tests section)
 * Allow (easier) debugging the managed code
 * Integrate into ament (See [this](https://groups.google.com/d/msg/ros-sig-ng-ros/MN_N_SunrjA/wuEUYOXxEwAJ) mailinglist post)
 
+## Build and run tests
+
+Checkout my fork of the [system_tests](https://github.com/firesurfer/system_tests) repository of ros2.
+The test are implemented via the [nunit framework](https://github.com/nunit/docs/wiki/NUnit-Documentation) version 3.2. 
+This version is shipped via the system_tests repository. The nunit framework is shipped under the MIT license which is compatible to the 
+Apache 2.0 license used for the system_test repository. 
+You can build and run the tests via:
+
+```
+cd <ros2_ws>
+ament build --only-package test_rclcs --build-tests
+```
+
+Unfortunatly invoking the nunit3-console test runner via cmake results in an uncoloured test output. Furthermore I need to copy the `test_rclcs.dll` into the 
+`ros2_ws/install/lib` directory and run the test in this directory because otherwise nunit won't properly resolve the assembly dependencies. 
+The test results can also be found in an xml file called "TestResults.txt" in the `install/lib` folder.
 
