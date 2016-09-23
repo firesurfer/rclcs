@@ -2,23 +2,33 @@
 using System.Runtime.InteropServices;
 namespace rclcs
 {
-	
+	/// <summary>
+	/// The RCL class handles the initialisation of the ros client librarie and wraps the functions defined in the rcl/rcl.h.
+	/// It furthermore defines the paths to the rcl and rmw libs that are used in the DllImport statement for native interop.
+	/// This class implements IDisposable.
+	/// </summary>
 	public class RCL:IDisposable
 	{
 		bool disposed = false;
 
+		//Check if compiled on windows or linux, unfortunatly we can't do a runtime check for the import statements
 		#if __MonoCS__
 		#warning Compiling on linux: path is now: librcl.so
+		//On linux the files start with lib and end with .so
 		public const string LibRCLPath = "librcl.so";
 		public const string LibRMWPath = "librmw.so";
 		#else
-		#warning Compiling on windows: path is now: librcl.so
+		#warning Compiling on windows: path is now: rcl.dll
+		//On windows they end with .dll
 		public const string LibRCLPath = "rcl.dll";
 		public const string LibRMWPath = "rmw.dll";
 		#endif
-		/**
-		 * Call this function instead of rcl_init
-		 */
+
+		/// <summary>
+		/// This method does the initilisation of the ros client lib.
+		/// <remarks>Call this method before you do any other calls to ros</remarks>
+		/// </summary>
+		/// <param name="args">Commandline arguments</param>
 		public void Init(String[] args)
 		{
 			RCLReturnValues retVal = (RCLReturnValues)rcl_init (args.Length, args, Allocator.rcl_get_default_allocator ());
@@ -36,6 +46,13 @@ namespace rclcs
 			}
 
 		}
+		/// <summary>
+		/// This method does the initilisation of the ros client lib
+		/// <remarks>Call this method before you do any other calls to ros
+		/// You can specify a custom memory allocator for ros but I wouldn't recommend doing this at the moment. </remarks>
+		/// </summary>
+		/// <param name="args">Arguments.</param>
+		/// <param name="custom_allocator">Custom allocator.</param>
 		public void Init(String[] args, rcl_allocator_t custom_allocator)
 		{
 			if (args == null)
@@ -56,18 +73,14 @@ namespace rclcs
 
 		}
 
-		[DllImport(LibRCLPath)]
-		static extern int rcl_init(int argc, [In, Out] String[] argv, rcl_allocator_t allocator);
-
-		[DllImport(LibRCLPath)]
-	    static extern int rcl_shutdown ();
-
-		[DllImport(LibRCLPath)]
-	    static extern UInt64 rcl_get_instance_id ();
-
-		[DllImport(LibRCLPath)]
-		static extern bool rcl_ok ();
-
+		
+		/// <summary>
+		/// Releases all resource used by the <see cref="rclcs.RCL"/> object.
+		/// </summary>
+		/// <remarks>Call <see cref="Dispose"/> when you are finished using the <see cref="rclcs.RCL"/>. The <see cref="Dispose"/>
+		/// method leaves the <see cref="rclcs.RCL"/> in an unusable state. After calling <see cref="Dispose"/>, you must
+		/// release all references to the <see cref="rclcs.RCL"/> so the garbage collector can reclaim the memory that the
+		/// <see cref="rclcs.RCL"/> was occupying.</remarks>
 		public void Dispose()
 		{
 			// Dispose of unmanaged resources.
@@ -75,6 +88,10 @@ namespace rclcs
 			// Suppress finalization.
 			GC.SuppressFinalize(this);
 		}
+		/// <summary>
+		/// Implementation of IDisposable
+		/// </summary>
+		/// <param name="disposing">If set to <c>true</c> disposing.</param>
 		protected virtual void Dispose(bool disposing)
 		{
 			if (disposed)
@@ -99,13 +116,33 @@ namespace rclcs
 			}
 			disposed = true;
 		}
+		/// <summary>
+		/// Releases unmanaged resources and performs other cleanup operations before the <see cref="rclcs.RCL"/> is reclaimed
+		/// by garbage collection.
+		/// </summary>
 		~RCL()
 		{
 			Dispose (false);
 		}
+		//Native methods
+
+		[DllImport(LibRCLPath)]
+		static extern int rcl_init(int argc, [In, Out] String[] argv, rcl_allocator_t allocator);
+
+		[DllImport(LibRCLPath)]
+		static extern int rcl_shutdown ();
+
+		[DllImport(LibRCLPath)]
+		static extern UInt64 rcl_get_instance_id ();
+
+		[DllImport(LibRCLPath)]
+		static extern bool rcl_ok ();
 
 
 	}
+	/// <summary>
+	/// Managed implementation of the rcl_ret_t enum which specifies return values for the rcl functions.
+	/// </summary>
 	public enum RCLReturnValues
 	{
 		RCL_RET_OK = 0,
