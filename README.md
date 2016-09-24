@@ -109,6 +109,7 @@ For further understanding of the what is happening behind the scenes see [memory
 * Write tests (See Build and run tests section)
 * Allow (easier) debugging the managed code
 * Integrate into ament (See [this](https://groups.google.com/d/msg/ros-sig-ng-ros/MN_N_SunrjA/wuEUYOXxEwAJ) mailinglist post)
+* Change how executors, nodes and publishers (and so on) interact with each other. 
 
 ## Build and run tests
 

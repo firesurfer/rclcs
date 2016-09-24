@@ -11,6 +11,7 @@ namespace rclcs
 	{
 		bool disposed = false;
 
+
 		//Check if compiled on windows or linux, unfortunatly we can't do a runtime check for the import statements
 		#if __MonoCS__
 		#warning Compiling on linux: path is now: librcl.so
@@ -29,11 +30,15 @@ namespace rclcs
 		/// <remarks>Call this method before you do any other calls to ros</remarks>
 		/// </summary>
 		/// <param name="args">Commandline arguments</param>
+		/// <exception cref="RCLAlreadInitExcption">In case rcl was alread initialised</exception>
 		public void Init(String[] args)
 		{
+			if (args == null)
+				throw new ArgumentNullException ();
 			RCLReturnValues retVal = (RCLReturnValues)rcl_init (args.Length, args, Allocator.rcl_get_default_allocator ());
 			switch (retVal) {
 			case RCLReturnValues.RCL_RET_OK:
+				
 				break;
 			case RCLReturnValues.RCL_RET_ALREADY_INIT:
 				throw new RCLAlreadyInitExcption ();
@@ -60,6 +65,7 @@ namespace rclcs
 			RCLReturnValues retVal = (RCLReturnValues)rcl_init (args.Length, args, custom_allocator);
 			switch (retVal) {
 			case RCLReturnValues.RCL_RET_OK:
+				
 				break;
 			case RCLReturnValues.RCL_RET_ALREADY_INIT:
 				throw new RCLAlreadyInitExcption ();
@@ -70,6 +76,15 @@ namespace rclcs
 			default:
 				break;
 			}
+
+		}
+		/// <summary>
+		/// Gets a value indicating whether there was a Init call in the past.
+		/// </summary>
+		/// <value><c>true</c> if this instance is init; otherwise, <c>false</c>.</value>
+		public bool IsInit
+		{
+			get{ return rcl_ok(); }
 
 		}
 

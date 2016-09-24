@@ -187,7 +187,10 @@ namespace rclcs
 				item.Execute ();
 			}
 		}
-
+		public void AddExecutable(Executable _Executable)
+		{
+			this.ManagedExecutables.Add (_Executable);
+		}
 		protected override void Dispose (bool disposing)
 		{
 			if (disposed)
@@ -211,6 +214,7 @@ namespace rclcs
 		{
 			return disposed;
 		}
+	
 
 
 	}

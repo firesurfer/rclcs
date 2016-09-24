@@ -35,6 +35,7 @@ namespace rclcs
 		{
 			
 		}
+		//TODO add a datatype that represents a intervall in Hertz
 		public virtual void Spin(System.TimeSpan Intervall)
 		{
 		}

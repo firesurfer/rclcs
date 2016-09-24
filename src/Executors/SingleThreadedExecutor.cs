@@ -41,11 +41,11 @@ namespace rclcs
 		}
 		public  override void Cancel()
 		{
-			Console.WriteLine ("Stopping spin");
+			
 			AbortSpin = true;
-			SpinThread.Join ();
-			//SpinThread.Abort ();
-			//SpinMutex.Close ();
+			if(SpinThread.IsAlive)
+				SpinThread.Join ();
+			
 		}
 
 		private void InternalSpinMethod(object Intervall)
@@ -70,6 +70,7 @@ namespace rclcs
 				// Free any other managed objects here.
 				//
 			}
+			//Stop the spin
 			Cancel ();
 			// Free any unmanaged objects here.
 			//

@@ -132,6 +132,8 @@ namespace rclcs
 		/// <param name="msg">Message.</param>
 		public bool Publish(T msg)
 		{
+			if (msg == null)
+				throw new ArgumentNullException ("msg may not be null");
 			//This is needed for nested types, mostly because we can't store a reference to a value type in C#
 			msg.SyncDataOut ();
 			ValueType temp;
