@@ -23,7 +23,7 @@ Then from your ros2 workspace base directory:
   cd rosidl
   git clone https://github.com/firesurfer/rosidl_generator_cs
 ```
-Then edit the file in `rosidl/rosidl_default_generators/CMakeLists.txt` and add the following line after the other generators:
+Then edit the file in `rosidl_typesupport/rosidl_default_generators/CMakeLists.txt` and add the following line after the other generators:
 ```
   ament_export_dependencies(rosidl_generator_cs)
 ```
