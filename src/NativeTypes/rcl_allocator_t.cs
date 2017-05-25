@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 namespace rclcs
 {
@@ -14,7 +14,7 @@ namespace rclcs
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		public  delegate  void Reallocate(IntPtr ptr, IntPtr state);
 
-		[DllImport(RCL.LibRCLPath)]
+		[DllImport(RCL.LibRCUtilsPATH, EntryPoint ="rcutils_get_default_allocator")]
 		public static extern rcl_allocator_t rcl_get_default_allocator ();
 	}
 	public struct rcl_allocator_t
