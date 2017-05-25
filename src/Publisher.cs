@@ -272,6 +272,7 @@ namespace rclcs
 		}
 		/// <summary>
 		/// Gets the default options from the rcl
+		/// //TODO rename  to GetDefaultOptions
 		/// </summary>
 		/// <returns>The default options.</returns>
 		public static rcl_publisher_options_t get_default_options()
