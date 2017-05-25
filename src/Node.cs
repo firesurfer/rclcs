@@ -298,7 +298,8 @@ namespace rclcs
 		{
 			rcl_node_t node = rcl_get_zero_initialized_node ();
 			rcl_node_options_t default_options = rcl_node_get_default_options ();
-			int ret = rcl_node_init (ref node, name,ref default_options);
+            string ns = "";
+			int ret = rcl_node_init (ref node, name, ns, ref default_options);
 			rcl_node local_node = new rcl_node (node);
 			return local_node;
 		}
@@ -313,7 +314,7 @@ namespace rclcs
 		static extern int rcl_node_get_domain_id( ref rcl_node_t  node, ref UIntPtr  domain_id);
 
 		[DllImport(RCL.LibRCLPath)]
-		static extern int rcl_node_init (ref rcl_node_t node, [MarshalAs (UnmanagedType.LPStr)]string name, ref rcl_node_options_t options);
+		static extern int rcl_node_init (ref rcl_node_t node, [MarshalAs (UnmanagedType.LPStr)]string name, [MarshalAs(UnmanagedType.LPStr)]string namespace_, ref rcl_node_options_t options);
 
 		[DllImport(RCL.LibRCLPath)]
 		static extern int rcl_node_fini (ref rcl_node_t node);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 namespace rclcs
 {
@@ -18,11 +18,12 @@ namespace rclcs
 		//On linux the files start with lib and end with .so
 		public const string LibRCLPath = "librcl.so";
 		public const string LibRMWPath = "librmw.so";
-		#else
-		#warning Compiling on windows: path is now: rcl.dll
-		//On windows they end with .dll
-		public const string LibRCLPath = "rcl.dll";
-		public const string LibRMWPath = "rmw.dll";
+#else
+#warning Compiling on windows: path is now: rcl.dll
+        	//On windows they end with .dll
+        	public const string LibRCUtilsPATH = @"rcutils.dll";
+		public const string LibRCLPath = @"rcl.dll";
+		public const string LibRMWPath = @"rmw.dll";
 		#endif
 
 		/// <summary>
