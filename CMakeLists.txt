@@ -17,7 +17,7 @@ add_custom_target(rclcs ALL
 else()
 add_custom_target(rclcs ALL
 	COMMAND 
-	"msbuild" rclcs.csproj /property:OutputPath=${CMAKE_BINARY_DIR} /property:AssemblyName=rclcs /property:Configuration=Release /property:Platform=x64 /property:AllowUnsafeBlocks=true /property:DocumentationFile="rclcs.xml"
+	"msbuild" rclcs.csproj /property:OutputPath=${CMAKE_BINARY_DIR} /property:AssemblyName=rclcs /property:Platform=x64 /property:AllowUnsafeBlocks=true /property:GenerateDocumentation=true /property:DocumentationFile="rclcs.xml"
 	WORKING_DIRECTORY
 	${CMAKE_SOURCE_DIR}/src
 )
