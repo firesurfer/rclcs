@@ -22,10 +22,10 @@ namespace rclcs
 		/// Takes the node name
 		/// </summary>
 		/// <param name="_Name">Name.</param>
-		public Node (string _Name)
+		public Node (string _Name, string _Namespace = "")
 		{
 			//Create a rcl_node which is a wrapper of the native methods
-			InternalNode = rcl_node.create_native_node (_Name);
+			InternalNode = rcl_node.create_native_node (_Name, _Namespace);
 			Name = _Name;
 		}
 
@@ -294,12 +294,11 @@ namespace rclcs
 		/// </summary>
 		/// <returns>The native node.</returns>
 		/// <param name="name">Name.</param>
-		public static rcl_node create_native_node (string name)
+		public static rcl_node create_native_node (string name, string namespace_ = "")
 		{
 			rcl_node_t node = rcl_get_zero_initialized_node ();
 			rcl_node_options_t default_options = rcl_node_get_default_options ();
-            string ns = "";
-			int ret = rcl_node_init (ref node, name, ns, ref default_options);
+			int ret = rcl_node_init (ref node, name, namespace_, ref default_options);
 			rcl_node local_node = new rcl_node (node);
 			return local_node;
 		}
