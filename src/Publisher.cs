@@ -87,14 +87,11 @@ namespace rclcs
             
 			//Now we do the same for the message struct
 			foreach (var item in messageType.GetMethods()) {
-                Console.WriteLine("Found item: " + item.Name);
 				if (item.IsStatic ) {
 					//We search for the method that does the native call
 					if (item.Name.Contains ("rosidl_typesupport_introspection_c__get_message_type_support_handle__")) {
-                        Console.WriteLine("Calling " + item.Name);
 						//We call it and marshal the returned IntPtr (a managed wrapper around a pointer) to the managed typesupport struct
 						TypeSupport = (rosidl_message_type_support_t)Marshal.PtrToStructure((IntPtr)item.Invoke (null, null), typeof(rosidl_message_type_support_t));
-                        Console.WriteLine("what ever just happened");
                     }
 
 				}
