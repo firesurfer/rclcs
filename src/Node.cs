@@ -22,6 +22,7 @@ namespace rclcs
 		/// Takes the node name
 		/// </summary>
 		/// <param name="_Name">Name.</param>
+		/// <param name="_Namespace">Namespace.</param>
 		public Node (string _Name, string _Namespace = "")
 		{
 			//Create a rcl_node which is a wrapper of the native methods
@@ -294,6 +295,7 @@ namespace rclcs
 		/// </summary>
 		/// <returns>The native node.</returns>
 		/// <param name="name">Name.</param>
+		/// <param name="namespace">Namespace.</param>
 		public static rcl_node create_native_node (string name, string namespace_ = "")
 		{
 			rcl_node_t node = rcl_get_zero_initialized_node ();
