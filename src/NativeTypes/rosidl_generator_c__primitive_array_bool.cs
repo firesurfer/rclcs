@@ -12,7 +12,7 @@ namespace ROS2Sharp
 		public rosidl_generator_c__primitive_array_bool(bool[] _Data)
 		{
 			Data = Marshal.AllocHGlobal (Marshal.SizeOf (_Data));
-			Size = Marshal.SizeOf (_Data);
+			Size = (UIntPtr)Marshal.SizeOf (_Data);
 			Capacity = Size;
 			Marshal.StructureToPtr (_Data, Data, true);  
 		}
