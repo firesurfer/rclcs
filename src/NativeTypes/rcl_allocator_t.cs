@@ -25,6 +25,7 @@ namespace rclcs
 		IntPtr allocate;
 		IntPtr deallocate;
 		IntPtr reallocate;
+		IntPtr zero_allocate;
 		IntPtr state;
 	}
 
