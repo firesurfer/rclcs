@@ -47,15 +47,18 @@ namespace rclcs
 			foreach (var item in messageType.GetMethods()) {
 
 				if (item.IsStatic ) {
-					if (item.Name.Contains ("rosidl_typesupport_introspection_c_get_message")) {
+					
+					if (item.Name.Contains ("rosidl_typesupport_introspection_c__get_message_type_support_handle")) {
 						TypeSupport = (rosidl_message_type_support_t)Marshal.PtrToStructure((IntPtr)item.Invoke (null, null),typeof(rosidl_message_type_support_t));
 					}
 				}
 			}
 			if (TypeSupport.data == IntPtr.Zero)
 				throw new Exception ("Couldn't get typesupport");
+			
 			SubscriptionOptions = rcl_subscription.get_default_options ();
 			SubscriptionOptions.qos = QOSProfile;
+
 			InternalSubscription = new rcl_subscription (RosNode, TypeSupport, TopicName,SubscriptionOptions);
 		}
 		public rcl_subscription_t NativeSubscription

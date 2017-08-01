@@ -298,9 +298,7 @@ namespace rclcs
 		/// <param name="namespace">Namespace.</param>
 		public static rcl_node create_native_node (string name, string namespace_ = "")
 		{
-			Console.WriteLine ("Test");
 			rcl_node_t node = rcl_get_zero_initialized_node ();
-			Console.WriteLine ("Test2");
 			rcl_node_options_t default_options = rcl_node_get_default_options ();
 			int ret = rcl_node_init (ref node, name, namespace_, ref default_options);
 			rcl_node local_node = new rcl_node (node);
