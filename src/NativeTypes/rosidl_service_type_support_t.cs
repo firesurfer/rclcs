@@ -6,6 +6,7 @@ namespace rclcs
 	{
 		public IntPtr typesupport_identifier;
 		public IntPtr data;
+		public IntPtr func;
 	}
 }
 

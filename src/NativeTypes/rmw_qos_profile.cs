@@ -14,6 +14,7 @@ namespace rclcs
 			reliability = _reliability;
 			depth = (UIntPtr)_depth;
 			durability = _durability;
+			avoid_ros_namespace_conventions = 0;
 		}
 		public static rmw_qos_profile_t rmw_qos_profile_sensor_data
 		{
@@ -44,6 +45,7 @@ namespace rclcs
 		UIntPtr depth;
 		rmw_qos_reliability_policy_t reliability;
 		rmw_qos_durability_policy_t durability;
+		byte avoid_ros_namespace_conventions;
 
 		public override string ToString ()
 		{

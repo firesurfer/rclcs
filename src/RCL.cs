@@ -14,15 +14,16 @@ namespace rclcs
 
 		//Check if compiled on windows or linux, unfortunatly we can't do a runtime check for the import statements
 		//TODO implement different codepaths for windows and linux. This has the advantage we can do different calls for windows and linux
-		#if __MonoCS__
-		#warning Compiling on linux: path is now: librcl.so
+#if __MonoCS__
+#warning Compiling on linux: path is now: librcl.so
 		//On linux the files start with lib and end with .so
 		public const string LibRCLPath = "librcl.so";
 		public const string LibRMWPath = "librmw.so";
+        public const string LibRCUtilsPATH = "librcutils.so";
 #else
 #warning Compiling on windows: path is now: rcl.dll
         	//On windows they end with .dll
-        	public const string LibRCUtilsPATH = @"rcutils.dll";
+        public const string LibRCUtilsPATH = @"rcutils.dll";
 		public const string LibRCLPath = @"rcl.dll";
 		public const string LibRMWPath = @"rmw.dll";
 		#endif
