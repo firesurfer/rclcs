@@ -18,7 +18,9 @@ Make sure you've got mono/ .Net in a version installed that targets at least the
 
 Then from your ros2 workspace base directory:
 ```
-  cd src/ros2
+  cd src/ament
+  git clone https://github.com/esteve/dotnet_cmake_module
+  cd ../ros2
   git clone https://github.com/firesurfer/rclcs
   cd rosidl
   git clone https://github.com/firesurfer/rosidl_generator_cs
@@ -30,6 +32,7 @@ Then edit the file in `rosidl_typesupport/rosidl_default_generators/CMakeLists.t
 
 Then go back to the ros2 workspace and do:
 
+(Dont't do a symlink install)
 __Linux__:
 ```
 rm -rf build/ install/
@@ -37,7 +40,7 @@ rm -rf build/ install/
 
 ``` 
 
-__Windows__:
+__Windows__: Building on windows will take a lot of effort at the moment. I couldn't get it to work!
 Delete the build and install folder with the windows explorer.
 
 ```
@@ -80,8 +83,8 @@ For further understanding of the what is happening behind the scenes see [memory
 * Preinitialized value -> Not coming soon (This is because C# doesn't allow preinitialised members in structs) At the moment the preinit values are simply ignored
 	* They might be coming with the rewrite of the message generator
 * Sometimes you might have to compile messages twice in order to have them properly compiled. (Or just remove the build and install folder)
-* Using messages on Windows
-* Sending messages from a cpp program to a C# program: (See: https://github.com/eProsima/ROS-RMW-Fast-RTPS-cpp/pull/45) 
+* Using Windows. 
+* ~~Sending messages from a cpp program to a C# program: (See: https://github.com/eProsima/ROS-RMW-Fast-RTPS-cpp/pull/45)~~
 
 ## What is critical at the moment
 
