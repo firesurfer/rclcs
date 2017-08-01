@@ -86,16 +86,20 @@ namespace rclcs
 			}
             
 			//Now we do the same for the message struct
+			bool foundMethod = false;
 			foreach (var item in messageType.GetMethods()) {
 				if (item.IsStatic ) {
 					//We search for the method that does the native call
 					if (item.Name.Contains ("rosidl_typesupport_introspection_c__get_message_type_support_handle__")) {
+						foundMethod = true;
 						//We call it and marshal the returned IntPtr (a managed wrapper around a pointer) to the managed typesupport struct
 						TypeSupport = (rosidl_message_type_support_t)Marshal.PtrToStructure((IntPtr)item.Invoke (null, null), typeof(rosidl_message_type_support_t));
                     }
 
 				}
 			}
+			if (!foundMethod)
+				throw new MissingMethodException ("Could not find typesupport method");
 			//The case that the data pointer inside the type support struct is 0 is a strong indicator that the call failed somewhere 
 			//Or that we got a wrong typesupport object at least
 			if (TypeSupport.data == IntPtr.Zero)

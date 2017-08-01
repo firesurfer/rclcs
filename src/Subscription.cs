@@ -44,14 +44,18 @@ namespace rclcs
 					}
 				}
 			}
+			bool foundMethod = false;
 			foreach (var item in messageType.GetMethods()) {
 
 				if (item.IsStatic ) {
 					if (item.Name.Contains ("rosidl_typesupport_introspection_c_get_message")) {
+						foundMethod = true;
 						TypeSupport = (rosidl_message_type_support_t)Marshal.PtrToStructure((IntPtr)item.Invoke (null, null),typeof(rosidl_message_type_support_t));
 					}
 				}
 			}
+			if (!foundMethod)
+				throw new MissingMethodException ("Could not find typesupport method");
 			if (TypeSupport.data == IntPtr.Zero)
 				throw new Exception ("Couldn't get typesupport");
 			SubscriptionOptions = rcl_subscription.get_default_options ();
