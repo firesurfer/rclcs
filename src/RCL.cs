@@ -2,31 +2,66 @@ using System;
 using System.Runtime.InteropServices;
 namespace rclcs
 {
+	internal abstract class RCLBase
+	{
+		public  abstract void Init (String[] args);
+		public  abstract void Init(String[] args, rcl_allocator_t custom_allocator);
+		public  abstract bool IsInit{ get;}
+	}
+	public class RCL
+	{
+
+		//Check if compiled on windows or linux, unfortunatly we can't do a runtime check for the import statements
+		//TODO implement different codepaths for windows and linux. This has the advantage we can do different calls for windows and linux
+		#if __MonoCS__
+		#warning Compiling on linux: path is now: librcl.so
+		//On linux the files start with lib and end with .so
+		public const string LibRCLPath = "librcl.so";
+		public const string LibRMWPath = "librmw.so";
+		public const string LibRCUtilsPATH = "librcutils.so";
+		#else
+		#warning Compiling on windows: path is now: rcl.dll
+		//On windows they end with .dll
+		public const string LibRCUtilsPATH = @"rcutils.dll";
+		public const string LibRCLPath = @"rcl.dll";
+		public const string LibRMWPath = @"rmw.dll";
+		#endif
+		RCLBase Impl;
+		public RCL ()
+		{
+			if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
+				//TODO codepath for windows
+			} else if (Environment.OSVersion.Platform == PlatformID.Unix) {
+				Impl = new RCLLinux ();
+			} else {
+				throw new Exception("Operating system: " +Environment.OSVersion.Platform.ToString() + " not supported");
+			}
+		}
+
+		public void Init (String[] args)
+		{
+			Impl.Init (args);
+		}
+		public void Init(String[] args, rcl_allocator_t custom_allocator)
+		{
+			Impl.Init (args, custom_allocator);
+		}
+		public bool IsInit
+		{
+			get{ return Impl.IsInit; }
+		}
+	}
 	/// <summary>
 	/// The RCL class handles the initialisation of the ros client librarie and wraps the functions defined in the rcl/rcl.h.
 	/// It furthermore defines the paths to the rcl and rmw libs that are used in the DllImport statement for native interop.
 	/// This class implements IDisposable.
 	/// </summary>
-	public class RCL:IDisposable
+	internal class RCLLinux:RCLBase, IDisposable
 	{
 		bool disposed = false;
 
 
-		//Check if compiled on windows or linux, unfortunatly we can't do a runtime check for the import statements
-		//TODO implement different codepaths for windows and linux. This has the advantage we can do different calls for windows and linux
-#if __MonoCS__
-#warning Compiling on linux: path is now: librcl.so
-		//On linux the files start with lib and end with .so
-		public const string LibRCLPath = "librcl.so";
-		public const string LibRMWPath = "librmw.so";
-        public const string LibRCUtilsPATH = "librcutils.so";
-#else
-#warning Compiling on windows: path is now: rcl.dll
-        	//On windows they end with .dll
-        public const string LibRCUtilsPATH = @"rcutils.dll";
-		public const string LibRCLPath = @"rcl.dll";
-		public const string LibRMWPath = @"rmw.dll";
-		#endif
+
 
 		/// <summary>
 		/// This method does the initilisation of the ros client lib.
@@ -34,7 +69,7 @@ namespace rclcs
 		/// </summary>
 		/// <param name="args">Commandline arguments</param>
 		/// <exception cref="RCLAlreadInitExcption">In case rcl was alread initialised</exception>
-		public void Init(String[] args)
+		public override void Init(String[] args)
 		{
 			if (args == null)
 				throw new ArgumentNullException ();
@@ -61,7 +96,7 @@ namespace rclcs
 		/// </summary>
 		/// <param name="args">Arguments.</param>
 		/// <param name="custom_allocator">Custom allocator.</param>
-		public void Init(String[] args, rcl_allocator_t custom_allocator)
+		public  override void Init(String[] args, rcl_allocator_t custom_allocator)
 		{
 			if (args == null)
 				throw new ArgumentNullException ();
@@ -85,7 +120,7 @@ namespace rclcs
 		/// Gets a value indicating whether there was a Init call in the past.
 		/// </summary>
 		/// <value><c>true</c> if this instance is init; otherwise, <c>false</c>.</value>
-		public bool IsInit
+		public override  bool IsInit
 		{
 			get{ return rcl_ok(); }
 
@@ -138,22 +173,22 @@ namespace rclcs
 		/// Releases unmanaged resources and performs other cleanup operations before the <see cref="rclcs.RCL"/> is reclaimed
 		/// by garbage collection.
 		/// </summary>
-		~RCL()
+		~RCLLinux()
 		{
 			Dispose (false);
 		}
 		//Native methods
 
-		[DllImport(LibRCLPath)]
+		[DllImport("librcl.so")]
 		static extern int rcl_init(int argc, [In, Out] String[] argv, rcl_allocator_t allocator);
 
-		[DllImport(LibRCLPath)]
+		[DllImport("librcl.so")]
 		static extern int rcl_shutdown ();
 
-		[DllImport(LibRCLPath)]
+		[DllImport("librcl.so")]
 		static extern UInt64 rcl_get_instance_id ();
 
-		[DllImport(LibRCLPath)]
+		[DllImport("librcl.so")]
 		static extern bool rcl_ok ();
 
 

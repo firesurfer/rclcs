@@ -26,7 +26,7 @@ namespace rclcs
 		public Node (string _Name, string _Namespace = "")
 		{
 			//Create a rcl_node which is a wrapper of the native methods
-			InternalNode = rcl_node.create_native_node (_Name, _Namespace);
+			InternalNode = new rcl_node(_Name,_Namespace);
 			Name = _Name;
 		}
 
@@ -219,24 +219,87 @@ namespace rclcs
 
 
 	}
-	/// <summary>
-	/// Wrapper for the native methods
-	/// </summary>
-	internal class rcl_node:IDisposable
+	internal abstract class rcl_node_base:IDisposable
 	{
-		private bool disposed = false;
-		private rcl_node_t native_handle;
+		protected rcl_node_t native_handle;
+		protected string name_space;
 		/// <summary>
 		/// Gets the native handle (Which is wrapped in a rcl_node_t.
 		/// </summary>
 		/// <value>The native node.</value>
-		public rcl_node_t NativeNode {
-			get{ return native_handle; }
+		public  rcl_node_t NativeNode{ 
+			get{ return native_handle;} 
+		}
+		public string NameSpace{ 
+			get { return name_space; } 
+		}
+		public rcl_node_base (string name, string namespace_ = "")
+		{
+			name_space = namespace_;
+		}
+		public abstract string get_node_name ();
+		public abstract bool node_is_valid ();
+		public void Dispose (){
+			Dispose (true);
+			GC.SuppressFinalize (this);       
+		}
+		protected virtual void Dispose (bool disposing)
+		{
+
+		}
+	}
+	internal class rcl_node:IDisposable
+	{
+		private rcl_node_base Impl;
+		public rcl_node(string name, string namespace_ = "")
+		{
+			if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
+				//TODO codepath for windows
+			} else if (Environment.OSVersion.Platform == PlatformID.Unix) {
+				Impl = new rcl_node_linux (name,namespace_);
+			} else {
+				throw new Exception("Operating system: " +Environment.OSVersion.Platform.ToString() + " not supported");
+			}
+		}
+		public  string get_node_name ()
+		{
+			return Impl.get_node_name ();
+		}
+		public  bool node_is_valid ()
+		{
+			return Impl.node_is_valid ();
+		}
+		public string NameSpace {
+			get{ return Impl.NameSpace; }
+		}
+		public  rcl_node_t NativeNode{ 
+			get{ return Impl.NativeNode;} 
+		}
+		public void Dispose()
+		{
+			Impl.Dispose ();
 		}
 
-		public rcl_node (rcl_node_t _node)
+
+	}
+	/// <summary>
+	/// Wrapper for the native methods
+	/// </summary>
+	internal class rcl_node_linux:rcl_node_base
+	{
+		private bool disposed = false;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="rclcs.rcl_node"/> class.
+		/// </summary>
+		/// <param name="name">Name.</param>
+		/// <param name="namespace_">Namespace.</param>
+		public rcl_node_linux (string name, string namespace_ = ""):base(name,namespace_)
 		{
-			native_handle = _node;
+			rcl_node_t node = rcl_get_zero_initialized_node ();
+			rcl_node_options_t default_options = rcl_node_get_default_options ();
+			int ret = rcl_node_init (ref node, name, namespace_, ref default_options);
+			native_handle = node;
 		}
 		/// <summary>
 		/// Releases all resource used by the <see cref="rclcs.rcl_node"/> object.
@@ -245,13 +308,7 @@ namespace rclcs
 		/// method leaves the <see cref="rclcs.rcl_node"/> in an unusable state. After calling <see cref="Dispose"/>, you must
 		/// release all references to the <see cref="rclcs.rcl_node"/> so the garbage collector can reclaim the memory that
 		/// the <see cref="rclcs.rcl_node"/> was occupying.</remarks>
-		public void Dispose ()
-		{ 
-			Dispose (true);
-			GC.SuppressFinalize (this);           
-		}
-
-		protected virtual void Dispose (bool disposing)
+		protected override void Dispose (bool disposing)
 		{
 			if (disposed)
 				return; 
@@ -267,7 +324,7 @@ namespace rclcs
 			disposed = true;
 		}
 
-		~rcl_node ()
+		~rcl_node_linux ()
 		{
 			Dispose (false);
 		}
@@ -275,7 +332,7 @@ namespace rclcs
 		/// Gets the name of the node over the rcl interface
 		/// </summary>
 		/// <returns>The node name.</returns>
-		public string get_node_name ()
+		public override string get_node_name ()
 		{	
 			IntPtr handle =  rcl_node_get_name (ref native_handle);
 			return Marshal.PtrToStringAnsi (handle);
@@ -284,26 +341,12 @@ namespace rclcs
 		/// Checks if the stored native_handle is valid
 		/// </summary>
 		/// <returns><c>true</c>, if native_handle is valid, <c>false</c> otherwise.</returns>
-		public bool node_is_valid ()
+		public override bool node_is_valid ()
 		{
 			//TODO bool should be marshalled ?
 			return rcl_node_is_valid (ref native_handle);
 		}
-		/// <summary>
-		/// Creates the native node.
-		/// Moving this method into the constructor resulted into an error
-		/// </summary>
-		/// <returns>The native node.</returns>
-		/// <param name="name">Name.</param>
-		/// <param name="namespace">Namespace.</param>
-		public static rcl_node create_native_node (string name, string namespace_ = "")
-		{
-			rcl_node_t node = rcl_get_zero_initialized_node ();
-			rcl_node_options_t default_options = rcl_node_get_default_options ();
-			int ret = rcl_node_init (ref node, name, namespace_, ref default_options);
-			rcl_node local_node = new rcl_node (node);
-			return local_node;
-		}
+
 
 		[DllImport(RCL.LibRCLPath)]
 		static extern rcl_node_t rcl_get_zero_initialized_node ();
