@@ -1,56 +1,7 @@
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 namespace rclcs
 {
-	internal abstract class RCLBase
-	{
-		public  abstract void Init (String[] args);
-		public  abstract void Init(String[] args, rcl_allocator_t custom_allocator);
-		public  abstract bool IsInit{ get;}
-	}
-	public class RCL
-	{
-
-		//Check if compiled on windows or linux, unfortunatly we can't do a runtime check for the import statements
-		//TODO implement different codepaths for windows and linux. This has the advantage we can do different calls for windows and linux
-		#if __MonoCS__
-		#warning Compiling on linux: path is now: librcl.so
-		//On linux the files start with lib and end with .so
-		public const string LibRCLPath = "librcl.so";
-		public const string LibRMWPath = "librmw.so";
-		public const string LibRCUtilsPATH = "librcutils.so";
-		#else
-		#warning Compiling on windows: path is now: rcl.dll
-		//On windows they end with .dll
-		public const string LibRCUtilsPATH = @"rcutils.dll";
-		public const string LibRCLPath = @"rcl.dll";
-		public const string LibRMWPath = @"rmw.dll";
-		#endif
-		RCLBase Impl;
-		public RCL ()
-		{
-			if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
-				//TODO codepath for windows
-			} else if (Environment.OSVersion.Platform == PlatformID.Unix) {
-				Impl = new RCLLinux ();
-			} else {
-				throw new Exception("Operating system: " +Environment.OSVersion.Platform.ToString() + " not supported");
-			}
-		}
-
-		public void Init (String[] args)
-		{
-			Impl.Init (args);
-		}
-		public void Init(String[] args, rcl_allocator_t custom_allocator)
-		{
-			Impl.Init (args, custom_allocator);
-		}
-		public bool IsInit
-		{
-			get{ return Impl.IsInit; }
-		}
-	}
 	/// <summary>
 	/// The RCL class handles the initialisation of the ros client librarie and wraps the functions defined in the rcl/rcl.h.
 	/// It furthermore defines the paths to the rcl and rmw libs that are used in the DllImport statement for native interop.
@@ -59,9 +10,6 @@ namespace rclcs
 	internal class RCLLinux:RCLBase, IDisposable
 	{
 		bool disposed = false;
-
-
-
 
 		/// <summary>
 		/// This method does the initilisation of the ros client lib.
@@ -76,7 +24,7 @@ namespace rclcs
 			RCLReturnValues retVal = (RCLReturnValues)rcl_init (args.Length, args, Allocator.rcl_get_default_allocator ());
 			switch (retVal) {
 			case RCLReturnValues.RCL_RET_OK:
-				
+
 				break;
 			case RCLReturnValues.RCL_RET_ALREADY_INIT:
 				throw new RCLAlreadyInitExcption ();
@@ -103,7 +51,7 @@ namespace rclcs
 			RCLReturnValues retVal = (RCLReturnValues)rcl_init (args.Length, args, custom_allocator);
 			switch (retVal) {
 			case RCLReturnValues.RCL_RET_OK:
-				
+
 				break;
 			case RCLReturnValues.RCL_RET_ALREADY_INIT:
 				throw new RCLAlreadyInitExcption ();
@@ -126,7 +74,7 @@ namespace rclcs
 
 		}
 
-		
+
 		/// <summary>
 		/// Releases all resource used by the <see cref="rclcs.RCL"/> object.
 		/// </summary>
@@ -150,7 +98,7 @@ namespace rclcs
 			if (disposed)
 				return;
 			if (disposing) {
-				
+
 				// Free any other managed objects here.
 			}
 			// Free any unmanaged objects here.
@@ -193,42 +141,6 @@ namespace rclcs
 
 
 	}
-	/// <summary>
-	/// Managed implementation of the rcl_ret_t enum which specifies return values for the rcl functions.
-	/// </summary>
-	public enum RCLReturnValues
-	{
-		RCL_RET_OK = 0,
-		RCL_RET_ERROR = 1,
-		RCL_RET_TIMEOUT = 2,
-		// rcl specific ret codes start at 100
-		RCL_RET_ALREADY_INIT = 100,
-		RCL_RET_NOT_INIT = 101,
-		RCL_RET_BAD_ALLOC = 102,
-		RCL_RET_INVALID_ARGUMENT = 103,
-		RCL_REG_MISMATCHED_RMW_ID = 104,
-		// rcl node specific ret codes in 2XX
-		RCL_RET_NODE_INVALID = 200,
-		// rcl publisher specific ret codes in 3XX
-		RCL_RET_PUBLISHER_INVALID =  300,
-		// rcl subscription specific ret codes in 4XX
-		RCL_RET_SUBSCRIPTION_INVALID = 400,
-		RCL_RET_SUBSCRIPTION_TAKE_FAILED = 401,
-		// rcl service client specific ret codes in 5XX
-		RCL_RET_CLIENT_INVALID = 500,
-		RCL_RET_CLIENT_TAKE_FAILED = 501,
-		// rcl service server specific ret codes in 6XX
-		RCL_RET_SERVICE_INVALID =600,
-		RCL_RET_SERIVCE_TAKE_FAILD = 601,
-		// rcl guard condition specific ret codes in 7XX
-		// rcl timer specific ret codes in 8XX
-		RCL_RET_TIMER_INVALID = 800,
-		RCL_RET_TIMER_CANCELED = 801,
-		// rcl wait and wait set specific ret codes in 9XX
-		RCL_RET_WAIT_SET_INVALID = 900,
-		RCL_RET_WAIT_SET_EMPTY = 901,
-		RCL_RET_WAIT_SET_FULL = 902
-	}
-			
+
 }
 
