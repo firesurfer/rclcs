@@ -348,25 +348,25 @@ namespace rclcs
 		}
 
 
-		[DllImport(RCL.LibRCLPath)]
+		[DllImport("librcl.so")]
 		static extern rcl_node_t rcl_get_zero_initialized_node ();
 
-		[DllImport(RCL.LibRCLPath)]
+		[DllImport("librcl.so")]
 		static extern rcl_node_options_t rcl_node_get_default_options ();
 
-		[DllImport(RCL.LibRCLPath)]
+		[DllImport("librcl.so")]
 		static extern int rcl_node_get_domain_id( ref rcl_node_t  node, ref UIntPtr  domain_id);
 
-		[DllImport(RCL.LibRCLPath)]
+		[DllImport("librcl.so")]
 		static extern int rcl_node_init (ref rcl_node_t node, [MarshalAs (UnmanagedType.LPStr)]string name, [MarshalAs(UnmanagedType.LPStr)]string namespace_, ref rcl_node_options_t options);
 
-		[DllImport(RCL.LibRCLPath)]
+		[DllImport("librcl.so")]
 		static extern int rcl_node_fini (ref rcl_node_t node);
 
-		[DllImport(RCL.LibRCLPath)]
+		[DllImport("librcl.so")]
 		static extern bool rcl_node_is_valid (ref rcl_node_t node);
 
-		[DllImport(RCL.LibRCLPath)]
+		[DllImport("librcl.so")]
 		static extern IntPtr rcl_node_get_name (ref rcl_node_t node);
 
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Reflection;
+
 namespace rclcs
 {
 
@@ -10,7 +11,7 @@ namespace rclcs
 	/// <typeparam name="T">Message type</typeparam>
 	/// </summary>
 	public class Publisher<T>:Executable
-		where T: MessageWrapper,new()
+		where T: MessageWrapper, new()
 	{
 		//The c-message-type-support that is obtained for the given message type
 		private rosidl_message_type_support_t TypeSupport;
@@ -31,7 +32,7 @@ namespace rclcs
 		/// Gets the ros node.
 		/// </summary>
 		/// <value>The ros node.</value>
-		public Node RosNode{ get; private set;}
+		public Node RosNode{ get; private set; }
 
 		/// <summary>
 		/// Gets the name of the topic.
@@ -59,7 +60,7 @@ namespace rclcs
 		/// <param name="_TopicName">Topic name.</param>
 		/// <param name="_QOS">Custom qos profile.</param>
 		/// 
-		public Publisher (Node _Node, string _TopicName, rmw_qos_profile_t _QOS )
+		public Publisher (Node _Node, string _TopicName, rmw_qos_profile_t _QOS)
 		{
 			QOSProfile = _QOS;
 			RosNode = _Node;
@@ -88,13 +89,13 @@ namespace rclcs
 			//Now we do the same for the message struct
 			bool foundMethod = false;
 			foreach (var item in messageType.GetMethods()) {
-				if (item.IsStatic ) {
+				if (item.IsStatic) {
 					//We search for the method that does the native call
 					if (item.Name.Contains ("rosidl_typesupport_introspection_c__get_message_type_support_handle")) {
 						foundMethod = true;
 						//We call it and marshal the returned IntPtr (a managed wrapper around a pointer) to the managed typesupport struct
-						TypeSupport = (rosidl_message_type_support_t)Marshal.PtrToStructure((IntPtr)item.Invoke (null, null), typeof(rosidl_message_type_support_t));
-                    }
+						TypeSupport = (rosidl_message_type_support_t)Marshal.PtrToStructure ((IntPtr)item.Invoke (null, null), typeof(rosidl_message_type_support_t));
+					}
 
 				}
 			}
@@ -109,32 +110,33 @@ namespace rclcs
 			//Set the custom qos profile
 			PublisherOptions.qos = QOSProfile;
 			//And create an new publisher 
-			InternalPublisher = new rcl_publisher (RosNode, TypeSupport, TopicName,PublisherOptions);
+			InternalPublisher = new rcl_publisher (RosNode, TypeSupport, TopicName, PublisherOptions);
 
 		}
+
 		/// <summary>
 		/// Gets the native publisher which is simply a struct that contains a pointer to the publisher inside the unmanaged ros code.
 		/// Don't mess around with it!
 		/// </summary>
 		/// <value>The native publisher.</value>
-		public rcl_publisher_t NativePublisher
-		{
-			get{ return InternalPublisher.NativePublisher;}
+		public rcl_publisher_t NativePublisher {
+			get{ return InternalPublisher.NativePublisher; }
 		}
+
 		/// <summary>
 		/// Gets the native wrapper that is used in this managed publisher instance
 		/// </summary>
 		/// <value>The native wrapper.</value>
-		public rcl_publisher NativeWrapper
-		{
+		public rcl_publisher NativeWrapper {
 			get{ return InternalPublisher; }
 		}
+
 		/// <summary>
 		/// Publish the specified msg.
 		/// Call this method in order to publish a new message of the type T
 		/// </summary>
 		/// <param name="msg">Message.</param>
-		public bool Publish(T msg)
+		public bool Publish (T msg)
 		{
 			if (msg == null)
 				throw new ArgumentNullException ("msg may not be null");
@@ -161,13 +163,14 @@ namespace rclcs
 			Console.WriteLine ("##############################################");*/
 
 			//And the the native wrapper to publish the message struct
-			return InternalPublisher.PublishMessage ( temp);
+			return InternalPublisher.PublishMessage (temp);
 		}
+
 		/// <summary>
 		/// Implementation of the IDisposable pattern
 		/// </summary>
 		/// <param name="disposing">If set to <c>true</c> disposing.</param>
-		protected override void Dispose(bool disposing)
+		protected override void Dispose (bool disposing)
 		{
 			if (disposed)
 				return; 
@@ -176,7 +179,7 @@ namespace rclcs
 				
 				// Free any other managed objects here.
 				//
-				InternalPublisher.Dispose();
+				InternalPublisher.Dispose ();
 			}
 
 			// Free any unmanaged objects here.
@@ -184,21 +187,156 @@ namespace rclcs
 
 			disposed = true;
 			// Call base class implementation.
-			base.Dispose(disposing);
+			base.Dispose (disposing);
 		}
 	}
+
+	internal abstract class rcl_publisher_base:IDisposable
+	{
+		protected rcl_publisher_t native_handle;
+		protected rcl_node_t native_node;
+		protected string topic_name;
+		protected rcl_publisher_options_t options;
+		protected rosidl_message_type_support_t type_support;
+		protected bool disposed = false;
+
+		public rcl_publisher_base (Node _node, rosidl_message_type_support_t _type_support, string _topic_name, rcl_publisher_options_t _options)
+		{
+			this.native_node = _node.NativeNode;
+			this.topic_name = _topic_name;
+			this.type_support = _type_support;
+			this.options = _options;
+		}
+
+		public void Dispose ()
+		{ 
+			Dispose (true);
+			GC.SuppressFinalize (this);           
+		}
+
+		protected virtual void Dispose (bool disposing)
+		{
+			if (disposed)
+				return; 
+
+			if (disposing) {
+				// Free any other managed objects here.
+				//
+			}
+			//Clean up unmanaged resources
+
+			// Free any unmanaged objects here.
+			//
+			disposed = true;
+		}
+
+		/// <summary>
+		/// Gets the name of the topic.
+		/// </summary>
+		/// <value>The name of the topic.</value>
+		public string TopicName {
+			get{ return topic_name; }
+		}
+
+		/// <summary>
+		/// Gets the native publisher handle
+		/// </summary>
+		/// <value>The native publisher.</value>
+		public rcl_publisher_t NativePublisher {
+			get{ return native_handle; }
+		}
+
+		public abstract bool PublishMessage (ValueType msg);
+	
+
+
+	}
+	public class rcl_publisher:IDisposable
+	{
+		protected bool disposed = false;
+
+		rcl_publisher_base Impl;
+		public rcl_publisher(Node _node, rosidl_message_type_support_t _type_support, string _topic_name, rcl_publisher_options_t _options)
+		{
+			if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
+				//TODO codepath for windows
+			} else if (Environment.OSVersion.Platform == PlatformID.Unix) {
+				Impl = new rcl_publisher_linux (_node, _type_support,_topic_name,_options);
+			} else {
+				throw new Exception("Operating system: " +Environment.OSVersion.Platform.ToString() + " not supported");
+			}
+		}
+
+
+		/// <summary>
+		/// Gets the name of the topic.
+		/// </summary>
+		/// <value>The name of the topic.</value>
+		public string TopicName {
+			get{ return Impl.TopicName; }
+		}
+
+		/// <summary>
+		/// Gets the native publisher handle
+		/// </summary>
+		/// <value>The native publisher.</value>
+		public rcl_publisher_t NativePublisher {
+			get{ return Impl.NativePublisher; }
+		}
+		public void Dispose ()
+		{ 
+			Dispose (true);
+			GC.SuppressFinalize (this);           
+		}
+
+		protected virtual void Dispose (bool disposing)
+		{
+			if (disposed)
+				return; 
+
+			if (disposing) {
+				// Free any other managed objects here.
+				//
+			}
+			//Clean up unmanaged resources
+
+			// Free any unmanaged objects here.
+			//
+			disposed = true;
+		}
+
+
+		/// <summary>
+		/// Gets the default options from the rcl
+		/// //TODO rename  to GetDefaultOptions
+		/// </summary>
+		/// <returns>The default options.</returns>
+		public static rcl_publisher_options_t get_default_options ()
+		{
+			if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
+				//TODO codepath for windows
+				//for now we use the linux codepath
+				return rcl_publisher_linux.rcl_publisher_get_default_options ();
+			} else if (Environment.OSVersion.Platform == PlatformID.Unix) {
+				return rcl_publisher_linux.rcl_publisher_get_default_options ();
+			} else {
+				throw new Exception("Operating system: " +Environment.OSVersion.Platform.ToString() + " not supported");
+			}
+		}
+		public bool PublishMessage (ValueType msg)
+		{
+			return Impl.PublishMessage (msg);
+		}
+
+	}
+
 	/// <summary>
 	/// This class wraps the native methods and makes sure the Publisher<T> can only make save calls.
 	/// It does furthermore the correct memory handling for memory allocated in the native code, like finishing the native publisher
 	/// </summary>
-	public class rcl_publisher:IDisposable
+	internal class rcl_publisher_linux:rcl_publisher_base
 	{
-		private rcl_publisher_t native_handle;
-		private rcl_node_t native_node;
-		private string topic_name;
-		private rcl_publisher_options_t options;
-		private rosidl_message_type_support_t type_support;
-		private bool disposed = false;
+
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="rclcs.rcl_publisher"/> class.
@@ -207,42 +345,28 @@ namespace rclcs
 		/// <param name="_type_support">Type support.</param>
 		/// <param name="_topic_name">Topic name.</param>
 		/// <param name="_options">Options.</param>
-		public rcl_publisher(Node _node, rosidl_message_type_support_t _type_support, string _topic_name, rcl_publisher_options_t _options)
+		public rcl_publisher_linux (Node _node, rosidl_message_type_support_t _type_support, string _topic_name, rcl_publisher_options_t _options):base(_node,_type_support,_topic_name,_options)
 		{
-			this.native_node = _node.NativeNode;
-			this.topic_name = _topic_name;
-			this.type_support = _type_support;
-			this.options = _options;
-
 			native_handle = rcl_get_zero_initialized_publisher ();
-			rcl_publisher_init (ref native_handle,ref native_node, ref type_support, topic_name, ref options);
-
+			rcl_publisher_init (ref native_handle, ref native_node, ref type_support, topic_name, ref options);
 		}
+
 		/// <summary>
 		/// Releases unmanaged resources and performs other cleanup operations before the <see cref="rclcs.rcl_publisher"/> is
 		/// reclaimed by garbage collection.
 		/// </summary>
-		~rcl_publisher()
+		~rcl_publisher_linux ()
 		{
 			Dispose (false);	
 		}
-		/// <summary>
-		/// Releases all resource used by the <see cref="rclcs.rcl_publisher"/> object.
-		/// </summary>
-		/// <remarks>Call <see cref="Dispose"/> when you are finished using the <see cref="rclcs.rcl_publisher"/>. The
-		/// <see cref="Dispose"/> method leaves the <see cref="rclcs.rcl_publisher"/> in an unusable state. After calling
-		/// <see cref="Dispose"/>, you must release all references to the <see cref="rclcs.rcl_publisher"/> so the garbage
-		/// collector can reclaim the memory that the <see cref="rclcs.rcl_publisher"/> was occupying.</remarks>
-		public void Dispose()
-		{ 
-			Dispose(true);
-			GC.SuppressFinalize(this);           
-		}
+
+
+
 		/// <summary>
 		/// Implementation of the IDisposable pattern
 		/// </summary>
 		/// <param name="disposing">If set to <c>true</c> disposing.</param>
-		protected virtual void Dispose(bool disposing)
+		protected override void Dispose (bool disposing)
 		{
 			if (disposed)
 				return; 
@@ -257,40 +381,18 @@ namespace rclcs
 			//
 			disposed = true;
 		}
-		/// <summary>
-		/// Gets the name of the topic.
-		/// </summary>
-		/// <value>The name of the topic.</value>
-		public string TopicName
-		{
-			get{ return topic_name; }
-		}
 
-		/// <summary>
-		/// Gets the native publisher handle
-		/// </summary>
-		/// <value>The native publisher.</value>
-		public rcl_publisher_t NativePublisher
-		{
-			get{ return native_handle;}
-		}
-		/// <summary>
-		/// Gets the default options from the rcl
-		/// //TODO rename  to GetDefaultOptions
-		/// </summary>
-		/// <returns>The default options.</returns>
-		public static rcl_publisher_options_t get_default_options()
-		{
-			return rcl_publisher_get_default_options ();
-		}
+
+
+
 		/// <summary>
 		/// This method gets called from the Publisher<T> class in order to publish a message. Have in mind this method does not perform any type checks
 		/// </summary>
 		/// <returns><c>true</c>, if message was published, <c>false</c> otherwise.</returns>
 		/// <param name="msg">Message.</param>
-		public bool PublishMessage( ValueType msg)
+		public override bool PublishMessage (ValueType msg)
 		{
-			int ret = rcl_publish (ref native_handle,  msg);
+			int ret = rcl_publish (ref native_handle, msg);
 			//Handle the return types
 			RCLReturnValues ret_val = (RCLReturnValues)ret;
 
@@ -315,27 +417,28 @@ namespace rclcs
 		}
 		//Native methods. See the rcl/publisher.h file for detailed documentation.
 
-		[DllImport(RCL.LibRCLPath)]
-		extern static rcl_publisher_t rcl_get_zero_initialized_publisher();
+		[DllImport (RCL.LibRCLPath)]
+		extern static rcl_publisher_t rcl_get_zero_initialized_publisher ();
 
-		[DllImport(RCL.LibRCLPath)]
-		extern static int rcl_publisher_init(ref rcl_publisher_t publisher,ref rcl_node_t node, ref rosidl_message_type_support_t type_support, string topic_name, ref rcl_publisher_options_t options);
+		[DllImport (RCL.LibRCLPath)]
+		extern static int rcl_publisher_init (ref rcl_publisher_t publisher, ref rcl_node_t node, ref rosidl_message_type_support_t type_support, string topic_name, ref rcl_publisher_options_t options);
 
-		[DllImport(RCL.LibRCLPath)]
+		[DllImport (RCL.LibRCLPath)]
 		extern static int rcl_publisher_fini (ref rcl_publisher_t publisher, ref rcl_node_t node);
 
-		[DllImport(RCL.LibRCLPath)]
-		extern static rcl_publisher_options_t rcl_publisher_get_default_options();
+		[DllImport (RCL.LibRCLPath)]
+		internal extern static rcl_publisher_options_t rcl_publisher_get_default_options ();
 
-		[DllImport(RCL.LibRCLPath)]
-		extern static int rcl_publish(ref rcl_publisher_t publisher,  [In] ValueType ros_message);
+		[DllImport (RCL.LibRCLPath)]
+		extern static int rcl_publish (ref rcl_publisher_t publisher, [In] ValueType ros_message);
 
-		[DllImport(RCL.LibRCLPath)]
-		extern static string rcl_publisher_get_topic_name(ref rcl_publisher_t publisher);
+		[DllImport (RCL.LibRCLPath)]
+		extern static string rcl_publisher_get_topic_name (ref rcl_publisher_t publisher);
 
-		[DllImport(RCL.LibRCLPath)]
-		extern static rcl_publisher_options_t rcl_publisher_get_options(ref rcl_publisher_t publisher);
+		[DllImport (RCL.LibRCLPath)]
+		extern static rcl_publisher_options_t rcl_publisher_get_options (ref rcl_publisher_t publisher);
 	}
+
 	/// <summary>
 	/// This struct wraps the pointer on the "real" publisher that ros uses
 	/// </summary>
@@ -343,6 +446,7 @@ namespace rclcs
 	{
 		IntPtr impl;
 	}
+
 	/// <summary>
 	/// Implementation of the rcl_publisher_options_t struct with the same name and same definition in ros.
 	/// </summary>
