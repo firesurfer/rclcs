@@ -9,7 +9,7 @@ namespace rclcs
 	/// </summary>
 	internal class RCLLinux:RCLBase, IDisposable
 	{
-		bool disposed = false;
+		
 
 		/// <summary>
 		/// This method does the initilisation of the ros client lib.
@@ -75,25 +75,12 @@ namespace rclcs
 		}
 
 
-		/// <summary>
-		/// Releases all resource used by the <see cref="rclcs.RCL"/> object.
-		/// </summary>
-		/// <remarks>Call <see cref="Dispose"/> when you are finished using the <see cref="rclcs.RCL"/>. The <see cref="Dispose"/>
-		/// method leaves the <see cref="rclcs.RCL"/> in an unusable state. After calling <see cref="Dispose"/>, you must
-		/// release all references to the <see cref="rclcs.RCL"/> so the garbage collector can reclaim the memory that the
-		/// <see cref="rclcs.RCL"/> was occupying.</remarks>
-		public void Dispose()
-		{
-			// Dispose of unmanaged resources.
-			Dispose(true);
-			// Suppress finalization.
-			GC.SuppressFinalize(this);
-		}
+
 		/// <summary>
 		/// Implementation of IDisposable
 		/// </summary>
 		/// <param name="disposing">If set to <c>true</c> disposing.</param>
-		protected virtual void Dispose(bool disposing)
+		protected override void Dispose(bool disposing)
 		{
 			if (disposed)
 				return;

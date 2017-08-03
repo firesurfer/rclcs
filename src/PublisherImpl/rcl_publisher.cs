@@ -109,6 +109,7 @@ namespace rclcs
 			if (disposing) {
 				// Free any other managed objects here.
 				//
+				Impl.Dispose();
 			}
 			//Clean up unmanaged resources
 

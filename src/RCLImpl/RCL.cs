@@ -2,15 +2,35 @@ using System;
 using System.Runtime.InteropServices;
 namespace rclcs
 {
-	internal abstract class RCLBase
+	internal abstract class RCLBase:IDisposable
 	{
+		protected bool disposed = false;
 		public  abstract void Init (String[] args);
 		public  abstract void Init(String[] args, rcl_allocator_t custom_allocator);
 		public  abstract bool IsInit{ get;}
-	}
-	public class RCL
-	{
 
+		/// <summary>
+		/// Releases all resource used by the <see cref="rclcs.RCL"/> object.
+		/// </summary>
+		/// <remarks>Call <see cref="Dispose"/> when you are finished using the <see cref="rclcs.RCL"/>. The <see cref="Dispose"/>
+		/// method leaves the <see cref="rclcs.RCL"/> in an unusable state. After calling <see cref="Dispose"/>, you must
+		/// release all references to the <see cref="rclcs.RCL"/> so the garbage collector can reclaim the memory that the
+		/// <see cref="rclcs.RCL"/> was occupying.</remarks>
+		public void Dispose()
+		{
+			// Dispose of unmanaged resources.
+			Dispose(true);
+			// Suppress finalization.
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+		}
+	}
+	public class RCL:IDisposable
+	{
+		bool disposed = false;
 		//Check if compiled on windows or linux, unfortunatly we can't do a runtime check for the import statements
 		//TODO implement different codepaths for windows and linux. This has the advantage we can do different calls for windows and linux
 		#if __MonoCS__
@@ -50,6 +70,28 @@ namespace rclcs
 		{
 			get{ return Impl.IsInit; }
 		}
+
+		public void Dispose()
+		{
+			// Dispose of unmanaged resources.
+			Dispose(true);
+			// Suppress finalization.
+			GC.SuppressFinalize(this);
+		}
+		protected virtual void Dispose(bool disposing)
+		{
+			if (disposed)
+				return;
+			if (disposing) {
+
+				// Free any other managed objects here.
+				Impl.Dispose();
+			}
+
+
+			disposed = true;
+		}
+
 	}
 
 			
