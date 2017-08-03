@@ -74,6 +74,9 @@
     <Compile Include="SubscriptionImpl\rcl_subscription_linux.cs" />
     <Compile Include="NativeTypes\rcl_subscription_t.cs" />
     <Compile Include="SubscriptionImpl\Subscription.cs" />
+    <Compile Include="ClientImpl\rcl_client.cs" />
+    <Compile Include="ClientImpl\rcl_client_linux.cs" />
+    <Compile Include="NativeTypes\rcl_client_t.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -82,5 +85,6 @@
     <Folder Include="NodeImpl\" />
     <Folder Include="PublisherImpl\" />
     <Folder Include="SubscriptionImpl\" />
+    <Folder Include="ClientImpl\" />
   </ItemGroup>
 </Project>
