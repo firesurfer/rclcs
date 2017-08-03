@@ -19,7 +19,7 @@ Make sure you've got mono/ .Net in a version installed that targets at least the
 Then from your ros2 workspace base directory:
 ```
   cd src/ament
-  git clone https://github.com/esteve/dotnet_cmake_module
+  git clone https://github.com/firesurfer/dotnet_cmake_module
   cd ../ros2
   git clone https://github.com/firesurfer/rclcs
   cd rosidl
