@@ -42,14 +42,12 @@
     <Compile Include="Executor.cs" />
     <Compile Include="Executable.cs" />
     <Compile Include="MessageRecievedEventArgs.cs" />
-    <Compile Include="Service.cs" />
     <Compile Include="RCLExceptions.cs" />
     <Compile Include="Executors\SingleThreadedExecutor.cs" />
     <Compile Include="NativeTypes\rosidl_generator_c__primitive_arrays.cs" />
     <Compile Include="NativeTypes\rcl_allocator_t.cs" />
     <Compile Include="NativeTypes\rosidl_service_type_support_t.cs" />
     <Compile Include="NativeTypes\rmw_request_id_t.cs" />
-    <Compile Include="Client.cs" />
     <Compile Include="ServiceRecievedRequestEventArgs.cs" />
     <Compile Include="IRosMessage.cs" />
     <Compile Include="IRosService.cs" />
@@ -77,6 +75,11 @@
     <Compile Include="ClientImpl\rcl_client.cs" />
     <Compile Include="ClientImpl\rcl_client_linux.cs" />
     <Compile Include="NativeTypes\rcl_client_t.cs" />
+    <Compile Include="ServiceImpl\rcl_service.cs" />
+    <Compile Include="ServiceImpl\rcl_service_linux.cs" />
+    <Compile Include="NativeTypes\rcl_service_t.cs" />
+    <Compile Include="ClientImpl\Client.cs" />
+    <Compile Include="ServiceImpl\Service.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -86,5 +89,6 @@
     <Folder Include="PublisherImpl\" />
     <Folder Include="SubscriptionImpl\" />
     <Folder Include="ClientImpl\" />
+    <Folder Include="ServiceImpl\" />
   </ItemGroup>
 </Project>
