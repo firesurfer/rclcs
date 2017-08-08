@@ -19,7 +19,7 @@ add_assemblies("${PROJECT_NAME}_assemblies"
   COMPILER_ARGS
   "-unsafe"
   "-doc:rclcs.xml"
-  "-keyfile:${CMAKE_CURRENT_SOURCE_DIR}/src/firesurfer.snk"
+  "-keyfile:${CMAKE_CURRENT_SOURCE_DIR}/src/rclcs.snk"
 )
 install_assemblies("${PROJECT_NAME}_assemblies" COPY_DEPENDENCIES DESTINATION lib)
 #if(NOT WIN32)
