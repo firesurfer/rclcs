@@ -55,7 +55,6 @@
     <Compile Include="ClientRecievedResponseEventArgs.cs" />
     <Compile Include="RCLErrorHandling.cs" />
     <Compile Include="MessageWrapper.cs" />
-    <Compile Include="Graph.cs" />
     <Compile Include="MarshallingHelpers.cs" />
     <Compile Include="RCLImpl\RCLReturnValues.cs" />
     <Compile Include="RCLImpl\RCLLinux.cs" />
@@ -80,6 +79,9 @@
     <Compile Include="NativeTypes\rcl_service_t.cs" />
     <Compile Include="ClientImpl\Client.cs" />
     <Compile Include="ServiceImpl\Service.cs" />
+    <Compile Include="GraphImpl\Graph.cs" />
+    <Compile Include="GraphImpl\rcl_graph_linux.cs" />
+    <Compile Include="NativeTypes\rcl_topic_names_and_types_t.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -90,5 +92,6 @@
     <Folder Include="SubscriptionImpl\" />
     <Folder Include="ClientImpl\" />
     <Folder Include="ServiceImpl\" />
+    <Folder Include="GraphImpl\" />
   </ItemGroup>
 </Project>
