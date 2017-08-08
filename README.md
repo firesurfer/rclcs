@@ -48,7 +48,33 @@ python src\ament\ament_tools\scripts\ament.py build
 ```
 
 
+### Install to the GAC (Global assembly cache)
 
+This is __optional__ but useful. But it just makes sense if the code is stable. By installing the assembly into the GAC you won't need the `WindowsAssemblyLoader` or the `MONO_PATH` any more (See examples for more information).
+
+1. Create a keyfile:
+(sn is called sn.exe on windows)
+
+```
+sn -k <keypair name>
+```
+
+2. Tell the compiler to use it:
+
+In your `CMakeLists.txt` in the `add_assemblies` section add to the `COMPILER_ARGS`
+```
+"-keyfile:<Path to the keypair>"
+
+```
+
+3. Install to the GAC:
+
+```
+gacutil -i <assembly name>
+```
+
+For the `rclcs` I already did step 1 and 2. But due to lacking root permissions I can't add an automatic installation step into the GAC. Furthermore it won't make much sense because every build would result into a new version of the `rclcs.dll` in the GAC. Perhaps I can find a nicer solution in the future.
+ 
 ## Examples
 
 You can have look at my [testing workspace](https://github.com/firesurfer/rclcs_testing_ws) ~~which is quite messy.~~ which contains some [examples](https://github.com/firesurfer/rclcs_testing_ws/tree/master/src/test_cs/test_cs/Examples) (And is still a bit messy, but you should get ahead with it).
