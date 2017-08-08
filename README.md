@@ -2,7 +2,7 @@
 
 A C# wrapper for [ROS2](https://github.com/ros2). It is designed to provide an interface similar to the rclcpp.
 The idea behind the wrapper is to reproduce the ros message as a C# struct with the same memory layout as their C counterparts.
-So the messages (structs) can directly be passed to the `rcl` without any conversions. 
+So the messages (structs) can directly be passed to the `rcl` without any conversions. For easier usage these structs are wrapped into classes so you don't have the inconvenience of memory handling.
 
 ## How to use
 
@@ -122,8 +122,10 @@ For further understanding of the what is happening behind the scenes see [memory
 ## What has to be done next
 
 * ~~Generate xml documentation for better autocompletion~~
-* Cleanup of the message generator
-   * ~~Use templating engine for message generation~~ I will probably use the C# codedom or in future the roselyn codesynthesizer API
+* ~~Cleanup of the message generator~~
+   * ~~Use templating engine for message generation~~ I implemented the message generator in C# using the CodeDom API
+   * The generated code would be better if I could directly create IL-code
+   * Testing of nested types in the messages
    * Having a proper dependency resolving mechanism
 * ~~Fix errors regarding arrays~~
 * Free memory where needed - I should have covered all (or at least most cases) by now
@@ -137,8 +139,9 @@ For further understanding of the what is happening behind the scenes see [memory
 	* Implement the various executors and spin methods
 * Write tests (See Build and run tests section)
 * Allow (easier) debugging the managed code
-* Integrate into ament (See [this](https://groups.google.com/d/msg/ros-sig-ng-ros/MN_N_SunrjA/wuEUYOXxEwAJ) mailinglist post)
-* Change how executors, nodes and publishers (and so on) interact with each other. 
+* ~~Integrate into ament (See [this](https://groups.google.com/d/msg/ros-sig-ng-ros/MN_N_SunrjA/wuEUYOXxEwAJ) mailinglist post)~~
+    * Check integration for windows
+* Implement code paths for windows (Infrastructure is already available)
 
 ## Build and run tests
 
