@@ -82,7 +82,7 @@
     <Compile Include="GraphImpl\Graph.cs" />
     <Compile Include="GraphImpl\rcl_graph_linux.cs" />
     <Compile Include="NativeTypes\rcl_topic_names_and_types_t.cs" />
-    <Compile Include="RCLWindows.cs" />
+    <Compile Include="RCLImpl\RCLWindows.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
