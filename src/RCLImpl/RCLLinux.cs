@@ -7,7 +7,7 @@ namespace rclcs
 	/// It furthermore defines the paths to the rcl and rmw libs that are used in the DllImport statement for native interop.
 	/// This class implements IDisposable.
 	/// </summary>
-	internal class RCLLinux:RCLBase, IDisposable
+	internal class RCLLinux:RCLBase
 	{
 		
 

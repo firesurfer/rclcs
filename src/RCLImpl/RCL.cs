@@ -50,7 +50,7 @@ namespace rclcs
 		public RCL ()
 		{
 			if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
-				//TODO codepath for windows
+                Impl = new RCLWindows();
 			} else if (Environment.OSVersion.Platform == PlatformID.Unix) {
 				Impl = new RCLLinux ();
 			} else {

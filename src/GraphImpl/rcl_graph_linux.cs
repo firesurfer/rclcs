@@ -5,7 +5,7 @@ namespace rclcs
 {
    /// <summary>
     /// This class wraps the functions defined in the rcl/graph.h in the rcl package.
-    /// The Graph class provides meta information about the ros2 connection structure, like the amound of publishers on a certain topic.
+    /// The Graph class provides meta information about the ros2 connection structure, like the amount of publishers on a certain topic.
     /// </summary>
     public class GraphLinux:GraphBase
     {
