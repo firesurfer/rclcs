@@ -5,8 +5,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{CC0D4875-60FA-4318-854B-1924FED1C85B}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>ROS2Sharp</RootNamespace>
-    <AssemblyName>ROS2Sharp</AssemblyName>
+    <RootNamespace>rclcs</RootNamespace>
+    <AssemblyName>rclcs</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
