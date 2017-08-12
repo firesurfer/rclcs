@@ -86,6 +86,7 @@
     <Compile Include="NativeTypes\rcl_topic_names_and_types_t.cs" />
     <Compile Include="RCLImpl\RCLWindows.cs" />
     <Compile Include="PublisherImpl\rcl_publisher_windows.cs" />
+    <Compile Include="SubscriptionImpl\rcl_subscription_windwos.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

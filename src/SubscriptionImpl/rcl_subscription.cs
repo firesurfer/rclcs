@@ -40,7 +40,7 @@ namespace rclcs
 		public rcl_subscription(Node _node, rosidl_message_type_support_t _type_support, string _topic_name, rcl_subscription_options_t _options)
 		{
 			if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
-				//TODO codepath for windows
+                Impl = new rcl_subscription_windows(_node, _type_support, _topic_name, _options);
 			} else if (Environment.OSVersion.Platform == PlatformID.Unix) {
 				Impl = new rcl_subscription_linux (_node,_type_support,_topic_name,_options);
 			} else {
