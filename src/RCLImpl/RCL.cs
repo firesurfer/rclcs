@@ -31,8 +31,10 @@ namespace rclcs
 	public class RCL:IDisposable
 	{
 		bool disposed = false;
-		//Check if compiled on windows or linux, unfortunatly we can't do a runtime check for the import statements
+		//Check if compiled on windows or linux, unfortunatly we can't do a runtime check for the import statements 
+        // !!This has changed. We just need the dynamic paths for the rcl errorhandling functions
 		//TODO implement different codepaths for windows and linux. This has the advantage we can do different calls for windows and linux
+        //Infrastructure for different codepaths is already implemented
 		#if __MonoCS__
 		#warning Compiling on linux: path is now: librcl.so
 		//On linux the files start with lib and end with .so

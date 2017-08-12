@@ -8,6 +8,8 @@
     <RootNamespace>rclcs</RootNamespace>
     <AssemblyName>rclcs</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>rclcs.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -83,6 +85,7 @@
     <Compile Include="GraphImpl\rcl_graph_linux.cs" />
     <Compile Include="NativeTypes\rcl_topic_names_and_types_t.cs" />
     <Compile Include="RCLImpl\RCLWindows.cs" />
+    <Compile Include="PublisherImpl\rcl_publisher_windows.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

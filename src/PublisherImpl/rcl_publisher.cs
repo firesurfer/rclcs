@@ -71,7 +71,7 @@ namespace rclcs
 		public rcl_publisher(Node _node, rosidl_message_type_support_t _type_support, string _topic_name, rcl_publisher_options_t _options)
 		{
 			if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
-				//TODO codepath for windows
+                Impl = new rcl_publisher_windows(_node, _type_support, _topic_name, _options);
 			} else if (Environment.OSVersion.Platform == PlatformID.Unix) {
 				Impl = new rcl_publisher_linux (_node, _type_support,_topic_name,_options);
 			} else {
