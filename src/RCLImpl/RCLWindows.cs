@@ -25,7 +25,7 @@ namespace rclcs
 				case RCLReturnValues.RCL_RET_BAD_ALLOC:
 					throw new RCLBadAllocException();
 				case RCLReturnValues.RCL_RET_ERROR:
-					throw new RCLErrorException(RCLErrorHandling.GetRMWErrorState());
+                    throw new RCLErrorException(RCLErrorHandling.Instance.GetRMWErrorState());
 				default:
 					break;
 			}
@@ -53,7 +53,7 @@ namespace rclcs
 				case RCLReturnValues.RCL_RET_BAD_ALLOC:
 					throw new RCLBadAllocException();
 				case RCLReturnValues.RCL_RET_ERROR:
-					throw new RCLErrorException(RCLErrorHandling.GetRMWErrorState());
+                    throw new RCLErrorException(RCLErrorHandling.Instance.GetRMWErrorState());
 				default:
 					break;
 			}

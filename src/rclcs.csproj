@@ -54,7 +54,6 @@
     <Compile Include="IRosService.cs" />
     <Compile Include="IRosTransportItem.cs" />
     <Compile Include="ClientRecievedResponseEventArgs.cs" />
-    <Compile Include="RCLErrorHandling.cs" />
     <Compile Include="MessageWrapper.cs" />
     <Compile Include="MarshallingHelpers.cs" />
     <Compile Include="RCLImpl\RCLReturnValues.cs" />
@@ -86,6 +85,10 @@
     <Compile Include="RCLImpl\RCLWindows.cs" />
     <Compile Include="PublisherImpl\rcl_publisher_windows.cs" />
     <Compile Include="SubscriptionImpl\rcl_subscription_windwos.cs" />
+    <Compile Include="RCLErrorHandlingImpl\RCLErrorHandling.cs" />
+    <Compile Include="RCLErrorHandlingImpl\rcl_error_handling.cs" />
+    <Compile Include="NativeTypes\rmw_error_state_t.cs" />
+    <Compile Include="RCLErrorHandlingImpl\rcl_error_handling_linux.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -97,5 +100,6 @@
     <Folder Include="ClientImpl\" />
     <Folder Include="ServiceImpl\" />
     <Folder Include="GraphImpl\" />
+    <Folder Include="RCLErrorHandlingImpl\" />
   </ItemGroup>
 </Project>
