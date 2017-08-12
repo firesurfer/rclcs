@@ -4,6 +4,7 @@ namespace rclcs
 {
 	internal abstract class rcl_node_base:IDisposable
 	{
+        protected bool disposed = false;
 		protected rcl_node_t native_handle;
 		protected string name_space;
 		/// <summary>
@@ -29,15 +30,26 @@ namespace rclcs
 		protected virtual void Dispose (bool disposing)
 		{
 
+            if (disposed)
+                return;
+            if (disposing) {
+
+                // Free any other managed objects here.
+              
+            }
+
+
+            disposed = true;
 		}
 	}
 	internal class rcl_node:IDisposable
 	{
+        private bool disposed = false;
 		private rcl_node_base Impl;
 		public rcl_node(string name, string namespace_ = "")
 		{
 			if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
-				//TODO codepath for windows
+                Impl = new rcl_node_windows(name, namespace_);
 			} else if (Environment.OSVersion.Platform == PlatformID.Unix) {
 				Impl = new rcl_node_linux (name,namespace_);
 			} else {
@@ -60,9 +72,27 @@ namespace rclcs
 		}
 		public void Dispose()
 		{
-			Impl.Dispose ();
+			Dispose(true);
+			GC.SuppressFinalize(this);
 		}
+		protected virtual void Dispose(bool disposing)
+		{
+			if (disposed)
+				return;
+			if (disposing)
+			{
 
+				// Free any other managed objects here.
+				Impl.Dispose();
+			}
+
+
+			disposed = true;
+		}
+        ~rcl_node()
+        {
+            Dispose(false);
+        }
 
 	}
 }

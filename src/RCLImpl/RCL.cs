@@ -27,6 +27,10 @@ namespace rclcs
 		protected virtual void Dispose(bool disposing)
 		{
 		}
+        ~RCLBase()
+        {
+            Dispose(false);
+        }
 	}
 	public class RCL:IDisposable
 	{
@@ -59,6 +63,10 @@ namespace rclcs
 				throw new Exception("Operating system: " +Environment.OSVersion.Platform.ToString() + " not supported");
 			}
 		}
+        ~RCL()
+        {
+            Dispose(false);
+        }
 
 		public void Init (String[] args)
 		{

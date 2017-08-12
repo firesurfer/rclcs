@@ -89,6 +89,7 @@
     <Compile Include="RCLErrorHandlingImpl\rcl_error_handling.cs" />
     <Compile Include="NativeTypes\rmw_error_state_t.cs" />
     <Compile Include="RCLErrorHandlingImpl\rcl_error_handling_linux.cs" />
+    <Compile Include="NodeImpl\rcl_node_windows.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

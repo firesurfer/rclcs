@@ -7,7 +7,7 @@ namespace rclcs
 	/// </summary>
 	internal class rcl_node_linux:rcl_node_base
 	{
-		private bool disposed = false;
+		
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="rclcs.rcl_node"/> class.

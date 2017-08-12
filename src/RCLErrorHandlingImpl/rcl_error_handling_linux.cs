@@ -9,20 +9,20 @@ namespace rclcs
         }
 
 		//TODO Do I have to call the corresponding functions in the rcl ?
-		[DllImport(RCL.LibRMWPath)]
+		[DllImport("librmw.so")]
 		extern static bool rmw_error_is_set();
 
-		[DllImport(RCL.LibRMWPath)]
+		[DllImport("librmw.so")]
 		[return: MarshalAs(UnmanagedType.LPStruct)]
 		extern static rmw_error_state_t rmw_get_error_state();
 
-		[DllImport(RCL.LibRMWPath)]
+		[DllImport("librmw.so")]
 		extern static IntPtr rmw_get_error_string();
 
-		[DllImport(RCL.LibRMWPath)]
+		[DllImport("librmw.so")]
 		extern static IntPtr rmw_get_error_string_safe();
 
-		[DllImport(RCL.LibRMWPath)]
+		[DllImport("librmw.so")]
 		extern static void rmw_reset_error();
 
         public override  RMWErrorState get_rmw_error_state()
