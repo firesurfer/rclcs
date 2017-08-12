@@ -22,7 +22,10 @@ namespace rclcs
 			this.options = _options;
 			this.typesupport = _typesupport;
 		}
-
+        ~rcl_client_base()
+        {
+            Dispose(false);
+        }
 		public rcl_client_t NativeClient
 		{
 			get{return native_handle;}
@@ -77,6 +80,10 @@ namespace rclcs
 			Dispose(true);
 			GC.SuppressFinalize(this);           
 		}
+        ~rcl_client()
+        {
+            Dispose(false);
+        }
 
 		protected virtual void Dispose(bool disposing)
 		{

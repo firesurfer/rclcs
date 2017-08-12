@@ -21,7 +21,10 @@ namespace rclcs
 			Dispose(true);
 			GC.SuppressFinalize(this);           
 		}
-
+        ~rcl_service_base()
+        {
+            Dispose(false);
+        }
 		protected virtual void Dispose(bool disposing)
 		{
 			if (disposed)
@@ -70,6 +73,10 @@ namespace rclcs
 			Dispose(true);
 			GC.SuppressFinalize(this);           
 		}
+        ~rcl_service()
+        {
+            Dispose(false);
+        }
 
 		protected virtual void Dispose(bool disposing)
 		{
