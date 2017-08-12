@@ -24,6 +24,11 @@ namespace rclcs
 			GC.SuppressFinalize(this);           
 		}
 
+        ~rcl_subscription_base()
+        {
+            Dispose(false);
+        }
+
 		// Protected implementation of Dispose pattern.
 		protected abstract void Dispose(bool disposing);
 
@@ -67,6 +72,10 @@ namespace rclcs
 			Dispose(true);
 			GC.SuppressFinalize(this);           
 		}
+        ~rcl_subscription()
+        {
+            Dispose(false);
+        }
 
 		// Protected implementation of Dispose pattern.
 		protected virtual void Dispose(bool disposing)
