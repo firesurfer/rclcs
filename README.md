@@ -4,6 +4,8 @@ A C# wrapper for [ROS2](https://github.com/ros2). It is designed to provide an i
 The idea behind the wrapper is to reproduce the ros message as a C# struct with the same memory layout as their C counterparts.
 So the messages (structs) can directly be passed to the `rcl` without any conversions. For easier usage these structs are wrapped into classes so you don't have the inconvenience of memory handling.
 
+__Important__: I needed to force building 64bit assemblies. If you need 32bit support you have to add fitting targets in your csproj files and adapt the `add_msbuild` cmake function to build the 32bit target instead!
+
 ## How to use
 
 These instructions are mostly the same on Windows and Linux. 
@@ -32,25 +34,24 @@ Then edit the file in `rosidl_typesupport/rosidl_default_generators/CMakeLists.t
 
 Then go back to the ros2 workspace and do:
 
-(Dont't do a symlink install)
-__Linux__:
+
+### Linux
 ```
 rm -rf build/ install/
 ./src/ament/ament_tools/scripts/ament.py build
 
 ``` 
 
-__Windows__: Building on windows will take a lot of effort at the moment. I couldn't get it to work!
-Delete the build and install folder with the windows explorer.
-
+### Windows 
 ```
+rmdir /S /Q build install
 python src\ament\ament_tools\scripts\ament.py build
 ```
 
 
-### Install to the GAC (Global assembly cache)
+## Install to the GAC (Global assembly cache)
 
-This is __optional__ but useful. But it just makes sense if the code is stable. By installing the assembly into the GAC you won't need the `WindowsAssemblyLoader` or the `MONO_PATH` any more (See examples for more information).
+This is __optional__ but useful. But it just makes sense if the code is stable. By installing the assembly into the GAC you won't need the `WindowsAssemblyLoader` or the `MONO_PATH` any more (See examples for more information). But you are tied to the installed version of the rclcs.
 
 1. Create a keyfile:
 (sn is called sn.exe on windows)
@@ -73,11 +74,11 @@ In your `CMakeLists.txt` in the `add_assemblies` section add to the `COMPILER_AR
 gacutil -i <assembly name>
 ```
 
-For the `rclcs` I already did step 1 and 2. But due to lacking root permissions I can't add an automatic installation step into the GAC. Furthermore it won't make much sense because every build would result into a new version of the `rclcs.dll` in the GAC. Perhaps I can find a nicer solution in the future.
+
  
 ## Examples
 
-You can have look at my [testing workspace](https://github.com/firesurfer/rclcs_testing_ws) ~~which is quite messy.~~ which contains some [examples](https://github.com/firesurfer/rclcs_testing_ws/tree/master/src/test_cs/test_cs/Examples) (And is still a bit messy, but you should get ahead with it).
+You can have look at my [testing workspace](https://github.com/firesurfer/rclcs_testing_ws) which contains some [examples](https://github.com/firesurfer/rclcs_testing_ws/tree/master/src/test_cs/test_cs/Examples) (And is still a bit messy, but you should get ahead with it).
 
 For windows you need to use the `WindowsAssemblyLoader` as main method and replace the line inside the `StartMain(string[] args)` function with your own start function.
 
@@ -107,9 +108,7 @@ For further understanding of the what is happening behind the scenes see [memory
 * ~~String arrays~~
 * ~~Fixed Arrays - Coming soon (probably)~~
 * Preinitialized value -> Not coming soon (This is because C# doesn't allow preinitialised members in structs) At the moment the preinit values are simply ignored
-	* They might be coming with the rewrite of the message generator
 * Sometimes you might have to compile messages twice in order to have them properly compiled. (Or just remove the build and install folder)
-* Using Windows. 
 * ~~Sending messages from a cpp program to a C# program: (See: https://github.com/eProsima/ROS-RMW-Fast-RTPS-cpp/pull/45)~~
 
 ## What is critical at the moment
@@ -117,7 +116,10 @@ For further understanding of the what is happening behind the scenes see [memory
 * ~~I'm not sure if it's possible to reproduce more complicated messages in C# an directly pass them to the rcl without any conversion. A conversion would be possible but would be a waste of resources in the most cases.~~
 
 * ~~Program crashes at exit due to a multithreading error~~ 
+* Sometimes the program will crash at exit (But just sometimes....)
 * ~~Memory handling has to be done manual: See [memory handling](/doc/MemoryHandling.md)~~
+* Windows support. Codepaths for service and client are missing at the moment. Publishing and subscribing not tested at the moment.
+* Messages are somehow compiled twice. This isn't critical but it fails at the first time. So don't worry if you get any build warnings.
 
 ## What has to be done next
 
