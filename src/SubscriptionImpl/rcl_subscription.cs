@@ -99,7 +99,7 @@ namespace rclcs
 			if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
 				//TODO codepath for windows
 				//At the moment use linux path
-				return rcl_subscription_linux.get_default_options();
+				return rcl_subscription_windows.get_default_options();
 			} else if (Environment.OSVersion.Platform == PlatformID.Unix) {
 				return rcl_subscription_linux.get_default_options();
 			} else {

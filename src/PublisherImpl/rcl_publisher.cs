@@ -129,7 +129,7 @@ namespace rclcs
 			if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
 				//TODO codepath for windows
 				//for now we use the linux codepath
-				return rcl_publisher_linux.rcl_publisher_get_default_options ();
+				return rcl_publisher_windows.rcl_publisher_get_default_options ();
 			} else if (Environment.OSVersion.Platform == PlatformID.Unix) {
 				return rcl_publisher_linux.rcl_publisher_get_default_options ();
 			} else {
