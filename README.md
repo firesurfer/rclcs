@@ -1,5 +1,8 @@
 # rclcs
 
+__WARNING__ : The rcl api and the generated message types did change recently and I couldn't adapt yet. You will be able to compile everything but you will run into segfaults while execution!
+These are usually some easy fixes by adapting the methods called in the rcl.
+
 A C# wrapper for [ROS2](https://github.com/ros2). It is designed to provide an interface similar to the rclcpp.
 The idea behind the wrapper is to reproduce the ros message as a C# struct with the same memory layout as their C counterparts.
 So the messages (structs) can directly be passed to the `rcl` without any conversions. For easier usage these structs are wrapped into classes so you don't have the inconvenience of memory handling.
@@ -119,7 +122,7 @@ For further understanding of the what is happening behind the scenes see [memory
 * Sometimes the program will crash at exit (But just sometimes....)
 * ~~Memory handling has to be done manual: See [memory handling](/doc/MemoryHandling.md)~~
 * Windows support. Codepaths for service and client are missing at the moment. Publishing and subscribing not tested at the moment.
-* Messages are somehow compiled twice. This isn't critical but it fails at the first time. So don't worry if you get any build warnings.
+* ~~Messages are somehow compiled twice. This isn't critical but it fails at the first time. So don't worry if you get any build warnings.~~
 
 ## What has to be done next
 
