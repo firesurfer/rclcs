@@ -1,9 +1,9 @@
 # rclcs
 
 __WARNING__ : The rcl api and the generated message types did change recently and I couldn't adapt yet. You will be able to compile everything but you will run into segfaults while execution!
-These are usually some easy fixes by adapting the methods called in the rcl.
+These are usually some easy fixes by adapting the methods called in the rcl. Also support for windows is more than buggy at the moment! (Feel free to get it running)
 
-A C# wrapper for [ROS2](https://github.com/ros2). It is designed to provide an interface similar to the rclcpp.
+__rclcs__ is C# wrapper for [ROS2](https://github.com/ros2). It is designed to provide an interface similar to the rclcpp.
 The idea behind the wrapper is to reproduce the ros message as a C# struct with the same memory layout as their C counterparts.
 So the messages (structs) can directly be passed to the `rcl` without any conversions. For easier usage these structs are wrapped into classes so you don't have the inconvenience of memory handling.
 
@@ -85,6 +85,7 @@ You can have look at my [testing workspace](https://github.com/firesurfer/rclcs_
 
 For windows you need to use the `WindowsAssemblyLoader` as main method and replace the line inside the `StartMain(string[] args)` function with your own start function.
 
+For starting your own project see [starting your own project](doc/StartingOwnProject.md)
 
 ## What works at the moment
 
@@ -101,6 +102,7 @@ For windows you need to use the `WindowsAssemblyLoader` as main method and repla
 * Setting qos profiles
 * Using the currently implemented graph functions
 * Having intellisense comments
+* Integration in the ros2 build system
 
 For a list of currently supported types see: [supported types](doc/SupportedTypes.md)
 For further understanding of the what is happening behind the scenes see [memory handling](/doc/MemoryHandling.md)
@@ -111,7 +113,7 @@ For further understanding of the what is happening behind the scenes see [memory
 * ~~String arrays~~
 * ~~Fixed Arrays - Coming soon (probably)~~
 * Preinitialized value -> Not coming soon (This is because C# doesn't allow preinitialised members in structs) At the moment the preinit values are simply ignored
-* Sometimes you might have to compile messages twice in order to have them properly compiled. (Or just remove the build and install folder)
+* ~~Sometimes you might have to compile messages twice in order to have them properly compiled. (Or just remove the build and install folder)~~
 * ~~Sending messages from a cpp program to a C# program: (See: https://github.com/eProsima/ROS-RMW-Fast-RTPS-cpp/pull/45)~~
 
 ## What is critical at the moment
@@ -132,6 +134,7 @@ For further understanding of the what is happening behind the scenes see [memory
    * The generated code would be better if I could directly create IL-code
    * Testing of nested types in the messages
    * Having a proper dependency resolving mechanism
+        * At the moment I simply search for all assemblies available in the AMENT_PREFIX_PATH and add them as references
 * ~~Fix errors regarding arrays~~
 * Free memory where needed - I should have covered all (or at least most cases) by now
 * ~~Finish implementation of services~~
