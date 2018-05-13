@@ -51,6 +51,8 @@ rmdir /S /Q build install
 python src\ament\ament_tools\scripts\ament.py build
 ```
 
+Afterwards take a look at the _Examples_ section.
+
 
 ## Install to the GAC (Global assembly cache)
 
